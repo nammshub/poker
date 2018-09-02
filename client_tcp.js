@@ -8,7 +8,26 @@ client.connect(PORT, HOST, function() {
 
     console.log('CONNECTED TO: ' + HOST + ':' + PORT);
     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
-    client.write('I am Chuck Norris!');
+    //client.write('I am Chuck Norris!');
+    //Test game start
+    const player = 
+        {
+            'id': 666,
+            'name': 'D.E.V.',
+            'chips': 500,
+            'state': 'ACTIVE',
+            'dealer': false
+            }
+    
+    const gameStart = {
+        'id': 'server.game.start',
+        'data': {
+        'info': player,
+        'count': 4
+        }
+    };
+        
+    client.write(JSON.stringify(gameStart));
 
 });
 
