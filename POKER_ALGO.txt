@@ -1,0 +1,33 @@
+Algo Poker IA:
+
+- Listeners:
+	TCPListener: ecoute les arrivées TCPListener et emet 3 types d'events
+		3 events possibles: 
+			1) otherPlayerEvent => emit an event with other player datas
+			2) playEvent => emit event to allow our playEvent
+			3) turnEndEvent => emit event when turns end and winner is designated
+			
+	OtherPlayerListener: ce listener capte l'event otherPlayerEvent et lance les actions necessaires
+		- emet un TurnUpdateEvent : Le TurnUpdateListener capte les data et sauve le coup du joueur dans un objet Turn: objet qui garde en memoire les actions de chaque joueur pour le tour en cour
+		- 
+		
+	PlayListener: capte le playEvent et lance les actions necessaires:
+		- lance le machine learning
+		- lance le hardcoded
+		- lance le chrono => a total - 2 secondes  oblige envoie reponse
+	
+	
+	
+	TurnEndListener: 
+		- maj de la DB dee machine learning
+		
+		
+		
+		
+	TurnClass:
+		- currPosition
+		- nbPlayer
+		- arrayPlayers ( position: mise: 
+		
+	PartieClass:
+	- arrayPlayers ( argent )
