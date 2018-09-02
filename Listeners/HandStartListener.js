@@ -7,6 +7,17 @@ class HandStartListener extends EventEmitter {
     handleMessage(startMessage) {
         game.listPlayers = startMessage.data.players;
         this.updateActiveAndPosition();
+        //ajout d'un nouveau tour (vide pour le moment)
+        game.totalHands++; 
+        game.turnsDetails.push({
+            'tourNumber' :game.totalHands,
+            'actionNbrIter' :0,
+            'tapis' : [
+                //carte1, carte2...
+            ],
+            'neuronalResponses' : [],
+            'randomResponse' : 0
+        });
         console.log('object game contains' + JSON.stringify(game));
     }
 

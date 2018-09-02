@@ -67,16 +67,18 @@ client.connect(PORT, HOST, function() {
     
       //test start
     client.write(JSON.stringify(gameStart));
+
+      //hand start
+      setTimeout(function () {
+        client.write(JSON.stringify(handStartMessage));
+    }, 5000);
     
     //test cards received
     setTimeout(function () {
         client.write(JSON.stringify(cardsMessage));
-    }, 5000);
-
-    //hand start
-    setTimeout(function () {
-        client.write(JSON.stringify(handStartMessage));
     }, 10000);
+
+  
 
 });
 

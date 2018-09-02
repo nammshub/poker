@@ -1,10 +1,15 @@
 const net = require('net');
-const config = require('./config');
+require('./config');
 const TCPListener = require('./Listeners/TCPListener');
+const NeuronalNetworkListener = require('./Listeners/NeuronalNetworkListener');
+const brain = require('brain.js');
 
 const tcpListener = new TCPListener();
 const HOST = config.HOST;
 const PORT = config.PORT;
+config.NEURONAL_NETWORK = new brain.NeuralNetwork();
+config.NEURONAL_NETWORK_LISTENER = new NeuronalNetworkListener();
+config.NEURONAL_NETWORK_HELPER = new 
 
 // Create a server instance, and chain the listen function to it
 // The function passed to net.createServer() becomes the event handler for the 'connection' event
