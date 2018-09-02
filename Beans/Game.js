@@ -1,4 +1,7 @@
 module.exports = {
     'player' : '',
-    'nbJoueurs' : 0
+    'nbJoueursActifs' : 0,
+    'turnPosition' : 0,
+    'hand': [],
+    'listPlayers' : []
 }
