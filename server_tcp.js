@@ -23,6 +23,12 @@ net.createServer(function(sock) {
     sock.on('data', function(data) {
         tcpListener.handleTCPData(data);
     });
+
+    //le joueur signale au ceoupier qu'il veut jouer
+    const suscribeJSON = {
+        "id" : "player.suscribe"
+    };
+    sock.write(JSON.stringify(suscribeJSON));
     /*
     sock.on('data', function(data) {
         
