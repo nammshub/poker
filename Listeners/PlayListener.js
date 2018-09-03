@@ -7,11 +7,14 @@ const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 class PlayListener extends EventEmitter {
   
 
-    handleMessage(playMessage) {
-        game.hand = cardsMessage.data.cards;
-        config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
-            //game
-        });
+    handleMessage(playMessage,callback) {
+        //game.hand = cardsMessage.data.cards;
+        //config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
+        let messageJson = {
+            'message' : 'toto is back'
+        }
+        callback(messageJson);
+        //});
         console.log('object game contains' + JSON.stringify(game));
     }
 }

@@ -41,7 +41,11 @@ net.createServer(function (socket) {
   socket.on('error', function (data) {
    console.log('Exception : ' + data);
   });
-  
+
+  testMessage = {
+    'id':'server.game.play'
+  }
+  socket.write(JSON.stringify(testMessage));
   // Send a message to all clients
   function broadcast(message, sender) {
     clients.forEach(function (client) {
@@ -56,4 +60,4 @@ net.createServer(function (socket) {
 }).listen(PORT);
 
 // Put a friendly message on the terminal of the server.
-console.log("Chat server running at port "+PORT+"\n");
+console.log("Poker server running at port "+PORT+"\n");

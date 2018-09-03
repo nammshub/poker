@@ -22,7 +22,9 @@ playerSocket.connect(PORT, HOST, function() {
 // Add a "data" event handler for the client socket
 // data is what the server sent to this socket
 playerSocket.on("data", function(data) {
-    tcpListener.handleTCPData(data);
+    tcpListener.handleTCPData(data, function(response){
+        playerSocket.write(JSON.stringify(response));
+    });
 });
 
 // Add a "close" event handler for the client socket

@@ -10,7 +10,7 @@ const cardsListener = new CardsListener();
 const handStartListener = new HandStartListener();
 const playListener = new PlayListener();
 class TCPListener extends EventEmitter {
-    handleTCPData(data) {
+    handleTCPData(data,callback) {
         const message = JSON.parse(data);
         switch (message.id){
             case 'server.game.start':
@@ -27,7 +27,7 @@ class TCPListener extends EventEmitter {
                 break;
             case 'server.game.play':
                 console.log('A vous de jouer');
-                playListener.handleMessage(message);
+                playListener.handleMessage(message,callback);
                 break;
     }
         //  11 types de data possibles
