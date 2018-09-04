@@ -5,12 +5,19 @@
 
 var net = require("net");
 require('../config');
+require('../deck');
+//const DeckHelper = require('../Helpers/DeckHelper');
+const CroupierHelper = require('../Helpers/CroupierHelper');
 const CroupierMessageHandler = require('./CroupierMessageHandler');
 const PORT = config.PORT;
 const croupierMessageHandler = new CroupierMessageHandler();
 
 // Keep track of the players
 let players = [];
+let currentDeck = [];
+
+//generate new deck file
+//DeckHelper.generateNewDeckFile();
 
 // Start a TCP Server
 net.createServer(function (socket) {
@@ -30,7 +37,7 @@ net.createServer(function (socket) {
   players.push(socket);
 
   // Send a nice welcome message and announce
-  console.log("Welcome " + socket.playerDetails.name + "\n");
+  console.log("\nWelcome " + socket.playerDetails.name + "\n");
 
   // Handle incoming messages from clients.
   socket.on('data', function (data) {
@@ -45,7 +52,7 @@ net.createServer(function (socket) {
 
   // Remove the client from the list when it leaves
   socket.on('error', function (data) {
-   console.log('Exception : ' + data);
+   console.log('\nException : ' + data);
   });
 
 }).listen(PORT);
@@ -89,16 +96,38 @@ function startGame(){
     */
     config.CURRENT_HAND = 1;
     while (config.CURRENT_HAND <= config.MAX_HANDS && !hasWinner()){
+      console.log('\nMain en cours = '+config.CURRENT_HAND);
       //message de debut de main
-	sendNewHandMessage();
+      sendNewHandMessage();
+      
+      //distribution des cartes à chaque joueur
+      sendCardsMessage();
 
       config.CURRENT_HAND++;
     }
 	if(hasWinner()){
-		console.log('on a un gagnant !!');
-	}
+		console.log('\non a un gagnant !!');
+  }
+  else{
+    console.log('\nTous les tours sont épuisés');
+  }
 
   }, 1000*config.WAIT_BEFORE_START);
+}
+
+/**
+ * distribution de 2 cartes à chaque joueur actif
+ */
+function sendCardsMessage(){
+  config.PLAYER_DETAILS_BKP.forEach( function(player){
+    if(player.state === 'ACTIVE'){
+      let twoRandomCards = CroupierHelper.getRandomCards(currentDeck,2);
+      console.log('\nles cartes donnees au joueur '+player.id+' sont : '+JSON.stringify(twoRandomCards[0]) + ' et '+JSON.stringify(twoRandomCards[1]));
+      console.log('\ncartes restantes dans le deck en cours '+currentDeck.length);
+      console.log('\ncartes restantes dans le deck modele '+DECK.length);
+    }
+  })
+
 }
 
 function sendStartGameMessage(){
@@ -115,11 +144,19 @@ function sendStartGameMessage(){
   })
 }
 
+/**
+ * Message pour annoncer à tous les joueurs le debut d'une nouvelle main
+ */
 function sendNewHandMessage(){
+  //nouvelle main => on genere un nouveau deck pour cette main à partir du deck modele (DEEP COPY)
+  currentDeck =  DECK.slice(0);
+  //on etablit l'ordre de jeu de cette main
   let currentPlayersDetails = []
-  let previousPlayerDetails = config.PREVIOUS_PLAYER_DETAILS;
+  let previousPlayerDetails = config.PLAYER_DETAILS_BKP;
   if (previousPlayerDetails.length === 0){
-	previousPlayerDetails = players;
+    players.forEach( function(player){
+      previousPlayerDetails.push(player.playerDetails);
+    })
   }
 	console.log('previousPlayerDetails length = '+previousPlayerDetails.length);
   currentPlayersDetails.push(previousPlayerDetails[previousPlayerDetails.length-1]);
@@ -132,13 +169,13 @@ function sendNewHandMessage(){
   //assigne dealer
   currentPlayersDetails.forEach( function(player,pos){
 	if(pos === currentPlayersDetails.length - 1){
-		player.playerDetails.dealer = true;
+		player.dealer = true;
 	} 
 	else{
-		player.playerDetails.dealer = false;
+		player.dealer = false;
 	}
   });
-  config.PREVIOUS_PLAYER_DETAILS = currentPlayersDetails;
+  config.PLAYER_DETAILS_BKP = currentPlayersDetails;
 
   let newHandMessage = {
     "id": "game.hand.start",

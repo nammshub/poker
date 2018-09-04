@@ -18,7 +18,7 @@ class HandStartListener extends EventEmitter {
             'neuronalResponses' : [],
             'randomResponse' : 0
         });
-        console.log('object game contains' + JSON.stringify(game));
+        console.log('\n Hand Start event. Game = ' + JSON.stringify(game));
     }
 
     updateActiveAndPosition(){

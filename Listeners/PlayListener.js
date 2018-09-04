@@ -15,7 +15,7 @@ class PlayListener extends EventEmitter {
         }
         callback(messageJson);
         //});
-        console.log('object game contains' + JSON.stringify(game));
+        console.log('\n Play event. Game = ' + JSON.stringify(game));
     }
 }
 
