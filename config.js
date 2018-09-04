@@ -10,7 +10,8 @@ global.config = {
     //croupier
     NB_PLAYERS : 0,
     START_MONEY : 1500,
-    WAIT_BEFORE_START : 60,
+    WAIT_BEFORE_START : 10,
     CURRENT_HAND : 0,
-    MAX_HANDS : 150
+    MAX_HANDS : 15,
+	PREVIOUS_PLAYER_DETAILS :[]
 };
