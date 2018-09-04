@@ -90,10 +90,13 @@ function startGame(){
     config.CURRENT_HAND = 1;
     while (config.CURRENT_HAND <= config.MAX_HANDS && !hasWinner()){
       //message de debut de main
-
+	sendNewHandMessage();
 
       config.CURRENT_HAND++;
     }
+	if(hasWinner()){
+		console.log('on a un gagnant !!');
+	}
 
   }, 1000*config.WAIT_BEFORE_START);
 }
@@ -113,15 +116,29 @@ function sendStartGameMessage(){
 }
 
 function sendNewHandMessage(){
-  /* TODO
-
   let currentPlayersDetails = []
-  let i;
-  for (i = 0; i < players.length; i++) {
-    let playerPos = 
-    text += cars[i] + "<br>";
+  let previousPlayerDetails = config.PREVIOUS_PLAYER_DETAILS;
+  if (previousPlayerDetails.length === 0){
+	previousPlayerDetails = players;
   }
+	console.log('previousPlayerDetails length = '+previousPlayerDetails.length);
+  currentPlayersDetails.push(previousPlayerDetails[previousPlayerDetails.length-1]);
+  for (i = 0; i < previousPlayerDetails.length-1; i++) {
+    currentPlayersDetails.push(previousPlayerDetails[i]);
+  }  
+  
+  	console.log('currentPlayersDetails length = '+currentPlayersDetails.length);
 
+  //assigne dealer
+  currentPlayersDetails.forEach( function(player,pos){
+	if(pos === currentPlayersDetails.length - 1){
+		player.playerDetails.dealer = true;
+	} 
+	else{
+		player.playerDetails.dealer = false;
+	}
+  });
+  config.PREVIOUS_PLAYER_DETAILS = currentPlayersDetails;
 
   let newHandMessage = {
     "id": "game.hand.start",
@@ -129,7 +146,9 @@ function sendNewHandMessage(){
       "players":currentPlayersDetails
     }
   }
-  */
+  
+  broadcast(JSON.stringify(newHandMessage));
+  
 }
 
 
