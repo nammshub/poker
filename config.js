@@ -4,5 +4,13 @@ global.config = {
     HOST : '127.0.0.1',
     NEURONAL_NETWORK : null,
     NEURONAL_NETWORK_LISTENER : null,
-    NEURONAL_NETWORK_HELPER : null
+    NEURONAL_NETWORK_HELPER : null,
+
+
+    //croupier
+    NB_PLAYERS : 0,
+    START_MONEY : 1500,
+    WAIT_BEFORE_START : 60,
+    CURRENT_HAND : 0,
+    MAX_HANDS : 150
 };

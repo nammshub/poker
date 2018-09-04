@@ -7,7 +7,6 @@ class StartListener extends EventEmitter {
     handleMessage(startMessage) {
         game.player = startMessage.data.info;
         game.nbJoueursActifs = startMessage.data.count;
-
         console.log('object game contains' + JSON.stringify(game));
     }
 }
