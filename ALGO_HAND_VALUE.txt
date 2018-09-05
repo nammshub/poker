@@ -1,0 +1,48 @@
+/* ALGO DETERMINATION MEILLEURE MAIN */
+
+1) on passe à la methode le tableau des cartes du joueur + table
+2) on injecte ces cartes dans une map qui a en clef les 4 couleurs et les 14 valeurs (1,2,3,4,5,6,7,8,9,10,valet(11), dame(12),roi(13), As(14)) 
+2) pour chaque combinaison possible en partant de la plus forte valeur on va tester si on est dans ce cas et on retourne un tableau de 2 nombres : [puissance_main , departage_egalite]
+
+
+Les combinaisons possibles dans l'ordre sont:
+
+Quinte Flush Royale => [10,0]
+     	
+Il s'agit d'une suite (ou quinte) du 10 à l'As, de la même couleur (pique, coeur, carreau, ou trèfle). C'est la combinaison la plus forte au poker, absolument imbattable. Elle est également évidemment très rare, et beaucoup de joueurs n'en verront sans doute jamais de toute une vie.
+
+Quinte Flush => [9, valeur + haute carte]
+     	
+Toute quinte de la même couleur (pique, coeur, carreau, ou trèfle) inférieure à la quinte flush royale.
+
+Carré => [8, valeur carte * 4 + carte restante (0 si rien) ]	     	 
+N'importe quelle 4 cartes identiques (de même rang). Si deux joueurs ont le même carré en même temps (ce qui veut dire que le carré est déjà sur la table), c'est alors le joueur avec la plus forte carte en mains (le kicker) qui remporte le pot. Si la cinquième plus forte carte possible est la cinquième du tapis aussi, il y a alors égalité, et le pot est partagé.
+
+Full House	   => [7, brelan * 100 + pair ]   	
+Un Full House (on dit aussi "main pleine" en français) est l'association d'un Brelan et d'une Paire, c'est à dire n'importe quelles 3 cartes identiques, et 2 autres cartes identiques à côté.
+Notre exemple montre un "full aux as par les rois", qui est plus fort qu'un "full aux rois par les as". On évalue en effet toujours la force du brelan en premier pour comparer deux Full.
+
+Couleur	  => [6, valeur + haute * 100 + suivante * 80 ... ]
+Flush en anglais. N'importe quelles 5 cartes de la même couleur (et qui ne se suivent pas, sinon c'est une quinte flush). Pour rappel, une couleur est soit à pique, à coeur, à carreau ou à trèfle.
+La carte la plus haute de la couleur détermine sa force. Notre exemple montre une "couleur hauteur as", la plus forte couleur possible.
+Si deux joueurs ont une couleur de la même hauteur, on compare alors leur deuxième carte de la couleur la plus forte, et ainsi de suite.
+
+Quinte	     => [5, valeur + haute]
+Une suite de 5 cartes consécutives, mais qui ne soient pas toutes de la même couleur. Les As peuvent tout autant compter pour une quinte basse (A-2-3-4-5), qu'on appelle aussi la roue, ou pour une quinte haute (10-J-Q-K-A). Naturellement, plus la quinte est haute, plus elle est forte.
+
+Brelan	     	=> [4, brelan * 100 + cartes accompagnantes ]
+3 cartes identiques. Notre exemple montre un Brelan d'As, avec un roi et une dame en kickers (cartes accompagnantes), soit le meilleur brelan possible.
+
+Double Paire => [3, valeur + forte * 1000 + valeur faible * 20 + kicker ]
+     	
+2 cartes identiques, accompagnées de 2 autres cartes identiques, soit tout simplement deux paires. Notre exemple montre la meilleure combinaison de deux paires possible, une double paire As - Rois.
+Lorsque l'on évalue ou compare une double paire, on commence toujours par la paire la plus forte. Ainsi, une double paire A-A-5-5 est plus forte qu'une double paire K-K-J-J.
+
+Paire	     	=> [2, valeur pair * 100 + cartes accompagnantes ]
+2 cartes identiques. Notre exemple montre la meilleure main à une paire possible.
+
+Hauteur	  => [1, valeur + haute * 100 + suivante * 80 ...]
+Toute main qui ne possède aucune des combinaisons listées ci-dessus. Dans ce cas on évalue la main par rapport à sa carte la plus forte. Par exemple une main K-J-9-4-2 (qui ne soient pas de la même couleur) est une "Hauteur Roi". Si deux joueurs ont la même "hauteur", on regarde ensuite la deuxième carte la plus forte.
+
+
+4) Apres avoir retourne ces tableaux pour chaque joueur, on trouve le ou les gagnants
