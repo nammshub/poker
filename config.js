@@ -16,6 +16,8 @@ global.config = {
     PLAYER_DETAILS_BKP :[],
     ALL_COLORS : ["SPADE", "HEART", "DIAMOND", "CLUB"],
     ALL_KINDS : ["1","2","3","4","5","6","7","8","9","10","JACK","QUEEN","KING"],
+    //garde en memoire le fait qu'un joueur aie repondu à temps à chaque tour
+    ANSWERS_IN_TIME : new Map(),
     
 
     //Exceptions

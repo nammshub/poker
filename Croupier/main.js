@@ -14,7 +14,10 @@ const croupierMessageHandler = new CroupierMessageHandler();
 
 // Keep track of the players
 let players = [];
+//deck du tour
 let currentDeck = [];
+//map des joueurs et de leurs 2 cartes du tour
+let playerCardsMap = new Map();
 
 //generate new deck file
 //DeckHelper.generateNewDeckFile();
@@ -103,6 +106,8 @@ function startGame(){
       //distribution des cartes à chaque joueur
       sendCardsMessage();
 
+      //On appelle les joueurs dans l'ordre pour donner leur action
+
       config.CURRENT_HAND++;
     }
 	if(hasWinner()){
@@ -122,6 +127,8 @@ function sendCardsMessage(){
   config.PLAYER_DETAILS_BKP.forEach( function(player){
     if(player.state === 'ACTIVE'){
       let twoRandomCards = CroupierHelper.getRandomCards(currentDeck,2);
+      //on stock ces 2 cartes dnas notre map joueur - cartes du tour
+      playerCardsMap.set(player.id, twoRandomCards);
       console.log('\nles cartes donnees au joueur '+player.id+' sont : '+JSON.stringify(twoRandomCards[0]) + ' et '+JSON.stringify(twoRandomCards[1]));
       console.log('\ncartes restantes dans le deck en cours '+currentDeck.length);
       console.log('\ncartes restantes dans le deck modele '+DECK.length);
