@@ -17,17 +17,28 @@ class HandValueHelper{
         return handValue;
     }
 
+    /**
+     * injecte chaque carte dans une map de arrays de type
+     * {
+     *  'SPADES' : ['1','3','5','6'],
+     *  'HEART' : ['5'],
+     *  '1' : ['SPADES],
+     *  '5' : ['SPADES','HEART'],
+     *  ...
+     * }
+     * @param {*} cards 
+     */
     static getCardsAsMap(cards){
         let cardsMap = new Map();
         cards.forEach( function(card){
-            let kindOccurences = typeof cardsMap.get(card.kind) === 'undefined' ? 0 : cardsMap.get(card.kind);
-            let colorOccurences = typeof cardsMap.get(card.color) === 'undefined' ? 0 : cardsMap.get(card.color);
-            cardsMap.set(card.kind, kindOccurences+1);
-            cardsMap.set(card.color, colorOccurences+1);
+            let kindArray = typeof cardsMap.get(card.kind) === 'undefined' ? [] : cardsMap.get(card.kind);
+            let colorArray = typeof cardsMap.get(card.color) === 'undefined' ? [] : cardsMap.get(card.color);
+            cardsMap.set(card.kind, kindArray.push[card.color]);
+            cardsMap.set(card.color, colorArray.push[card.kind]);
             //gestion de l'As qui vaut 1 et AS
             if(card.kind === '1'){
-                kindOccurences = typeof cardsMap.get('AS') === 'undefined' ? 0 : cardsMap.get('AS');
-                cardsMap.set('AS', kindOccurences+1);
+                kindArray = typeof cardsMap.get('AS') === 'undefined' ? [] : cardsMap.get('AS');
+                cardsMap.set('AS', kindArray.push[card.color]);
             }
         })
         return cardsMap
@@ -51,15 +62,20 @@ class HandValueHelper{
     }
 
     static testQuinteFlushRoyale(cardsAsMAp){
-        if (
-            //test 5 memes couleurs
-            (cardsAsMap.get('SPADE') === 5 || cardsAsMap.get('HEART') === 5 || cardsAsMap.get('DIAMOND') === 5 ||cardsAsMap.get('CLUB') === 5)
-            &&
-            //test suite
-            (cardsAsMap.get('AS') === 1 && cardsAsMap.get('KING') === 1 && cardsAsMap.get('QUEEN') === 1 && cardsAsMap.get('JACK') === 1 && cardsAsMap.get('10') === 1)
-        ){
-            return [10,0]
-        }
+        const ROYAL_KINDS = ["10","JACK","QUEEN","KING","AS"];
+        config.ALL_COLORS.forEach( function(color){
+            if(cardsAsMap.get(color).length >= 5 ){
+                let iterKind = 0;
+                ROYAL_KINDS.forEach( function(kind){
+                    if(cardsAsMap.get(color).includes(kind)){
+                        iterKind++;
+                    }
+                })
+                if(iterKind === 5){
+                    return [10,0];
+                }
+            }
+        })
         return [];
     }
 
