@@ -64,7 +64,7 @@ class HandValueHelper{
     static testQuinteFlushRoyale(cardsAsMAp){
         const ROYAL_KINDS = ["10","JACK","QUEEN","KING","AS"];
         config.ALL_COLORS.forEach( function(color){
-            if(cardsAsMap.get(color).length >= 5 ){
+            if(cardsAsMap.get(color) && cardsAsMap.get(color).length >= 5 ){
                 let iterKind = 0;
                 ROYAL_KINDS.forEach( function(kind){
                     if(cardsAsMap.get(color).includes(kind)){
