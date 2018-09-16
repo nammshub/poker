@@ -10,11 +10,12 @@ class PlayListener extends EventEmitter {
     handleMessage(playMessage,callback) {
         //game.hand = cardsMessage.data.cards;
         //config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
-        let messageJson = {
+        /*let messageJson = {
             'message' : 'toto is back'
         }
         callback(messageJson);
         //});
+        */
         console.log('\n Play event. Game = ' + JSON.stringify(game));
     }
 }

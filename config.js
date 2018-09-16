@@ -12,7 +12,7 @@ global.config = {
     START_MONEY: 1500,
     WAIT_BEFORE_START: 15,
     CURRENT_HAND: 0,
-    MAX_HANDS: 150,
+    MAX_HANDS: 5,
     //les joueurs ordonnés pour le tour en cours
     ORDERED_PLAYERS_BKP: [],
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
@@ -34,6 +34,7 @@ global.config = {
         [121, [75, 150]],
         [136, [100, 200]]
     ]),
+    CARDS_ON_TABLE : [],
 
 
     //Exceptions

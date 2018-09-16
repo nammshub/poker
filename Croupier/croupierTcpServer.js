@@ -10,7 +10,6 @@ require('../deck');
 const CroupierHelper = require('../Helpers/CroupierHelper');
 const CroupierMessageHandler = require('./CroupierMessageHandler');
 const PORT = config.PORT;
-const croupierMessageHandler = new CroupierMessageHandler();
 
 //deck du tour
 let currentDeck = [];
@@ -45,7 +44,7 @@ net.createServer(function (socket) {
 
   // Handle incoming messages from clients.
   socket.on('data', function (data) {
-    croupierMessageHandler.handleData(data);
+    CroupierMessageHandler.handleData(data);
   });
 
   // Remove the client from the list when it leaves
@@ -79,15 +78,10 @@ function actualizeBlinds(){
   config.CURR_SMALL_BLIND = config.BLIND_EVOLUTION.get(currValue)[0];
   config.CURR_BIG_BLIND = config.BLIND_EVOLUTION.get(currValue)[1];
 }
-// Send a message to all clients
-function broadcast(message, sender) {
-  config.PLAYERS.forEach(function (player) {
-    // Don't want to send it to sender
-    if (player === sender) return;
-    player.socket.write(message);
-  });
-  // Log it to the server output too
-  process.stdout.write(message)
+
+function hasHandWinner(){
+  //TODO
+  return false;
 }
 
 /**
@@ -110,23 +104,32 @@ function launchPlayCurrHand(){
   */
  //prise de petites et grande blinde chez joueur 1 et 2
   takeBlinds()
-  /* TODO
+  //* TODO
   let step = 1;
+  playerBets();
   while (!hasHandWinner() && step < 4){
-    playerBets();
     switch (step){
       //flop
       case 1:
-          CroupierHelper.giveCards(3);
+          CroupierHelper.putCardsOnTable(currentDeck, 3);
           break;
       default:
-          CroupierHelper.giveCards(1);
+          CroupierHelper.putCardsOnTable(currentDeck, 1);
           break;
     }
     step++;
+    playerBets();
   }
+
+
+}
+
+function playerBets(){
+  /*
+    On va tourner sur chaque joueur actif pour avoir son message soit de se coucher soit de suivre soit de relancer 
+    et ce jusqu'a avoir tout le monde de couche sauf un ou que tout le monde aie suivie
   */
- console.log(config.ORDERED_PLAYERS_BKP.toString());
+
 }
 
 function startGame(){
@@ -168,11 +171,11 @@ function startGame(){
  */
 function sendCardsMessage(){
   config.ORDERED_PLAYERS_BKP.forEach( function(player){
-    if(player.state === 'ACTIVE'){
+    if(player.details.state === 'ACTIVE'){
       let twoRandomCards = CroupierHelper.getRandomCards(currentDeck,2);
       //on stock ces 2 cartes dnas notre map joueur - cartes du tour
-      playerCardsMap.set(player.id, twoRandomCards);
-      console.log('\nles cartes donnees au joueur '+player.id+' sont : '+JSON.stringify(twoRandomCards[0]) + ' et '+JSON.stringify(twoRandomCards[1]));
+      playerCardsMap.set(player.details.id, twoRandomCards);
+      console.log('\nles cartes donnees au joueur '+player.details.id+' sont : '+JSON.stringify(twoRandomCards[0]) + ' et '+JSON.stringify(twoRandomCards[1]));
       console.log('\ncartes restantes dans le deck en cours '+currentDeck.length);
       console.log('\ncartes restantes dans le deck modele '+DECK.length);
     }
@@ -200,6 +203,8 @@ function sendStartGameMessage(){
 function sendNewHandMessage(){
   //nouvelle main => on genere un nouveau deck pour cette main à partir du deck modele (DEEP COPY)
   currentDeck =  DECK.slice(0);
+  //on nettoie la table des cartes precedentes:
+  config.CARDS_ON_TABLE = [];
   //on etablit l'ordre de jeu de cette main
   let currentOrderedPlayers = []
   let previousOrderedPlayers = config.ORDERED_PLAYERS_BKP;
@@ -237,7 +242,7 @@ function sendNewHandMessage(){
     }
   }
   
-  broadcast(JSON.stringify(newHandMessage));
+  CroupierMessageHandler.broadcast(JSON.stringify(newHandMessage));
   
 }
 

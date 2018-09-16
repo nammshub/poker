@@ -1,4 +1,6 @@
 require('../config');
+const CroupierMessageHandler = require('../Croupier/CroupierMessageHandler');
+
 
 class CroupierHelper {
 
@@ -33,6 +35,18 @@ class CroupierHelper {
             throw config.DECK_EMPTY_EXCEPTION;
         }
         return cardsToReturn;
+    }
+
+    static putCardsOnTable(sourceDeck,cardsNb){
+        const newCards = this.getRandomCards(sourceDeck, cardsNb);
+        config.CARDS_ON_TABLE =  config.CARDS_ON_TABLE.concat(newCards);
+        const updateMessage = {
+            "id": "server.game.board.cards",
+            "data": {
+              "cards": newCards
+            }
+        }
+        CroupierMessageHandler.broadcast(JSON.stringify(updateMessage));
     }
 }
 

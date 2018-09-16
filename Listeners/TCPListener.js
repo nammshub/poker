@@ -3,14 +3,17 @@ const StartListener = require('./StartListener');
 const CardsListener = require('./CardsListener');
 const HandStartListener = require('./HandStartListener');
 const PlayListener = require('./PlayListener');
+const BoardListener = require('./BoardListener');
 
 
 const startListener = new StartListener();
 const cardsListener = new CardsListener();
 const handStartListener = new HandStartListener();
 const playListener = new PlayListener();
+const boardListener = new BoardListener();
 class TCPListener extends EventEmitter {
     handleTCPData(data,callback) {
+        console.log('\n inside TCPListener. Data = '+data);
         const message = JSON.parse(data);
         switch (message.id){
             case 'server.game.start':
@@ -28,6 +31,10 @@ class TCPListener extends EventEmitter {
             case 'server.game.play':
                 console.log('A vous de jouer');
                 playListener.handleMessage(message,callback);
+                break;
+            case 'server.game.board.cards':
+                console.log('Nouvelles cartes sur le board');
+                boardListener.handleMessage(message,callback);
                 break;
     }
         //  11 types de data possibles

@@ -1,11 +1,11 @@
-const EventEmitter = require( 'events' );
+const EventEmitter = require('events');
 
 class CroupierMessageHandler extends EventEmitter {
-    handleData(data) {
+    static handleData(data) {
         const message = JSON.parse(data);
-        switch (message.id){
+        switch (message.id) {
             case 'server.game.start':
-                console.log('Le jeu commence !! nbr joueurs = '+message.data.count);
+                console.log('Le jeu commence !! nbr joueurs = ' + message.data.count);
                 startListener.handleMessage(message);
                 break;
             case 'server.game.cards':
@@ -20,7 +20,7 @@ class CroupierMessageHandler extends EventEmitter {
                 console.log('A vous de jouer');
                 playListener.handleMessage(message);
                 break;
-    }
+        }
         //  11 types de data possibles
         console.log('DATA from tcpListener: ' + data);
 
@@ -30,6 +30,17 @@ class CroupierMessageHandler extends EventEmitter {
         else
             this.emit( 'error', err );
             */
+    }
+
+    // Send a message to all clients
+    static broadcast(message, sender) {
+        config.PLAYERS.forEach(function (player) {
+            // Don't want to send it to sender
+            if (player === sender) return;
+            player.socket.write(message);
+        });
+        // Log it to the server output too
+        //process.stdout.write(message)
     }
 }
 
