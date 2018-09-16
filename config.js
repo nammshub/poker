@@ -1,28 +1,34 @@
 global.config = {
 
-    PORT: 6969,
+    PORT: 1300,
     HOST: "127.0.0.1",
     NEURONAL_NETWORK: null,
     NEURONAL_NETWORK_LISTENER: null,
     NEURONAL_NETWORK_HELPER: null,
 
+    //Player
+    MY_PLAYER : null,
+
+    //constantes partagées
+    MAX_SEC_TO_ANSWER : 15,
+
+
 
     //croupier
     NB_PLAYERS: 0,
     START_MONEY: 1500,
-    WAIT_BEFORE_START: 15,
+    WAIT_BEFORE_START: 10,
     CURRENT_HAND: 0,
     MAX_HANDS: 5,
-    //les joueurs ordonnés pour le tour en cours
+    //les joueurs ordonnés pour le tour en cours avec un parametre position qui peut etre SMALL_BLIND, BIG_BLIND, FIRST ou 
     ORDERED_PLAYERS_BKP: [],
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
     ALL_KINDS: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING"],
-    //garde en memoire le fait qu'un joueur aie repondu à temps à chaque tour
-    ANSWERS_IN_TIME: new Map(),
     //contient les details courants du joueur + son socket
     PLAYERS: [],
     //gestion des mises et du pot d'un tour
     CURRENT_BETS: new Map(),
+    CURRENT_MAX_BET : 0,
     CURR_SMALL_BLIND: 10,
     CURR_BIG_BLIND: 20,
     BLIND_EVOLUTION: new Map([
@@ -35,6 +41,9 @@ global.config = {
         [136, [100, 200]]
     ]),
     CARDS_ON_TABLE : [],
+    CURR_PLAYER_VALID_ANSWER : false,
+    CURR_PLAYER_CHRONO : null,
+    CURR_PLAYER : null,
 
 
     //Exceptions

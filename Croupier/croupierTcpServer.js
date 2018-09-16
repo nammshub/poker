@@ -10,6 +10,12 @@ require('../deck');
 const CroupierHelper = require('../Helpers/CroupierHelper');
 const CroupierMessageHandler = require('./CroupierMessageHandler');
 const PORT = config.PORT;
+const timeoutMessage = {
+  "id": "server.game.play.timeout"
+}
+const playMessage = {
+  "id": "server.game.play"
+};
 
 //deck du tour
 let currentDeck = [];
@@ -44,7 +50,7 @@ net.createServer(function (socket) {
 
   // Handle incoming messages from clients.
   socket.on('data', function (data) {
-    CroupierMessageHandler.handleData(data);
+    CroupierMessageHandler.handleData(data,socket);
   });
 
   // Remove the client from the list when it leaves
@@ -79,6 +85,11 @@ function actualizeBlinds(){
   config.CURR_BIG_BLIND = config.BLIND_EVOLUTION.get(currValue)[1];
 }
 
+function hasAllChecked(){
+  //return true SSI tous les joueurs actifs ont suivi la mise la plus haute
+  return false
+}
+
 function hasHandWinner(){
   //TODO
   return false;
@@ -97,7 +108,7 @@ function hasWinner(){
   return nbForfait === config.PLAYERS.length-1;
 }
 
-function launchPlayCurrHand(){
+async function launchPlayCurrHand(){
   /*
   une main se decompose en 4 phases de mises entrecoupées de pose de cartes sur le tapis par le croupier
   Une main peut se terminer prematurement si tous les joueurs sauf un se couchent
@@ -106,7 +117,7 @@ function launchPlayCurrHand(){
   takeBlinds()
   //* TODO
   let step = 1;
-  playerBets();
+  await playerBets();
   while (!hasHandWinner() && step < 4){
     switch (step){
       //flop
@@ -118,23 +129,46 @@ function launchPlayCurrHand(){
           break;
     }
     step++;
-    playerBets();
+    //La mise max retourne à 0 => possibilite de check
+    config.CURRENT_MAX_BET = 0;
+    await playerBets();
   }
 
 
 }
 
-function playerBets(){
+async function playerBets(){
   /*
     On va tourner sur chaque joueur actif pour avoir son message soit de se coucher soit de suivre soit de relancer 
-    et ce jusqu'a avoir tout le monde de couche sauf un ou que tout le monde aie suivie
+    et ce jusqu'a avoir tout le monde de couche sauf un ou que tout le monde aie suivi
   */
+ console.log('inside playerBets');
+ while (!hasHandWinner() && !hasAllChecked()){
+  //on boucle sur chaque joueur actif pour avoir son message
+  let currPlayer = CroupierHelper.getNextPlayer();
+  console.log(' joueur actif = ' + currPlayer.details.id);
+  config.CURR_PLAYER = currPlayer;
+  config.CURR_PLAYER_VALID_ANSWER = false;
+  currPlayer.socket.write(JSON.stringify(playMessage));
+
+  //on laisse un nbr de secondes defini dans config au joueur pour repondre
+  let timeOut = false;
+  config.CURR_PLAYER_CHRONO =   setTimeout(function () {
+    currPlayer.socket.write(JSON.stringify(timeoutMessage));
+    timeOut = true;
+  }, 1000*config.MAX_SEC_TO_ANSWER);
+
+  while(!config.CURR_PLAYER_VALID_ANSWER && !timeOut){
+    console.log('on attend un peu');
+    await sleep(2000);
+  }
+ }
 
 }
 
-function startGame(){
+async function startGame(){
   //on attend un nombre de secondes determines en config avant de lancer la partie afin que les joueurs se connectent
-  setTimeout(function () {
+  await setTimeout(async function () {
     //message de debut de game à chaque joueur
     sendStartGameMessage();
     /*on va ensuite boucler les sequences suivantes
@@ -152,7 +186,7 @@ function startGame(){
       sendCardsMessage();
 
       //On appelle les joueurs dans l'ordre pour donner leur action jusqu à la resolution de la main
-      launchPlayCurrHand();
+      await launchPlayCurrHand();
 
       config.CURRENT_HAND++;
     }
@@ -188,7 +222,7 @@ function sendStartGameMessage(){
     let startMessage = {
       "id": "server.game.start",
       "data": {
-        "info": player.playerDetails,
+        "info": player.details,
         "count": config.NB_PLAYERS
       }
     }
@@ -216,6 +250,9 @@ function sendNewHandMessage(){
 	console.log('previousOrderedPlayers length = '+previousOrderedPlayers.length);
   currentOrderedPlayers.push(previousOrderedPlayers[previousOrderedPlayers.length-1]);
   for (i = 0; i < previousOrderedPlayers.length-1; i++) {
+    if(previousOrderedPlayers[i].details.chips > 0){
+      previousOrderedPlayers[i].details.status = 'ACTIVE';
+    }
     currentOrderedPlayers.push(previousOrderedPlayers[i]);
   }  
   
@@ -248,7 +285,8 @@ function sendNewHandMessage(){
 
 //prise des blindes aupres des joueurs 1 et 2
 function takeBlinds(){
-  //modifie les blindes au besoin se lon le tour en cours
+  console.log('inside takeBlinds');
+  //modifie les blindes au besoin selon le tour en cours
   actualizeBlinds();
   let iterBlinds = 0;
   config.ORDERED_PLAYERS_BKP.every( function(player){
@@ -277,12 +315,17 @@ function takeBlinds(){
         player.details.chips = 0;
       }
       iterBlinds++;
+      config.CURRENT_MAX_BET = config.CURR_BIG_BLIND;
     }
     if(iterBlinds == 2){
       return false;
     }
   })
 
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 

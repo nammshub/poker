@@ -1,35 +1,20 @@
 const EventEmitter = require('events');
+const PlayerPlayedListener = require('../Listeners/PlayerPlayedListener');
+require('../config');
 
 class CroupierMessageHandler extends EventEmitter {
-    static handleData(data) {
+    static handleData(data,socket) {
         const message = JSON.parse(data);
+        const emmittingPlayer = this.getPlayerBySocket(socket);
         switch (message.id) {
-            case 'server.game.start':
-                console.log('Le jeu commence !! nbr joueurs = ' + message.data.count);
-                startListener.handleMessage(message);
+            case 'player.action':
+                console.log('Le joueur '+ emmittingPlayer.details.id +' a joue !');
+                PlayerPlayedListener.handleMessage(message,emmittingPlayer);
                 break;
-            case 'server.game.cards':
-                console.log('Un joueur recoit ses cartes');
-                cardsListener.handleMessage(message);
-                break;
-            case 'server.game.hand.start':
-                console.log('Une nouvelle main commence');
-                handStartListener.handleMessage(message);
-                break;
-            case 'server.game.play':
-                console.log('A vous de jouer');
-                playListener.handleMessage(message);
+            default:
+                console.log('message envoye de nature inconnue '+data)
                 break;
         }
-        //  11 types de data possibles
-        console.log('DATA from tcpListener: ' + data);
-
-        /*
-        if ( !err )
-            this.emit( 'success', result );
-        else
-            this.emit( 'error', err );
-            */
     }
 
     // Send a message to all clients
@@ -41,6 +26,20 @@ class CroupierMessageHandler extends EventEmitter {
         });
         // Log it to the server output too
         //process.stdout.write(message)
+    }
+
+    /**
+     * retourne le joueur lié au socket en param
+     * @param {*} socket 
+     */
+    static getPlayerBySocket(socket){
+        let iter;
+        for (iter in config.PLAYERS){
+            if(config.PLAYERS[iter].socket === socket){
+                return config.PLAYERS[iter];
+            }
+        }
+        return null;
     }
 }
 

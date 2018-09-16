@@ -30,7 +30,7 @@ class TCPListener extends EventEmitter {
                 break;
             case 'server.game.play':
                 console.log('A vous de jouer');
-                playListener.handleMessage(message,callback);
+                playListener.handleMessage(callback);
                 break;
             case 'server.game.board.cards':
                 console.log('Nouvelles cartes sur le board');

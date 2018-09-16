@@ -2,21 +2,33 @@ const EventEmitter = require( 'events' );
 var game = require('../Beans/Game');
 const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 /**
- * Ce listener gere l'event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
+ * Ce listener gere l'event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
  */
 class PlayListener extends EventEmitter {
   
 
-    handleMessage(playMessage,callback) {
-        //game.hand = cardsMessage.data.cards;
+    handleMessage(callback) {
         //config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
-        /*let messageJson = {
-            'message' : 'toto is back'
-        }
-        callback(messageJson);
-        //});
-        */
-        console.log('\n Play event. Game = ' + JSON.stringify(game));
+        let randomValue = this.getRandomInt(0,config.MY_PLAYER.chips);
+        let randomSecondes = this.getRandomInt(1,config.MAX_SEC_TO_ANSWER);
+        console.log('random value = '+randomValue+' and randomSecondes = '+randomSecondes);
+        let messageJson = {
+            "id": "player.action",
+            "data": {
+              "action": {
+                  "value" :randomValue
+              }
+            }
+          }
+          setTimeout(function () {
+            
+            callback(messageJson);
+          }, 1000*randomSecondes);  
+    }
+
+
+    getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
 

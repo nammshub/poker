@@ -1,4 +1,5 @@
 const EventEmitter = require( 'events' );
+require('../config');
 var game = require('../Beans/Game');
 /**
  * Ce listener gere l'event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
@@ -31,6 +32,7 @@ class HandStartListener extends EventEmitter {
                 if(game.player.id === player.id){
                     game.turnPosition = position;
                     posFound = true;
+                    config.MY_PLAYER = player;
                 }
             }
             if (player.state && (player.state === 'ACTIVE' || player.state === 'ALL_IN' )){

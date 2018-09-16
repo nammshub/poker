@@ -48,6 +48,41 @@ class CroupierHelper {
         }
         CroupierMessageHandler.broadcast(JSON.stringify(updateMessage));
     }
+
+    static getNextPlayer(){
+        if(!config.CURR_PLAYER){
+            console.log('inside getNextPlayer => !config.CURR_PLAYER');
+            //config.ORDERED_PLAYERS_BKP.forEach( function(player){
+                let iter;
+                for (iter in config.ORDERED_PLAYERS_BKP){
+                console.log('config.ORDERED_PLAYERS_BKP.forEach player = '+config.ORDERED_PLAYERS_BKP[iter].details.id +' state = '+config.ORDERED_PLAYERS_BKP[iter].details.state);
+                if(config.ORDERED_PLAYERS_BKP[iter].details.state === 'ACTIVE'){
+                    console.log('inside player.details.state === ACTIVE');
+                    config.CURR_PLAYER = config.ORDERED_PLAYERS_BKP[iter];
+                    return config.CURR_PLAYER;
+                }
+            }
+            
+        }
+        else{
+            //on prend le joueur actif suivant
+            let foundPrecedingPlayer = false;
+            let iter;
+            for (iter in config.ORDERED_PLAYERS_BKP){
+                if(foundPrecedingPlayer && config.ORDERED_PLAYERS_BKP[iter].details.state === 'ACTIVE'){
+                    return config.ORDERED_PLAYERS_BKP[iter];
+                }
+                if(config.ORDERED_PLAYERS_BKP[iter].details.id === config.CURR_PLAYER.details.id){
+                    foundPrecedingPlayer = true;
+                }
+            };
+            for (iter in config.ORDERED_PLAYERS_BKP){
+                if(foundPrecedingPlayer && config.ORDERED_PLAYERS_BKP[iter].details.state === 'ACTIVE'){
+                    return config.ORDERED_PLAYERS_BKP[iter];
+                }
+            };
+        }
+    }
 }
 
 module.exports = CroupierHelper;
