@@ -9,11 +9,11 @@ class CardsListener extends EventEmitter {
     handleMessage(cardsMessage) {
         game.hand = cardsMessage.data.cards;
         const tourNumber = game.turnsDetails.length;
-        config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
+        /*config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
             //game
             console.log('after response from NEURONAL_NETWORK_LISTENER.launchCompute = ' + output);
-        });
-        console.log('inside CardsListener');
+        });*/
+        console.log('inside CardsListener game = '+JSON.stringify(game));
     }
 }
 

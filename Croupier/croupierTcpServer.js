@@ -55,11 +55,12 @@ net.createServer(function (socket) {
 
   // Remove the client from the list when it leaves
   socket.on('end', function () {
-    config.PLAYERS.forEach( function(player, iter){
+    config.PLAYERS.every( function(player, iter){
       if(player.socket === socket){
         console.log(player.details.name + " leaves the game.\n");
         config.PLAYERS.splice(iter, 1);
-        break;
+        config.NB_PLAYERS--;
+        return true;
       }
     })
   });
@@ -147,6 +148,10 @@ async function playerBets(){
   //on boucle sur chaque joueur actif pour avoir son message
   let currPlayer = CroupierHelper.getNextPlayer();
   console.log(' joueur actif = ' + currPlayer.details.id);
+  console.log('etat des joueurs du tour : ');
+  config.ORDERED_PLAYERS_BKP.forEach( function(player){
+    console.log(player.details);
+  });
   config.CURR_PLAYER = currPlayer;
   config.CURR_PLAYER_VALID_ANSWER = false;
   currPlayer.socket.write(JSON.stringify(playMessage));
@@ -156,12 +161,35 @@ async function playerBets(){
   config.CURR_PLAYER_CHRONO =   setTimeout(function () {
     currPlayer.socket.write(JSON.stringify(timeoutMessage));
     timeOut = true;
+    if(config.CURRENT_MAX_BET > 0){
+      //le joueur est FOLDED pour cette main
+      config.ORDERED_PLAYERS_BKP.every( function(player){
+        if(player.details.id === currPlayer.details.id){
+          player.details.state = 'FOLDED';
+          return true;
+        }
+      })
+      //on broadcast la mise de 0 aux autres joueurs
+      let playerAction = {
+        "id": "server.player.action",
+        "data": {
+          "id": currPlayer.details.id,
+          "action": {
+            "value": 0
+          }
+        }
+      }
+
+      CroupierMessageHandler.broadcast(JSON.stringify(playerAction), currPlayer);
+
+    }
   }, 1000*config.MAX_SEC_TO_ANSWER);
 
   while(!config.CURR_PLAYER_VALID_ANSWER && !timeOut){
     console.log('on attend un peu');
     await sleep(2000);
   }
+  
  }
 
 }
@@ -212,6 +240,14 @@ function sendCardsMessage(){
       console.log('\nles cartes donnees au joueur '+player.details.id+' sont : '+JSON.stringify(twoRandomCards[0]) + ' et '+JSON.stringify(twoRandomCards[1]));
       console.log('\ncartes restantes dans le deck en cours '+currentDeck.length);
       console.log('\ncartes restantes dans le deck modele '+DECK.length);
+      let giveCardsMessage = {
+        "id": "server.game.cards",
+        "data": {
+          "cards": twoRandomCards
+        }
+      };
+      player.socket.write(JSON.stringify(giveCardsMessage));
+
     }
   })
 

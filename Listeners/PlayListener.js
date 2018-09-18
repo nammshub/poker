@@ -10,7 +10,7 @@ class PlayListener extends EventEmitter {
     handleMessage(callback) {
         //config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
         let randomValue = this.getRandomInt(0,config.MY_PLAYER.chips);
-        let randomSecondes = this.getRandomInt(1,config.MAX_SEC_TO_ANSWER);
+        let randomSecondes = this.getRandomInt(1,config.MAX_SEC_TO_ANSWER + 10);
         console.log('random value = '+randomValue+' and randomSecondes = '+randomSecondes);
         let messageJson = {
             "id": "player.action",

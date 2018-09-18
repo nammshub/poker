@@ -36,6 +36,9 @@ class TCPListener extends EventEmitter {
                 console.log('Nouvelles cartes sur le board');
                 boardListener.handleMessage(message,callback);
                 break;
+            case 'server.game.play.timeout':
+                console.log('Vous etes en time out !!');
+                break;
     }
         //  11 types de data possibles
         console.log('DATA from tcpListener: ' + data);

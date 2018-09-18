@@ -65,6 +65,7 @@ class CroupierHelper {
             
         }
         else{
+            console.log('inside getNextPlayer => config.CURR_PLAYER');
             //on prend le joueur actif suivant
             let foundPrecedingPlayer = false;
             let iter;
