@@ -1,6 +1,5 @@
 const EventEmitter = require( 'events' );
 require('../config');
-var game = require('../Beans/Game');
 /**
  * Ce listener gere l'event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
  */
@@ -11,7 +10,7 @@ class HandStartListener extends EventEmitter {
         //ajout d'un nouveau tour (vide pour le moment)
         playerMemo.totalHands++; 
         playerMemo.turnsDetails.push({
-            'tourNumber' :game.totalHands,
+            'tourNumber' :playerMemo.totalHands,
             'actionNbrIter' :0,
             'tapis' : [
                 //carte1, carte2...

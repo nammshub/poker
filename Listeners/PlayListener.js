@@ -1,5 +1,4 @@
 const EventEmitter = require( 'events' );
-var game = require('../Beans/Game');
 const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 /**
  * Ce listener gere l'event play. Il doit activer les calculs et repondre au croupier dans les temps impartis

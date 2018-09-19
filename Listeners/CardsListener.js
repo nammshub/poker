@@ -1,5 +1,4 @@
 const EventEmitter = require( 'events' );
-var game = require('../Beans/Game');
 require('../config');
 
 /**

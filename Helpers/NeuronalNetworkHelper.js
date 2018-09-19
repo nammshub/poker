@@ -1,4 +1,3 @@
-var game = require('../Beans/Game');
 require('../config');
 const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 /**
@@ -6,8 +5,6 @@ const NeuronalNetworkListener = require('./NeuronalNetworkListener');
  */
 class NeuronalNetworkHelper  {
     insertNeuronalAnswer(actionNbrIter, turnNumber, output) {
-        const turnsNbrMax = game
-        game.hand = cardsMessage.data.cards;
         neuronalNetworkListener.launchCompute( actionNbrIter, function(output){
             
         });

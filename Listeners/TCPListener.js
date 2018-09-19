@@ -33,7 +33,7 @@ class TCPListener extends EventEmitter {
                 break;
             case 'server.game.board.cards':
                 console.log('Nouvelles cartes sur le board');
-                boardListener.handleMessage(message,callback);
+                boardListener.handleMessage(message,playerMemo);
                 break;
             case 'server.game.play.timeout':
                 console.log('Vous etes en time out !!');

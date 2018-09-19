@@ -1,5 +1,4 @@
 const EventEmitter = require( 'events' );
-var game = require('../Beans/Game');
 const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 /**
  * Ce listener gere l'event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
@@ -11,7 +10,7 @@ class PlayListener extends EventEmitter {
         
         //joueur courant a joue => OK
         if(emmittingPlayer.details.id === config.CURR_PLAYER.details.id){
-            console.log('\n Le joueur courant (id = '+ emmittingPlayer.details.id +') a joue ' + JSON.stringify(game));
+            console.log('\n Le joueur courant (id = '+ emmittingPlayer.details.id +') a joue ');
             //on initialise sa mise à 0 si pas encore de mise pour ce joueur
             config.CURRENT_BETS.set(emmittingPlayer.details.id,config.CURRENT_BETS.get(emmittingPlayer.details.id)?config.CURRENT_BETS.get(emmittingPlayer.details.id):0);
             //on verifie que son action soit valide
