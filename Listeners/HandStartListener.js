@@ -5,12 +5,12 @@ var game = require('../Beans/Game');
  * Ce listener gere l'event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
  */
 class HandStartListener extends EventEmitter {
-    handleMessage(startMessage) {
-        game.listPlayers = startMessage.data.players;
-        this.updateActiveAndPosition();
+    handleMessage(startMessage,playerMemo) {
+        playerMemo.listPlayers = startMessage.data.players;
+        this.updateActiveAndPosition(playerMemo);
         //ajout d'un nouveau tour (vide pour le moment)
-        game.totalHands++; 
-        game.turnsDetails.push({
+        playerMemo.totalHands++; 
+        playerMemo.turnsDetails.push({
             'tourNumber' :game.totalHands,
             'actionNbrIter' :0,
             'tapis' : [
@@ -19,27 +19,26 @@ class HandStartListener extends EventEmitter {
             'neuronalResponses' : [],
             'randomResponse' : 0
         });
-        console.log('\n Hand Start event. Game = ' + JSON.stringify(game));
+        console.log('\n Hand Start event. playerMemo = ' + JSON.stringify(playerMemo));
     }
 
-    updateActiveAndPosition(){
+    updateActiveAndPosition(playerMemo){
         let activeNbr = 0;
         let position = 0;
         let posFound = false;
-        game.listPlayers.forEach(function(player) {
+        playerMemo.listPlayers.forEach(function(player) {
             if(!posFound){
                 position++;
-                if(game.player.id === player.id){
-                    game.turnPosition = position;
+                if(playerMemo.player.id === player.id){
+                    playerMemo.turnPosition = position;
                     posFound = true;
-                    config.MY_PLAYER = player;
                 }
             }
             if (player.state && (player.state === 'ACTIVE' || player.state === 'ALL_IN' )){
                 activeNbr++;
             }
           });
-        game.nbJoueursActifs = activeNbr;
+          playerMemo.nbJoueursActifs = activeNbr;
     }
 
 }

@@ -116,7 +116,6 @@ async function launchPlayCurrHand(){
   */
  //prise de petites et grande blinde chez joueur 1 et 2
   takeBlinds()
-  //* TODO
   let step = 1;
   await playerBets();
   while (!hasHandWinner() && step < 4){
@@ -287,7 +286,10 @@ function sendNewHandMessage(){
   currentOrderedPlayers.push(previousOrderedPlayers[previousOrderedPlayers.length-1]);
   for (i = 0; i < previousOrderedPlayers.length-1; i++) {
     if(previousOrderedPlayers[i].details.chips > 0){
-      previousOrderedPlayers[i].details.status = 'ACTIVE';
+      previousOrderedPlayers[i].details.state = 'ACTIVE';
+    }
+    else{
+      previousOrderedPlayers[i].details.state = 'ELIMINATED';
     }
     currentOrderedPlayers.push(previousOrderedPlayers[i]);
   }  
@@ -309,7 +311,7 @@ function sendNewHandMessage(){
     orderedPlayersDetails.push(player.details);
   })
   let newHandMessage = {
-    "id": "game.hand.start",
+    "id": "server.game.hand.start",
     "data": {
       "players":orderedPlayersDetails
     }
@@ -354,6 +356,7 @@ function takeBlinds(){
       config.CURRENT_MAX_BET = config.CURR_BIG_BLIND;
     }
     if(iterBlinds == 2){
+      console.log('le pot contient '+config.CURRENT_BETS.get('POT'));
       return false;
     }
   })

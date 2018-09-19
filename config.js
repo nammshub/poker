@@ -6,8 +6,6 @@ global.config = {
     NEURONAL_NETWORK_LISTENER: null,
     NEURONAL_NETWORK_HELPER: null,
 
-    //Player
-    MY_PLAYER : null,
 
     //constantes partagées
     MAX_SEC_TO_ANSWER : 15,

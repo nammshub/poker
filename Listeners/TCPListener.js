@@ -12,25 +12,24 @@ const handStartListener = new HandStartListener();
 const playListener = new PlayListener();
 const boardListener = new BoardListener();
 class TCPListener extends EventEmitter {
-    handleTCPData(data,callback) {
-        console.log('\n inside TCPListener. Data = '+data);
+    handleTCPData(data, playerMemo, callback) {
         const message = JSON.parse(data);
         switch (message.id){
             case 'server.game.start':
                 console.log('Le jeu commence !! nbr joueurs = '+message.data.count);
-                startListener.handleMessage(message);
+                startListener.handleMessage(message,playerMemo);
                 break;
             case 'server.game.cards':
                 console.log('Un joueur recoit ses cartes');
-                cardsListener.handleMessage(message);
+                cardsListener.handleMessage(message,playerMemo);
                 break;
             case 'server.game.hand.start':
                 console.log('Une nouvelle main commence');
-                handStartListener.handleMessage(message);
+                handStartListener.handleMessage(message,playerMemo);
                 break;
             case 'server.game.play':
                 console.log('A vous de jouer');
-                playListener.handleMessage(callback);
+                playListener.handleMessage(playerMemo,callback);
                 break;
             case 'server.game.board.cards':
                 console.log('Nouvelles cartes sur le board');
@@ -39,16 +38,7 @@ class TCPListener extends EventEmitter {
             case 'server.game.play.timeout':
                 console.log('Vous etes en time out !!');
                 break;
-    }
-        //  11 types de data possibles
-        console.log('DATA from tcpListener: ' + data);
-
-        /*
-        if ( !err )
-            this.emit( 'success', result );
-        else
-            this.emit( 'error', err );
-            */
+        }
     }
 }
 
