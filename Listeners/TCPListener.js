@@ -2,6 +2,7 @@ const EventEmitter = require( 'events' );
 const StartListener = require('./StartListener');
 const CardsListener = require('./CardsListener');
 const HandStartListener = require('./HandStartListener');
+const HandEndListener = require('./HandEndListener');
 const PlayListener = require('./PlayListener');
 const BoardListener = require('./BoardListener');
 
@@ -9,6 +10,7 @@ const BoardListener = require('./BoardListener');
 const startListener = new StartListener();
 const cardsListener = new CardsListener();
 const handStartListener = new HandStartListener();
+const handEndListener = new HandEndListener();
 const playListener = new PlayListener();
 const boardListener = new BoardListener();
 class TCPListener extends EventEmitter {
@@ -37,6 +39,10 @@ class TCPListener extends EventEmitter {
                 break;
             case 'server.game.play.timeout':
                 console.log('Vous etes en time out !!');
+                break;
+            case 'server.game.hand.end':
+                console.log('Le gagnant est :');
+                handEndListner.handleMessage(message);
                 break;
         }
     }
