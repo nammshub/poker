@@ -1,6 +1,6 @@
 require('../config');
 var fs = require("fs");
-var game = [r: 0.03, g: 0.7, b: 0.5];
+var game = ['r: 0.03', 'g: 0.7', 'b: 0.5'];
 
 
 /**
