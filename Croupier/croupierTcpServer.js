@@ -114,7 +114,7 @@ async function launchPlayCurrHand(){
   une main se decompose en 4 phases de mises entrecoupées de pose de cartes sur le tapis par le croupier
   Une main peut se terminer prematurement si tous les joueurs sauf un se couchent
   */
- //prise de petites et grande blinde chez joueur 1 et 2
+ //prise de petites et grande blinde
   takeBlinds()
   let step = 1;
   await playerBets();
@@ -222,6 +222,7 @@ async function startGame(){
   }
   else{
     console.log('\nTous les tours sont épuisés');
+    //todo => calcul du vainqueur
   }
 
   }, 1000*config.WAIT_BEFORE_START);
