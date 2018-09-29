@@ -137,6 +137,41 @@ async function launchPlayCurrHand(){
 
 }
 
+function orderPlayers(){
+  console.log('inside orderPlayers');
+  let activeArray = [];
+  let eliminatedArray = [];
+  let position = 0;
+  for (let player of config.PLAYERS){
+    position++;
+    player.details.state = 'ELIMINATED'
+    if(player.details.chips > 0){
+      player.details.state = 'ACTIVE'
+    }
+    if(position>1){
+      if(player.details.state === 'ACTIVE'){
+        activeArray.push(player);
+      }
+      else{
+        eliminatedArray.push(player);
+      }
+    }
+  }
+  //on gere ensuite l'ancien 1er joueur
+  if(config.PLAYERS[0].details.state === 'ACTIVE'){
+    activeArray.push(config.PLAYERS[0]);
+  }
+  else{
+    eliminatedArray.push(config.PLAYERS[0]);
+  }
+
+  //on concat les 2 tableaux dans le config.PLAYERS
+  activeArray.concat(eliminatedArray);
+  config.PLAYERS = activeArray;
+  console.log('config.PLAYERS size = '+config.PLAYERS.length)
+  console.log('end orderPlayers');
+}
+
 async function playerBets(){
   /*
     On va tourner sur chaque joueur actif pour avoir son message soit de se coucher soit de suivre soit de relancer 
@@ -213,7 +248,7 @@ async function startGame(){
       sendCardsMessage();
 
       //On appelle les joueurs dans l'ordre pour donner leur action jusqu à la resolution de la main
-      await launchPlayCurrHand();
+      //await launchPlayCurrHand();
 
       config.CURRENT_HAND++;
     }
@@ -276,48 +311,18 @@ function sendNewHandMessage(){
   //on nettoie la table des cartes precedentes:
   config.CARDS_ON_TABLE = [];
   //on etablit l'ordre de jeu de cette main
-  let currentOrderedPlayers = []
-  let previousOrderedPlayers = config.ORDERED_PLAYERS_BKP;
-  if (previousOrderedPlayers.length === 0){
-    config.PLAYERS.forEach( function(player){
-      previousOrderedPlayers.push(player);
-    })
-  }
-	console.log('previousOrderedPlayers length = '+previousOrderedPlayers.length);
-  currentOrderedPlayers.push(previousOrderedPlayers[previousOrderedPlayers.length-1]);
-  for (i = 0; i < previousOrderedPlayers.length-1; i++) {
-    if(previousOrderedPlayers[i].details.chips > 0){
-      previousOrderedPlayers[i].details.state = 'ACTIVE';
-    }
-    else{
-      previousOrderedPlayers[i].details.state = 'ELIMINATED';
-    }
-    currentOrderedPlayers.push(previousOrderedPlayers[i]);
-  }  
-  
-  	console.log('currentOrderedPlayers length = '+currentOrderedPlayers.length);
-
-  //assigne dealer
-  currentOrderedPlayers.forEach( function(player,pos){
-	if(pos === currentOrderedPlayers.length - 1){
-		player.details.dealer = true;
-	} 
-	else{
-		player.details.dealer = false;
-	}
-  });
-  config.ORDERED_PLAYERS_BKP = currentOrderedPlayers;
-  let orderedPlayersDetails = [];
-  config.ORDERED_PLAYERS_BKP.forEach( function(player){
-    orderedPlayersDetails.push(player.details);
+  orderPlayers();
+  let playersDetails = [];
+  config.PLAYERS.forEach(function (player){
+    console.log(JSON.stringify(player.details));
+    playersDetails.push(player.details);
   })
   let newHandMessage = {
     "id": "server.game.hand.start",
     "data": {
-      "players":orderedPlayersDetails
+      "players":playersDetails
     }
   }
-  
   CroupierMessageHandler.broadcast(JSON.stringify(newHandMessage));
   
 }
