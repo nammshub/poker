@@ -46,7 +46,7 @@ net.createServer(function (socket) {
   config.PLAYERS.push(currPlayer);
 
   // Send a nice welcome message and announce
-  console.log("\nWelcome " + currPlayer.details.name + "\n");
+  console.log("\nWelcome " + currPlayer.details.id + "\n");
 
   // Handle incoming messages from clients.
   socket.on('data', function (data) {

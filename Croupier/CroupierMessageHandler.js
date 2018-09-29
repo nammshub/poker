@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const PlayerPlayedListener = require('../Listeners/PlayerPlayedListener');
+const LobbyJoinListener = require('../Listeners/LobbyJoinListener');
 require('../config');
 
 class CroupierMessageHandler extends EventEmitter {
@@ -10,6 +11,10 @@ class CroupierMessageHandler extends EventEmitter {
             case 'player.action':
                 console.log('Le joueur '+ emmittingPlayer.details.id +' a joue !');
                 PlayerPlayedListener.handleMessage(message,emmittingPlayer);
+                break;
+            case 'client.lobby.join':
+                console.log('Le joueur '+ emmittingPlayer.details.id +' rejoint le lobby !');
+                LobbyJoinListener.handleMessage(message,emmittingPlayer);
                 break;
             default:
                 console.log('message envoye de nature inconnue '+data)
