@@ -79,11 +79,15 @@ console.log("Poker server running at port "+PORT+"\n");
 function actualizeBlinds(){
   let iterBlindValues = config.BLIND_EVOLUTION.keys();
   let currValue = iterBlindValues.next().value;
-  while( currValue < config.CURRENT_HAND){
+  while( currValue > config.CURRENT_HAND){
+    console.log('currValue = '+ currValue);
+    console.log('config.CURRENT_HAND = '+ config.CURRENT_HAND);
     currValue = iterBlindValues.next().value
   }
   config.CURR_SMALL_BLIND = config.BLIND_EVOLUTION.get(currValue)[0];
   config.CURR_BIG_BLIND = config.BLIND_EVOLUTION.get(currValue)[1];
+  console.log('SMALL_BLIND = '+config.CURR_SMALL_BLIND);
+  console.log('BIG_BLIND = '+config.CURR_BIG_BLIND);
 }
 
 function hasAllChecked(){
@@ -116,6 +120,7 @@ async function launchPlayCurrHand(){
   */
  //prise de petites et grande blinde
   takeBlinds()
+  /*
   let step = 1;
   await playerBets();
   while (!hasHandWinner() && step < 4){
@@ -133,7 +138,7 @@ async function launchPlayCurrHand(){
     config.CURRENT_MAX_BET = 0;
     await playerBets();
   }
-
+*/
 
 }
 
@@ -248,7 +253,7 @@ async function startGame(){
       sendCardsMessage();
 
       //On appelle les joueurs dans l'ordre pour donner leur action jusqu à la resolution de la main
-      //await launchPlayCurrHand();
+      await launchPlayCurrHand();
 
       config.CURRENT_HAND++;
     }
@@ -310,6 +315,8 @@ function sendNewHandMessage(){
   currentDeck =  DECK.slice(0);
   //on nettoie la table des cartes precedentes:
   config.CARDS_ON_TABLE = [];
+  //pot a 0
+  config.CURRENT_BETS.set('POT',0);
   //on etablit l'ordre de jeu de cette main
   orderPlayers();
   let playersDetails = [];
@@ -332,41 +339,45 @@ function takeBlinds(){
   console.log('inside takeBlinds');
   //modifie les blindes au besoin selon le tour en cours
   actualizeBlinds();
-  let iterBlinds = 0;
-  config.ORDERED_PLAYERS_BKP.every( function(player){
-    if(player.details.state === 'ACTIVE' && iterBlinds === 0){
-      if(player.details.chips >= config.CURR_SMALL_BLIND){
-        player.details.chips = player.details.chips - config.CURR_SMALL_BLIND;
-        config.CURRENT_BETS.set(player.details.id,config.CURR_SMALL_BLIND);
-        config.CURRENT_BETS.set('POT',config.CURR_SMALL_BLIND);
+  let bigBlindPayed = false;
+  let smallBlindPlayed = false;
+  let playersIter = config.PLAYERS.length - 1;
+  //on regarde les jouers en partant de la fin et on cherche les ACTIVE 
+  //le premier qu'on trouve => grosse blinde
+  //le deuxieme => petite blinde
+  while (playersIter >= 0 && !smallBlindPlayed){
+    if(config.PLAYERS[playersIter].details.state === 'ACTIVE' && bigBlindPayed && !smallBlindPlayed){
+      //paye small blind
+      smallBlindPlayed = true;
+      if(config.PLAYERS[playersIter].details.chips >= config.CURR_SMALL_BLIND){
+        config.PLAYERS[playersIter].details.chips = config.PLAYERS[playersIter].details.chips - config.CURR_SMALL_BLIND;
+        config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id,config.CURR_SMALL_BLIND);
+        config.CURRENT_BETS.set('POT',config.CURRENT_BETS.get('POT') + config.CURR_SMALL_BLIND);
       } else {
-        player.details.state = 'ALL_IN';
-        config.CURRENT_BETS.set(player.details.id,player.details.chips);
-        config.CURRENT_BETS.set('POT',player.details.chips);
-        player.details.chips = 0;
+        config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id,config.PLAYERS[playersIter].details.chips);
+        config.CURRENT_BETS.set('POT',config.CURRENT_BETS.get('POT') + config.PLAYERS[playersIter].details.chips);
+        config.PLAYERS[playersIter].details.chips = 0;
       }
-      iterBlinds++;
     }
-    if(player.details.state === 'ACTIVE' && iterBlinds === 1){
-      if(player.details.chips >= config.CURR_BIG_BLIND){
-        player.details.chips = player.details.chips - config.CURR_BIG_BLIND;
-        config.CURRENT_BETS.set(player.details.id,config.CURR_BIG_BLIND);
+
+
+    if(config.PLAYERS[playersIter].details.state === 'ACTIVE' && !bigBlindPayed){
+      //paye big blind
+      bigBlindPayed = true;
+      if(config.PLAYERS[playersIter].details.chips >= config.CURR_BIG_BLIND){
+        config.PLAYERS[playersIter].details.chips = config.PLAYERS[playersIter].details.chips - config.CURR_BIG_BLIND;
+        config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id,config.CURR_BIG_BLIND);
         config.CURRENT_BETS.set('POT',config.CURRENT_BETS.get('POT') + config.CURR_BIG_BLIND);
       } else {
-        player.details.state = 'ALL_IN';
-        config.CURRENT_BETS.set(player.details.id,player.details.chips);
-        config.CURRENT_BETS.set('POT',config.CURRENT_BETS.get('POT') + player.details.chips);
-        player.details.chips = 0;
+        config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id,config.PLAYERS[playersIter].details.chips);
+        config.CURRENT_BETS.set('POT',config.CURRENT_BETS.get('POT') + config.PLAYERS[playersIter].details.chips);
+        config.PLAYERS[playersIter].details.chips = 0;
       }
-      iterBlinds++;
       config.CURRENT_MAX_BET = config.CURR_BIG_BLIND;
     }
-    if(iterBlinds == 2){
-      console.log('le pot contient '+config.CURRENT_BETS.get('POT'));
-      return false;
-    }
-  })
-
+    playersIter--;
+  }
+  console.log('le pot contient '+config.CURRENT_BETS.get('POT'));
 }
 
 function sleep(ms) {
