@@ -120,9 +120,10 @@ async function launchPlayCurrHand(){
   */
  //prise de petites et grande blinde
   takeBlinds()
-  /*
+  
   let step = 1;
   await playerBets();
+  /*
   while (!hasHandWinner() && step < 4){
     switch (step){
       //flop
@@ -188,7 +189,7 @@ async function playerBets(){
   let currPlayer = CroupierHelper.getNextPlayer();
   console.log(' joueur actif = ' + currPlayer.details.id);
   console.log('etat des joueurs du tour : ');
-  config.ORDERED_PLAYERS_BKP.forEach( function(player){
+  config.PLAYERS.forEach( function(player){
     console.log(player.details);
   });
   config.CURR_PLAYER = currPlayer;
@@ -202,7 +203,7 @@ async function playerBets(){
     timeOut = true;
     if(config.CURRENT_MAX_BET > 0){
       //le joueur est FOLDED pour cette main
-      config.ORDERED_PLAYERS_BKP.every( function(player){
+      config.PLAYERS.every( function(player){
         if(player.details.id === currPlayer.details.id){
           player.details.state = 'FOLDED';
           return true;
@@ -272,7 +273,7 @@ async function startGame(){
  * distribution de 2 cartes à chaque joueur actif
  */
 function sendCardsMessage(){
-  config.ORDERED_PLAYERS_BKP.forEach( function(player){
+  config.PLAYERS.forEach( function(player){
     if(player.details.state === 'ACTIVE'){
       let twoRandomCards = CroupierHelper.getRandomCards(currentDeck,2);
       //on stock ces 2 cartes dnas notre map joueur - cartes du tour

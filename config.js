@@ -8,7 +8,7 @@ global.config = {
 
 
     //constantes partagées
-    MAX_SEC_TO_ANSWER : 15,
+    MAX_SEC_TO_ANSWER : 5,
 
 
 
@@ -17,9 +17,7 @@ global.config = {
     START_MONEY: 1500,
     WAIT_BEFORE_START: 10,
     CURRENT_HAND: 0,
-    MAX_HANDS: 25,
-    //les joueurs ordonnés pour le tour en cours avec un parametre position qui peut etre SMALL_BLIND, BIG_BLIND, FIRST ou 
-    ORDERED_PLAYERS_BKP: [],
+    MAX_HANDS: 150,
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
     ALL_KINDS: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING"],
     //contient les details courants du joueur + son socket

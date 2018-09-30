@@ -52,13 +52,13 @@ class CroupierHelper {
     static getNextPlayer(){
         if(!config.CURR_PLAYER){
             console.log('inside getNextPlayer => !config.CURR_PLAYER');
-            //config.ORDERED_PLAYERS_BKP.forEach( function(player){
+            //config.PLAYERS.forEach( function(player){
                 let iter;
-                for (iter in config.ORDERED_PLAYERS_BKP){
-                console.log('config.ORDERED_PLAYERS_BKP.forEach player = '+config.ORDERED_PLAYERS_BKP[iter].details.id +' state = '+config.ORDERED_PLAYERS_BKP[iter].details.state);
-                if(config.ORDERED_PLAYERS_BKP[iter].details.state === 'ACTIVE'){
+                for (iter in config.PLAYERS){
+                console.log('config.PLAYERS.forEach player = '+config.PLAYERS[iter].details.id +' state = '+config.PLAYERS[iter].details.state);
+                if(config.PLAYERS[iter].details.state === 'ACTIVE'){
                     console.log('inside player.details.state === ACTIVE');
-                    config.CURR_PLAYER = config.ORDERED_PLAYERS_BKP[iter];
+                    config.CURR_PLAYER = config.PLAYERS[iter];
                     return config.CURR_PLAYER;
                 }
             }
@@ -69,17 +69,19 @@ class CroupierHelper {
             //on prend le joueur actif suivant
             let foundPrecedingPlayer = false;
             let iter;
-            for (iter in config.ORDERED_PLAYERS_BKP){
-                if(foundPrecedingPlayer && config.ORDERED_PLAYERS_BKP[iter].details.state === 'ACTIVE'){
-                    return config.ORDERED_PLAYERS_BKP[iter];
+            for (iter in config.PLAYERS){
+                if(foundPrecedingPlayer && config.PLAYERS[iter].details.state === 'ACTIVE'){
+                    return config.PLAYERS[iter];
                 }
-                if(config.ORDERED_PLAYERS_BKP[iter].details.id === config.CURR_PLAYER.details.id){
+                if(config.PLAYERS[iter].details.id === config.CURR_PLAYER.details.id){
                     foundPrecedingPlayer = true;
                 }
             };
-            for (iter in config.ORDERED_PLAYERS_BKP){
-                if(foundPrecedingPlayer && config.ORDERED_PLAYERS_BKP[iter].details.state === 'ACTIVE'){
-                    return config.ORDERED_PLAYERS_BKP[iter];
+            console.log('inside getNextPlayer => 2e boucle => foundPrecedingPlayer = '+foundPrecedingPlayer);
+            for (iter in config.PLAYERS){
+                console.log('inside getNextPlayer => 2e boucle => state = '+config.PLAYERS[iter].details.state+' id = '+config.PLAYERS[iter].details.id);
+                if(foundPrecedingPlayer && config.PLAYERS[iter].details.state === 'ACTIVE'){
+                    return config.PLAYERS[iter];
                 }
             };
         }

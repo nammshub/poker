@@ -33,7 +33,7 @@ class HandStartListener extends EventEmitter {
                     posFound = true;
                 }
             }
-            if (player.state && (player.state === 'ACTIVE' || player.state === 'ALL_IN' )){
+            if (player.state && (player.state === 'ACTIVE')){
                 activeNbr++;
             }
           });
