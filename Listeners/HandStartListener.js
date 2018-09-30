@@ -7,6 +7,12 @@ class HandStartListener extends EventEmitter {
     handleMessage(startMessage,playerMemo) {
         playerMemo.listPlayers = startMessage.data.players;
         this.updateActiveAndPosition(playerMemo);
+        //Maj des chips si le corupier a pris une blinde chez le joueur
+        for(let player of startMessage.data.players){
+            if(playerMemo.player.id === player.id){
+                playerMemo.player = player;
+            }
+        }
         //ajout d'un nouveau tour (vide pour le moment)
         playerMemo.totalHands++; 
         playerMemo.turnsDetails.push({
@@ -31,6 +37,7 @@ class HandStartListener extends EventEmitter {
                 if(playerMemo.player.id === player.id){
                     playerMemo.turnPosition = position;
                     posFound = true;
+                    playerMemo.player.chips
                 }
             }
             if (player.state && (player.state === 'ACTIVE')){
