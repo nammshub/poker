@@ -1,4 +1,5 @@
 const EventEmitter = require('events');
+//const CroupierMessageHandler = require('../Croupier/CroupierMessageHandler');
 const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 /**
  * Ce listener gere l'event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
@@ -11,7 +12,16 @@ class PlayerPlayedListener extends EventEmitter {
     }
 
 
-    static handleMessage(message, emmittingPlayer) {
+    static handleMessage(message, emmittingPlayer, CroupierMessageHandler) {
+        let playerAction = {
+            "id": "server.player.action",
+            "data": {
+            "id": emmittingPlayer.details.id,
+            "action": {
+                "value": 0
+                }
+            }
+        }
         /*
         arbre decision:
 
@@ -41,7 +51,6 @@ class PlayerPlayedListener extends EventEmitter {
             for( let player of config.PLAYERS){
                 if (player.details.id === emmittingPlayer.details.id) {
                     player.details.state = 'FOLDED';
-                    PlayerPlayedListener.sendValidSignal();
                     return true;
                 }
             }
@@ -57,6 +66,7 @@ class PlayerPlayedListener extends EventEmitter {
                                 if (player.details.id === emmittingPlayer.details.id) {
                     player.details.state = 'FOLDED';
                     PlayerPlayedListener.sendValidSignal();
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
                     return true;
                 }
             }
@@ -75,6 +85,8 @@ class PlayerPlayedListener extends EventEmitter {
                         config.CURRENT_MAX_BET = config.CURRENT_BETS.get(emmittingPlayer.details.id);
                     }
                     PlayerPlayedListener.sendValidSignal();
+                    playerAction.data.action.value = message.data.action.value;
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
                     return true;
                 }
             }
@@ -87,6 +99,7 @@ class PlayerPlayedListener extends EventEmitter {
                 if (player.details.id === emmittingPlayer.details.id) {
                     player.details.state = 'FOLDED';
                     PlayerPlayedListener.sendValidSignal();
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
                     return true;
                 }
             }
@@ -101,6 +114,8 @@ class PlayerPlayedListener extends EventEmitter {
                     config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + message.data.action.value);
                     config.CURRENT_BETS.set(emmittingPlayer.details.id, config.CURRENT_BETS.get(emmittingPlayer.details.id) + message.data.action.value);
                     PlayerPlayedListener.sendValidSignal();
+                    playerAction.data.action.value = message.data.action.value;
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
                     return true;
                 }
             }
@@ -116,6 +131,8 @@ class PlayerPlayedListener extends EventEmitter {
                     config.CURRENT_MAX_BET = config.CURRENT_BETS.get(emmittingPlayer.details.id);
                     console.log('\n Le joueur avec (id = ' + emmittingPlayer.details.id + ') a RAISE !! la max bet (' + config.CURRENT_MAX_BET + ') ');
                     PlayerPlayedListener.sendValidSignal();
+                    playerAction.data.action.value = message.data.action.value;
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
                     return true;
                 }
             }

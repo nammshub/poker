@@ -10,7 +10,7 @@ class CroupierMessageHandler extends EventEmitter {
         switch (message.id) {
             case 'player.action':
                 console.log('Le joueur '+ emmittingPlayer.details.id +' a joue !');
-                PlayerPlayedListener.handleMessage(message,emmittingPlayer);
+                PlayerPlayedListener.handleMessage(message,emmittingPlayer,this);
                 break;
             case 'client.lobby.join':
                 console.log('Le joueur '+ emmittingPlayer.details.id +' rejoint le lobby !');
