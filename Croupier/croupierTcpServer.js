@@ -132,6 +132,10 @@ async function launchPlayCurrHand() {
     config.CURRENT_MAX_BET = 0;
     await playerBets();
   }
+  if(step === 4){
+    //on est arrive en fin de main, il faut determiner le vainqueur parmi les joueurs encore ACTIFS
+    //TODO
+  }
 
 }
 
