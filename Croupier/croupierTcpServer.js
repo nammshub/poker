@@ -8,6 +8,7 @@ require('../config');
 require('../deck');
 //const DeckHelper = require('../Helpers/DeckHelper');
 const CroupierHelper = require('../Helpers/CroupierHelper');
+const BlindHelper = require('../Helpers/BlindHelper');
 const CroupierMessageHandler = require('./CroupierMessageHandler');
 const PORT = config.PORT;
 const timeoutMessage = {
@@ -74,21 +75,6 @@ net.createServer(function (socket) {
 
 // Put a friendly message on the terminal of the server.
 console.log("Poker server running at port " + PORT + "\n");
-
-
-function actualizeBlinds() {
-  let iterBlindValues = config.BLIND_EVOLUTION.keys();
-  let currValue = iterBlindValues.next().value;
-  while (currValue > config.CURRENT_HAND) {
-    console.log('currValue = ' + currValue);
-    console.log('config.CURRENT_HAND = ' + config.CURRENT_HAND);
-    currValue = iterBlindValues.next().value
-  }
-  config.CURR_SMALL_BLIND = config.BLIND_EVOLUTION.get(currValue)[0];
-  config.CURR_BIG_BLIND = config.BLIND_EVOLUTION.get(currValue)[1];
-  console.log('SMALL_BLIND = ' + config.CURR_SMALL_BLIND);
-  console.log('BIG_BLIND = ' + config.CURR_BIG_BLIND);
-}
 
 function hasAllChecked() {
   //return true SSI tous les joueurs actifs ont suivi la mise la plus haute
@@ -347,7 +333,7 @@ function sendNewHandMessage() {
 function takeBlinds() {
   console.log('inside takeBlinds');
   //modifie les blindes au besoin selon le tour en cours
-  actualizeBlinds();
+  BlindHelper.actualizeBlinds(config.CURRENT_HAND);
   let bigBlindPayed = false;
   let smallBlindPlayed = false;
   let playersIter = config.PLAYERS.length - 1;

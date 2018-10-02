@@ -1,4 +1,6 @@
 const EventEmitter = require( 'events' );
+const BlindHelper = require('../Helpers/BlindHelper');
+
 require('../config');
 /**
  * Ce listener gere l'event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
@@ -15,6 +17,9 @@ class HandStartListener extends EventEmitter {
         }
         //ajout d'un nouveau tour (vide pour le moment)
         playerMemo.totalHands++; 
+        //actualise les blindes
+        const currBlinds = BlindHelper.actualizeBlinds(playerMemo.totalHands);
+        playerMemo.bigBlind = currBlinds[1];
         playerMemo.turnsDetails.push({
             'tourNumber' :playerMemo.totalHands,
             'actionNbrIter' :0,
