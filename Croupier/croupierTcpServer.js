@@ -223,6 +223,12 @@ async function playerBets() {
     }
 
   }
+  if(hasAllChecked()){
+    console.log('tout le monde à check');
+  }
+  else{
+    console.log('On a un gagnant pour la main');
+  }
 
 }
 
@@ -244,7 +250,8 @@ async function startGame() {
 
       //distribution des cartes à chaque joueur
       sendCardsMessage();
-
+      //on dort une seconde pour eviter les accrocs de transmission trop rapide
+      await sleep(1000);
       //On appelle les joueurs dans l'ordre pour donner leur action jusqu à la resolution de la main
       await launchPlayCurrHand();
 
