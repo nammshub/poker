@@ -56,7 +56,7 @@ class CroupierHelper {
                 let iter;
                 for (iter in config.PLAYERS){
                 console.log('config.PLAYERS.forEach player = '+config.PLAYERS[iter].details.id +' state = '+config.PLAYERS[iter].details.state);
-                if(config.PLAYERS[iter].details.state === 'ACTIVE'){
+                if(config.PLAYERS[iter].details.state === 'ACTIVE' && config.PLAYERS[iter].details.chips > 0){
                     console.log('inside player.details.state === ACTIVE');
                     config.CURR_PLAYER = config.PLAYERS[iter];
                     return config.CURR_PLAYER;
@@ -70,7 +70,7 @@ class CroupierHelper {
             let foundPrecedingPlayer = false;
             let iter;
             for (iter in config.PLAYERS){
-                if(foundPrecedingPlayer && config.PLAYERS[iter].details.state === 'ACTIVE'){
+                if(foundPrecedingPlayer && config.PLAYERS[iter].details.state === 'ACTIVE' && config.PLAYERS[iter].details.chips > 0){
                     return config.PLAYERS[iter];
                 }
                 if(config.PLAYERS[iter].details.id === config.CURR_PLAYER.details.id){
@@ -80,7 +80,7 @@ class CroupierHelper {
             console.log('inside getNextPlayer => 2e boucle => foundPrecedingPlayer = '+foundPrecedingPlayer);
             for (iter in config.PLAYERS){
                 console.log('inside getNextPlayer => 2e boucle => state = '+config.PLAYERS[iter].details.state+' id = '+config.PLAYERS[iter].details.id);
-                if(foundPrecedingPlayer && config.PLAYERS[iter].details.state === 'ACTIVE'){
+                if(foundPrecedingPlayer && config.PLAYERS[iter].details.state === 'ACTIVE' && config.PLAYERS[iter].details.chips > 0){
                     return config.PLAYERS[iter];
                 }
             };
