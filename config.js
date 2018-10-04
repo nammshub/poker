@@ -8,7 +8,7 @@ global.config = {
 
 
     //constantes partagées
-    MAX_SEC_TO_ANSWER : 5,
+    MAX_SEC_TO_ANSWER : 15,
 
 
 

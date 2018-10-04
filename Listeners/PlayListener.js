@@ -6,7 +6,7 @@ const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 class PlayListener extends EventEmitter {
 
 
-    handleMessage(playerMemo, callback) {
+    async handleMessage(playerMemo, callback) {
         /*
         lance le machine learning => quand fini emit event pour repondre
 		- lance le hardcoded
@@ -24,11 +24,12 @@ class PlayListener extends EventEmitter {
             }
         }
         //on cree la reponse neuronale
-        let sendNeuronal = null;
+        let timeout = false;
         const timerControl = setTimeout(function () {
-            //on annule la reponse neuronale
-            sendNeuronal = null;
+            console.log('le timeout est passe');
             callback(messageJson);
+            //on annule la reponse neuronale
+            timeout = true;
         }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
 
         //calcul random
@@ -39,19 +40,29 @@ class PlayListener extends EventEmitter {
         console.log('random value = ' + randomValue);
 
         //lancement de la partie neuronale
-        const rawNeuronal = getNeuronalAnswer();
-        const pureNeuronal = getPureAnswer(rawNeuronal);
+        const rawNeuronal = await this.getNeuronalAnswer();
+        console.log('on a la reponse neuronale');
+        const pureNeuronal = this.getPureAnswer(rawNeuronal);
         messageJson.data.action.value = pureNeuronal;
         clearTimeout(timerControl);
-        sendNeuronal = callback(messageJson);
+        if (!timeout) {
+            callback(messageJson);
+        }
     }
 
     /**
      * retourne la reponse du reseau de neurone sous la forme d'un nombre de chips à jouer
      */
-    getNeuronalAnswer() {
-        const neuronalAnswer = net.run({ r: 1, g: 0.4, b: 0 });  // { white: 0.99, black: 0.002 }
-        return neuronalAnswer.chipsToPlay;
+    async getNeuronalAnswer() {
+        //const neuronalAnswer = net.run({ r: 1, g: 0.4, b: 0 });  // { white: 0.99, black: 0.002 }
+        //return neuronalAnswer.chips;
+        //return 3;
+        await this.sleep((1000 * config.MAX_SEC_TO_ANSWER) + 1000);
+        return 3;
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
     /**
      * retourne une reponse propre selon la reponse brut du reseau neuronal
@@ -60,6 +71,7 @@ class PlayListener extends EventEmitter {
      * @param {*} rawNeuronal 
      */
     getPureAnswer(rawNeuronal) {
+        return rawNeuronal * 3;
         return 0;
     }
 
