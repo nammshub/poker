@@ -25,6 +25,14 @@ class DeckHelper{
             console.log('Saved!');
           });
     }
+
+    static compare(a,b) {
+        if (a.cardInput < b.cardInput)
+          return -1;
+        if (a.cardInput > b.cardInput)
+          return 1;
+        return 0;
+      }
 }
 
 module.exports =  DeckHelper;
