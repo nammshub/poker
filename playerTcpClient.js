@@ -33,11 +33,21 @@ let playerMemo = {
 }
 playerSocket.connect(PORT, HOST, function() {
 
+    let teamName = 'D.E.V. team';
+
+    process.argv.forEach((val, index) => {
+        if(index === 2)
+        teamName = val;
+      });
+
     console.log("CONNECTED TO: " + HOST + ":" + PORT);
     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
     const suscribeMessage = {
-        "data" : "I want to play poker !"
-    }
+        "id": "client.lobby.join",
+        "data": {
+          "name": teamName
+        }
+      }
     playerSocket.write(JSON.stringify(suscribeMessage));
 });
 

@@ -1,0 +1,22 @@
+input du reseau:
+- main en cours (trie par valeur croissante): h1 ,h2
+- tapis (trie par valeurs croissantes): t1,t2...
+- actions: (player 1 action 1.... mine action1) p1_a1,p2_a1,m_a1, p4_a1,p1_a2
+- gain du tour: 
+winLose : 
+	0 => lose
+	0.5 => equal
+	1 => win
+output chips: % du pot global
+
+exemple: {input: { h1: 0.03, h2: 0.7, t1: 0.5, t2: 0.16, t3: 0.09 ,p1_a1 : 0,p2_a1 : 0.006 ,m_a1 : 0.006, p4_a1 : 0,p2_a2 :0.002 g : 0.7  }, output: { chips: 0.005 }}
+
+
+Exemple:
+var net = new brain.NeuralNetwork();
+
+net.train([{input: { r: 0.03, g: 0.7, b: 0.5 }, output: { black: 1 }},
+           {input: { r: 0.16, g: 0.09, b: 0.2 }, output: { white: 1 }},
+           {input: { r: 0.5, g: 0.5, b: 1.0 }, output: { white: 1 }}]);
+
+var output = net.run({ r: 1, g: 0.4, b: 0 });  // { white: 0.99, black: 0.002 }

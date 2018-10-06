@@ -1,12 +1,27 @@
-const EventEmitter = require( 'events' );
+const EventEmitter = require('events');
+//const CroupierMessageHandler = require('../Croupier/CroupierMessageHandler');
 const NeuronalNetworkListener = require('./NeuronalNetworkListener');
 /**
  * Ce listener gere l'event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
  */
 class PlayerPlayedListener extends EventEmitter {
-  
 
-    static handleMessage(message,emmittingPlayer){
+    static sendValidSignal() {
+        clearTimeout(config.CURR_PLAYER_CHRONO);
+        config.CURR_PLAYER_VALID_ANSWER = true;
+    }
+
+
+    static handleMessage(message, emmittingPlayer, CroupierMessageHandler) {
+        let playerAction = {
+            "id": "server.player.action",
+            "data": {
+            "id": emmittingPlayer.details.id,
+            "action": {
+                "value": 0
+                }
+            }
+        }
         /*
         arbre decision:
 
@@ -31,80 +46,100 @@ class PlayerPlayedListener extends EventEmitter {
         */
 
         //joueur imprevu a joue=> KO
-        if(emmittingPlayer.details.id !== config.CURR_PLAYER.details.id){
-            console.log('\n Le joueur avec (id = '+ emmittingPlayer.details.id +') a joue MAIS ce n est pas son tour !!');
-            config.PLAYERS.every(function (player){
-                if(player.details.id === emmittingPlayer.details.id){
+        if (emmittingPlayer.details.id !== config.CURR_PLAYER.details.id) {
+            console.log('\n Le joueur avec (id = ' + emmittingPlayer.details.id + ') a joue MAIS ce n est pas son tour !!');
+            for( let player of config.PLAYERS){
+                if (player.details.id === emmittingPlayer.details.id) {
                     player.details.state = 'FOLDED';
                     return true;
                 }
-            })
+            }
         }
-        //joueur joue moins que 0 => KO
-        if(message.data.action.value < 0 ){
-            console.log('\n Le joueur avec (id = '+ emmittingPlayer.details.id +') a misé moins que 0 chips !!');
-            config.PLAYERS.every(function (player){
-                if(player.details.id === emmittingPlayer.details.id){
-                    player.details.state = 'FOLDED';
-                    return true;
-                }
-            })
-        }
+
+        //on initialise la bet du joueur en cours si pas deja fait
+        config.CURRENT_BETS.set(emmittingPlayer.details.id, config.CURRENT_BETS.get(emmittingPlayer.details.id) ? config.CURRENT_BETS.get(emmittingPlayer.details.id) : 0);
 
         //joueur joue plus que ses chips restants => KO
-        if(message.data.action.value > 0 ){
-            console.log('\n Le joueur avec (id = '+ emmittingPlayer.details.id +') a misé moins que 0 chips !!');
-            config.PLAYERS.every(function (player){
-                if(player.details.id === emmittingPlayer.details.id){
+        if (message.data.action.value > emmittingPlayer.details.chips) {
+            console.log('\n Le joueur avec (id = ' + emmittingPlayer.details.id + ') a misé plus que ses chips restants !!');
+            for( let player of config.PLAYERS){
+                                if (player.details.id === emmittingPlayer.details.id) {
                     player.details.state = 'FOLDED';
+                    PlayerPlayedListener.sendValidSignal();
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
                     return true;
                 }
-            })
+            }
         }
 
+        //joueur joue all-in
+        if (message.data.action.value === emmittingPlayer.details.chips) {
+            console.log('\n Le joueur avec (id = ' + emmittingPlayer.details.id + ') joue all-in !!');
+            for( let player of config.PLAYERS){
+                if (player.details.id === emmittingPlayer.details.id) {
+                    player.details.chips = 0;
+                    config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + message.data.action.value);
+                    config.CURRENT_BETS.set(emmittingPlayer.details.id, config.CURRENT_BETS.get(emmittingPlayer.details.id) + message.data.action.value);
 
-
-        //joueur courant a joue => OK
-            console.log('\n Le joueur courant (id = '+ emmittingPlayer.details.id +') a joue ');
-            //on initialise sa mise à 0 si pas encore de mise pour ce joueur
-            config.CURRENT_BETS.set(emmittingPlayer.details.id,config.CURRENT_BETS.get(emmittingPlayer.details.id)?config.CURRENT_BETS.get(emmittingPlayer.details.id):0);
-            //on verifie que son action soit valide
-            if(message.data.action.value === 0 ){
-                if(config.CURRENT_MAX_BET > 0){
-                //le joueur se couche
-                emmittingPlayer.details.state = 'FOLDED';
+                    if (config.CURRENT_MAX_BET < config.CURRENT_BETS.get(emmittingPlayer.details.id)) {
+                        config.CURRENT_MAX_BET = config.CURRENT_BETS.get(emmittingPlayer.details.id);
+                    }
+                    PlayerPlayedListener.sendValidSignal();
+                    playerAction.data.action.value = message.data.action.value;
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
+                    return true;
                 }
             }
-            if(message.data.action.value === emmittingPlayer.details.chips){
-                //le joueur fait ALL_IN
-                emmittingPlayer.details.state = 'ALL_IN';
-                emmittingPlayer.details.chips = 0;
-                config.CURRENT_BETS.set(emmittingPlayer.details.id,config.CURRENT_BETS.get(emmittingPlayer.details.id)?config.CURRENT_BETS.get(emmittingPlayer.details.id):0 + message.data.action.value);
-                config.CURRENT_BETS.set('POT',config.CURRENT_BETS.get('POT') + message.data.action.value);
-                if(config.CURRENT_MAX_BET < config.CURRENT_BETS.get(emmittingPlayer.details.id)){
+        }
+
+        //joueur joue moins que max bet => KO
+        if (message.data.action.value + config.CURRENT_BETS.get(emmittingPlayer.details.id) < config.CURRENT_MAX_BET) {
+            console.log('\n Le joueur avec (id = ' + emmittingPlayer.details.id + ') a misé moins que la max bet (' + config.CURRENT_MAX_BET + ') !!');
+            for( let player of config.PLAYERS){
+                if (player.details.id === emmittingPlayer.details.id) {
+                    player.details.state = 'FOLDED';
+                    PlayerPlayedListener.sendValidSignal();
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
+                    return true;
+                }
+            }
+        }
+
+        //joueur check
+        if (message.data.action.value + config.CURRENT_BETS.get(emmittingPlayer.details.id) === config.CURRENT_MAX_BET) {
+            console.log('\n Le joueur avec (id = ' + emmittingPlayer.details.id + ') a misé la max bet (' + config.CURRENT_MAX_BET + ') => CHECK');
+            for( let player of config.PLAYERS){
+                if (player.details.id === emmittingPlayer.details.id) {
+                    player.details.chips = player.details.chips - message.data.action.value;
+                    config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + message.data.action.value);
+                    config.CURRENT_BETS.set(emmittingPlayer.details.id, config.CURRENT_BETS.get(emmittingPlayer.details.id) + message.data.action.value);
+                    PlayerPlayedListener.sendValidSignal();
+                    playerAction.data.action.value = message.data.action.value;
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
+                    return true;
+                }
+            }
+        }
+
+        //joueur raise
+        if (message.data.action.value + config.CURRENT_BETS.get(emmittingPlayer.details.id) > config.CURRENT_MAX_BET) {
+            for( let player of config.PLAYERS){
+                if (player.details.id === emmittingPlayer.details.id) {
+                    player.details.chips = player.details.chips - message.data.action.value;
+                    config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + message.data.action.value);
+                    config.CURRENT_BETS.set(emmittingPlayer.details.id, config.CURRENT_BETS.get(emmittingPlayer.details.id) + message.data.action.value);
                     config.CURRENT_MAX_BET = config.CURRENT_BETS.get(emmittingPlayer.details.id);
+                    console.log('\n Le joueur avec (id = ' + emmittingPlayer.details.id + ') a RAISE !! la max bet (' + config.CURRENT_MAX_BET + ') ');
+                    PlayerPlayedListener.sendValidSignal();
+                    playerAction.data.action.value = message.data.action.value;
+                    CroupierMessageHandler.broadcast(JSON.stringify(playerAction),emmittingPlayer);
+                    return true;
                 }
             }
-            if(message.data.action.value < emmittingPlayer.details.chips){
-                //le joueur joue moins que la totalite de ses chips
-                //on verifie qu'il joue au moins la mise max de la main
-                if(config.CURRENT_BETS.get(emmittingPlayer.details.id) + message.data.action.value < config.CURRENT_MAX_BET){
-                    //action invalide => le joueur est FOLDED
-                    emmittingPlayer.details.state = 'FOLDED';
-                } else {
-
-                }
-                emmittingPlayer.details.state = 'ALL_IN';
-                emmittingPlayer.details.chips = 0;
-                config.CURRENT_BETS.set(emmittingPlayer.details.id,config.CURRENT_BETS.get(emmittingPlayer.details.id)?config.CURRENT_BETS.get(emmittingPlayer.details.id):0 + message.data.action);
-                config.CURRENT_BETS.set('POT',config.CURRENT_BETS.get('POT') + message.data.action);
-            }
-        clearTimeout(config.CURR_PLAYER_CHRONO);
-        config.CURR_PLAYER_VALID_ANSWER = true;
-        return true;
-        
-        
+        }
     }
 }
+
+
 
 module.exports = PlayerPlayedListener;

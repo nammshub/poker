@@ -44,6 +44,14 @@ class TCPListener extends EventEmitter {
                 console.log('Le gagnant est :');
                 handEndListner.handleMessage(message);
                 break;
+            case 'server.lobby.join.success':
+                console.log('Rejoindre le lobby = succes');
+                break;
+            case 'server.lobby.join.success':
+                console.log('Rejoindre le lobby = echec '+message.data.reason);
+                break;
+            default:
+            console.log('message imprevu data '+data);
         }
     }
 }

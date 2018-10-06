@@ -1,4 +1,6 @@
 const EventEmitter = require( 'events' );
+const BlindHelper = require('../Helpers/BlindHelper');
+
 require('../config');
 /**
  * Ce listener gere l'event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
@@ -7,8 +9,17 @@ class HandStartListener extends EventEmitter {
     handleMessage(startMessage,playerMemo) {
         playerMemo.listPlayers = startMessage.data.players;
         this.updateActiveAndPosition(playerMemo);
+        //Maj des chips si le corupier a pris une blinde chez le joueur
+        for(let player of startMessage.data.players){
+            if(playerMemo.player.id === player.id){
+                playerMemo.player = player;
+            }
+        }
         //ajout d'un nouveau tour (vide pour le moment)
         playerMemo.totalHands++; 
+        //actualise les blindes
+        const currBlinds = BlindHelper.actualizeBlinds(playerMemo.totalHands);
+        playerMemo.bigBlind = currBlinds[1];
         playerMemo.turnsDetails.push({
             'tourNumber' :playerMemo.totalHands,
             'actionNbrIter' :0,
@@ -31,9 +42,10 @@ class HandStartListener extends EventEmitter {
                 if(playerMemo.player.id === player.id){
                     playerMemo.turnPosition = position;
                     posFound = true;
+                    playerMemo.player.chips
                 }
             }
-            if (player.state && (player.state === 'ACTIVE' || player.state === 'ALL_IN' )){
+            if (player.state && (player.state === 'ACTIVE')){
                 activeNbr++;
             }
           });

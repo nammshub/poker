@@ -12,9 +12,9 @@ Algo Poker IA:
 		- 
 		
 	PlayListener: capte le playEvent et lance les actions necessaires:
-		- lance le machine learning
+		- lance le machine learning => quand fini emit event pour repondre
 		- lance le hardcoded
-		- lance le chrono => a total - 2 secondes  oblige envoie reponse
+		- lance le chrono => a total - 2 secondes  oblige envoie reponse => si timeout => on annule le listener sur l'event et on renvoie la reponse random
 	
 	
 	
