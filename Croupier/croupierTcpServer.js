@@ -37,7 +37,7 @@ net.createServer(function (socket) {
     "chips": config.START_MONEY,
     "state": "ACTIVE",
     "dealer": false
-  }
+  };
   let currPlayer = {
     "details": playerDetails,
     "socket": socket
@@ -63,7 +63,7 @@ net.createServer(function (socket) {
         config.NB_PLAYERS--;
         return true;
       }
-    })
+    });
   });
 
   // Remove the client from the list when it leaves
