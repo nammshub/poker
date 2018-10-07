@@ -1,5 +1,6 @@
 const fs = require("fs");
 require("../config");
+require("../deck");
 
 class DeckHelper{
 
@@ -32,6 +33,19 @@ class DeckHelper{
         if (a.cardInput > b.cardInput)
           return 1;
         return 0;
+      }
+    
+      /**
+       * for a give json card with kind and color, will return the corresponding card input between 0 and 1
+       * @param {*} cardJson 
+       */
+      static getCardInput(cardJson){
+        for (let card of DECK){
+            if(card.kind === cardJson.kind && card.color === cardJson.color){
+                return card.cardInput;
+            }
+        }
+
       }
 }
 

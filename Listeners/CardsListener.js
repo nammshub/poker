@@ -7,6 +7,11 @@ const DeckHelper = require("../Helpers/DeckHelper");
  */
 class CardsListener extends EventEmitter {
     handleMessage(cardsMessage, playerMemo) {
+        //on injecte le cardInput dans chaque carte recue
+        cardsMessage.data.cards.forEach(function (card){
+            card.cardInput = DeckHelper.getCardInput(card);
+            console.log("calcul du card input pour "+card.kind +" "+card.color+" vaut "+card.cardInput);
+        });
         playerMemo.hand = cardsMessage.data.cards;
         //tri croissant selon cardInput
         playerMemo.hand.sort(DeckHelper.compare);
