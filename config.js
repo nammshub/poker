@@ -8,7 +8,7 @@ global.config = {
 
 
     //constantes partagées
-    MAX_SEC_TO_ANSWER : 15,
+    MAX_SEC_TO_ANSWER: 15,
 
 
 
@@ -19,12 +19,31 @@ global.config = {
     CURRENT_HAND: 0,
     MAX_HANDS: 150,
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
-    ALL_KINDS: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING"],
+    ALL_KINDS: ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "1"],
+    CARDS_VALUE_MAP: new Map([
+        ["SPADE", 1],
+        ["HEART", 2],
+        ["DIAMOND", 3],
+        ["CLUB", 4],
+        ["2", 1],
+        ["3", 2],
+        ["4", 3],
+        ["5", 4],
+        ["6", 5],
+        ["7", 6],
+        ["8", 7],
+        ["9", 8],
+        ["10", 9],
+        ["JACK", 10],
+        ["QUEEN", 11],
+        ["KING", 12],
+        ["1", 13]
+    ]),
     //contient les details courants du joueur + son socket
     PLAYERS: [],
     //gestion des mises et du pot d'un tour
     CURRENT_BETS: new Map(),
-    CURRENT_MAX_BET : 0,
+    CURRENT_MAX_BET: 0,
     CURR_SMALL_BLIND: 10,
     CURR_BIG_BLIND: 20,
     BLIND_EVOLUTION: new Map([
@@ -36,10 +55,12 @@ global.config = {
         [16, [20, 40]],
         [1, [10, 20]]
     ]),
-    CARDS_ON_TABLE : [],
-    CURR_PLAYER_VALID_ANSWER : false,
-    CURR_PLAYER_CHRONO : null,
-    CURR_PLAYER : null,
+    CARDS_ON_TABLE: [],
+    CURR_PLAYER_VALID_ANSWER: false,
+    CURR_PLAYER_CHRONO: null,
+    CURR_PLAYER: null,
+    //map des joueurs et de leurs 2 cartes du tour
+    PLAYERS_CARDS_MAP: new Map(),
 
 
     //Exceptions

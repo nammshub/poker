@@ -7,10 +7,6 @@
 
 Les combinaisons possibles dans l'ordre sont:
 
-Quinte Flush Royale => [10,0]
-     	
-Il s'agit d'une suite (ou quinte) du 10 à l'As, de la même couleur (pique, coeur, carreau, ou trèfle). C'est la combinaison la plus forte au poker, absolument imbattable. Elle est également évidemment très rare, et beaucoup de joueurs n'en verront sans doute jamais de toute une vie.
-
 Quinte Flush => [9, valeur + haute carte]
      	
 Toute quinte de la même couleur (pique, coeur, carreau, ou trèfle) inférieure à la quinte flush royale.

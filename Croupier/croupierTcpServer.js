@@ -10,6 +10,7 @@ require("../deck");
 const CroupierHelper = require("../Helpers/CroupierHelper");
 const BlindHelper = require("../Helpers/BlindHelper");
 const CroupierMessageHandler = require("./CroupierMessageHandler");
+const HandValueHelper = require("../Helpers/HandValueHelper");
 const PORT = config.PORT;
 const timeoutMessage = {
   "id": "server.game.play.timeout"
@@ -78,19 +79,19 @@ console.log("Poker server running at port " + PORT + "\n");
 
 function hasAllChecked() {
   //return true SSI tous les joueurs actifs ont suivi la mise la plus haute
-  for (let player of config.PLAYERS){
+  for (let player of config.PLAYERS) {
     if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
       return false;
-    } 
+    }
   }
-  console.log("tout le monde a check au taux de "+config.CURRENT_MAX_BET);
+  console.log("tout le monde a check au taux de " + config.CURRENT_MAX_BET);
   return true;
 }
 
 function hasHandWinner() {
   let active = 0;
-  config.PLAYERS.forEach(function(player){
-    if(player.details.state === "ACTIVE"){
+  config.PLAYERS.forEach(function (player) {
+    if (player.details.state === "ACTIVE") {
       active++;
     }
   })
@@ -117,24 +118,29 @@ async function launchPlayCurrHand() {
   */
   let step = 1;
   await playerBets();
-  while (!hasHandWinner() && step < 4){
-    switch (step){
+  console.log("after first player bets");
+  while (!hasHandWinner() && step < 4) {
+    console.log("step = " + step);
+    switch (step) {
       //flop
       case 1:
-          CroupierHelper.putCardsOnTable(currentDeck, 3);
-          break;
+        CroupierHelper.putCardsOnTable(currentDeck, 3);
+        break;
       default:
-          CroupierHelper.putCardsOnTable(currentDeck, 1);
-          break;
+        CroupierHelper.putCardsOnTable(currentDeck, 1);
+        break;
     }
     step++;
     //La mise max retourne à 0 => possibilite de check
     config.CURRENT_MAX_BET = 0;
+    //on dort une seconde pour eviter les accrocs de transmission trop rapide
+    await sleep(1000);
     await playerBets();
   }
-  if(step === 4){
+  if (step === 4) {
+    console.log("step 4 =>who is the winner of the hand ?");
     //on est arrive en fin de main, il faut determiner le vainqueur parmi les joueurs encore ACTIFS
-    //TODO
+    HandValueHelper.getWinners();
   }
 
 }
@@ -227,10 +233,10 @@ async function playerBets() {
     }
 
   }
-  if(hasAllChecked()){
+  if (hasAllChecked()) {
     console.log("tout le monde à check");
   }
-  else{
+  else {
     console.log("On a un gagnant pour la main");
   }
 
@@ -280,7 +286,7 @@ function sendCardsMessage() {
     if (player.details.state === "ACTIVE") {
       let twoRandomCards = CroupierHelper.getRandomCards(currentDeck, 2);
       //on stock ces 2 cartes dnas notre map joueur - cartes du tour
-      playerCardsMap.set(player.details.id, twoRandomCards);
+      config.PLAYERS_CARDS_MAP.set(player.details.id, twoRandomCards);
       console.log("\nles cartes donnees au joueur " + player.details.id + " sont : " + JSON.stringify(twoRandomCards[0]) + " et " + JSON.stringify(twoRandomCards[1]));
       console.log("\ncartes restantes dans le deck en cours " + currentDeck.length);
       console.log("\ncartes restantes dans le deck modele " + DECK.length);

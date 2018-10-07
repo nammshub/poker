@@ -19,10 +19,10 @@ class PlayListener extends EventEmitter {
             "id": "player.action",
             "data": {
                 "action": {
-                    "value": playerMemo.turnsDetails[playerMemo.totalHands].randomResponse
+                    "value": 0
                 }
             }
-        }
+        };
         //on cree la reponse neuronale
         let timeout = false;
         const timerControl = setTimeout(function () {
@@ -33,11 +33,11 @@ class PlayListener extends EventEmitter {
         }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
 
         //calcul random
-        let randomValue = this.getRandomInt(0, playerMemo.player.chips);;
+        console.log("before random player chips = "+playerMemo.player.chips);
+        let randomValue = Math.max(0,playerMemo.player.chips - 1400); //this.getRandomInt(0, playerMemo.player.chips);
         playerMemo.player.chips = playerMemo.player.chips - randomValue;
-        playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = randomValue
-        //let randomSecondes = this.getRandomInt(1, config.MAX_SEC_TO_ANSWER - 1);
-        console.log("random value = " + randomValue);
+        playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = randomValue;
+        messageJson.data.action.value = randomValue;
 
         //lancement de la partie neuronale
         const rawNeuronal = await this.getNeuronalAnswer();

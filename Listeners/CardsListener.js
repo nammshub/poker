@@ -10,7 +10,6 @@ class CardsListener extends EventEmitter {
         //on injecte le cardInput dans chaque carte recue
         cardsMessage.data.cards.forEach(function (card){
             card.cardInput = DeckHelper.getCardInput(card);
-            console.log("calcul du card input pour "+card.kind +" "+card.color+" vaut "+card.cardInput);
         });
         playerMemo.hand = cardsMessage.data.cards;
         //tri croissant selon cardInput
