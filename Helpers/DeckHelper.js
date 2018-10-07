@@ -1,5 +1,5 @@
-const fs = require('fs');
-require('../config');
+const fs = require("fs");
+require("../config");
 
 class DeckHelper{
 
@@ -10,19 +10,19 @@ class DeckHelper{
         const deckPath = "../deck.js";
 
 
-        let deckContent = 'global.DECK = [';
+        let deckContent = "global.DECK = [";
         config.ALL_COLORS.forEach( function(color){
             config.ALL_KINDS.forEach( function(kind){
-                deckContent = deckContent.concat('{ "kind" : "'+kind+'", "color" : "' + color +'"},');
+                deckContent = deckContent.concat("{ \"kind\" : \""+kind+"\", \"color\" : \"" + color +"\"},");
             })
         })
         deckContent = deckContent.substring(0,deckContent.length-1);
-        deckContent = deckContent.concat(']');
+        deckContent = deckContent.concat("]");
       
 
         fs.writeFile(deckPath, deckContent, function (err) {
             if (err) throw err;
-            console.log('Saved!');
+            console.log("Saved!");
           });
     }
 

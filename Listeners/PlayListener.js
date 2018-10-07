@@ -1,7 +1,7 @@
-const EventEmitter = require('events');
-const NeuronalNetworkListener = require('./NeuronalNetworkListener');
+const EventEmitter = require("events");
+const NeuronalNetworkListener = require("./NeuronalNetworkListener");
 /**
- * Ce listener gere l'event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
+ * Ce listener gere l"event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
  */
 class PlayListener extends EventEmitter {
 
@@ -10,7 +10,7 @@ class PlayListener extends EventEmitter {
         /*
         lance le machine learning => quand fini emit event pour repondre
 		- lance le hardcoded
-		- lance le chrono => a total - 2 secondes  oblige envoie reponse => si timeout => on annule le listener sur l'event et on renvoie la reponse random
+		- lance le chrono => a total - 2 secondes  oblige envoie reponse => si timeout => on annule le listener sur l"event et on renvoie la reponse random
         */
         //config.NEURONAL_NETWORK_LISTENER.launchCompute( function(output){
         //let randomValue = this.getRandomInt(0,playerMemo.player.chips);
@@ -26,7 +26,7 @@ class PlayListener extends EventEmitter {
         //on cree la reponse neuronale
         let timeout = false;
         const timerControl = setTimeout(function () {
-            console.log('le timeout est passe');
+            console.log("le timeout est passe");
             callback(messageJson);
             //on annule la reponse neuronale
             timeout = true;
@@ -37,11 +37,11 @@ class PlayListener extends EventEmitter {
         playerMemo.player.chips = playerMemo.player.chips - randomValue;
         playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = randomValue
         //let randomSecondes = this.getRandomInt(1, config.MAX_SEC_TO_ANSWER - 1);
-        console.log('random value = ' + randomValue);
+        console.log("random value = " + randomValue);
 
         //lancement de la partie neuronale
         const rawNeuronal = await this.getNeuronalAnswer();
-        console.log('on a la reponse neuronale');
+        console.log("on a la reponse neuronale");
         const pureNeuronal = this.getPureAnswer(rawNeuronal);
         messageJson.data.action.value = pureNeuronal;
         clearTimeout(timerControl);
@@ -51,7 +51,7 @@ class PlayListener extends EventEmitter {
     }
 
     /**
-     * retourne la reponse du reseau de neurone sous la forme d'un nombre de chips à jouer
+     * retourne la reponse du reseau de neurone sous la forme d"un nombre de chips à jouer
      */
     async getNeuronalAnswer() {
         //const neuronalAnswer = net.run({ r: 1, g: 0.4, b: 0 });  // { white: 0.99, black: 0.002 }

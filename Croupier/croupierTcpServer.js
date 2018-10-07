@@ -1,19 +1,19 @@
 /**
  * Cette classe main lance une partie.
- * Attend que les joueurs se connectent pendant  minute ensuite lance les tours jusqu' a ce qu'il y aie un gagnant ou que  tours soient passés
+ * Attend que les joueurs se connectent pendant  minute ensuite lance les tours jusqu" a ce qu"il y aie un gagnant ou que  tours soient passés
  */
 
 var net = require("net");
-require('../config');
-require('../deck');
-//const DeckHelper = require('../Helpers/DeckHelper');
-const CroupierHelper = require('../Helpers/CroupierHelper');
-const BlindHelper = require('../Helpers/BlindHelper');
-const CroupierMessageHandler = require('./CroupierMessageHandler');
+require("../config");
+require("../deck");
+//const DeckHelper = require("../Helpers/DeckHelper");
+const CroupierHelper = require("../Helpers/CroupierHelper");
+const BlindHelper = require("../Helpers/BlindHelper");
+const CroupierMessageHandler = require("./CroupierMessageHandler");
 const PORT = config.PORT;
 const timeoutMessage = {
   "id": "server.game.play.timeout"
-}
+};
 const playMessage = {
   "id": "server.game.play"
 };
@@ -39,8 +39,8 @@ net.createServer(function (socket) {
     "dealer": false
   }
   let currPlayer = {
-    'details': playerDetails,
-    'socket': socket
+    "details": playerDetails,
+    "socket": socket
   };
 
   // Put this new player in the list
@@ -50,12 +50,12 @@ net.createServer(function (socket) {
   console.log("\nWelcome " + currPlayer.details.id + "\n");
 
   // Handle incoming messages from clients.
-  socket.on('data', function (data) {
+  socket.on("data", function (data) {
     CroupierMessageHandler.handleData(data, socket);
   });
 
   // Remove the client from the list when it leaves
-  socket.on('end', function () {
+  socket.on("end", function () {
     config.PLAYERS.every(function (player, iter) {
       if (player.socket === socket) {
         console.log(player.details.name + " leaves the game.\n");
@@ -67,8 +67,8 @@ net.createServer(function (socket) {
   });
 
   // Remove the client from the list when it leaves
-  socket.on('error', function (data) {
-    console.log('\nException : ' + data);
+  socket.on("error", function (data) {
+    console.log("\nException : " + data);
   });
 
 }).listen(PORT);
@@ -79,18 +79,18 @@ console.log("Poker server running at port " + PORT + "\n");
 function hasAllChecked() {
   //return true SSI tous les joueurs actifs ont suivi la mise la plus haute
   for (let player of config.PLAYERS){
-    if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === 'ACTIVE' && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
+    if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
       return false;
     } 
   }
-  console.log('tout le monde a check au taux de '+config.CURRENT_MAX_BET);
+  console.log("tout le monde a check au taux de "+config.CURRENT_MAX_BET);
   return true;
 }
 
 function hasHandWinner() {
   let active = 0;
   config.PLAYERS.forEach(function(player){
-    if(player.details.state === 'ACTIVE'){
+    if(player.details.state === "ACTIVE"){
       active++;
     }
   })
@@ -140,18 +140,18 @@ async function launchPlayCurrHand() {
 }
 
 function orderPlayers() {
-  console.log('inside orderPlayers');
+  console.log("inside orderPlayers");
   let activeArray = [];
   let eliminatedArray = [];
   let position = 0;
   for (let player of config.PLAYERS) {
     position++;
-    player.details.state = 'ELIMINATED'
+    player.details.state = "ELIMINATED"
     if (player.details.chips > 0) {
-      player.details.state = 'ACTIVE'
+      player.details.state = "ACTIVE"
     }
     if (position > 1) {
-      if (player.details.state === 'ACTIVE') {
+      if (player.details.state === "ACTIVE") {
         activeArray.push(player);
       }
       else {
@@ -159,8 +159,8 @@ function orderPlayers() {
       }
     }
   }
-  //on gere ensuite l'ancien 1er joueur
-  if (config.PLAYERS[0].details.state === 'ACTIVE') {
+  //on gere ensuite l"ancien 1er joueur
+  if (config.PLAYERS[0].details.state === "ACTIVE") {
     activeArray.push(config.PLAYERS[0]);
   }
   else {
@@ -170,21 +170,21 @@ function orderPlayers() {
   //on concat les 2 tableaux dans le config.PLAYERS
   activeArray.concat(eliminatedArray);
   config.PLAYERS = activeArray;
-  console.log('config.PLAYERS size = ' + config.PLAYERS.length)
-  console.log('end orderPlayers');
+  console.log("config.PLAYERS size = " + config.PLAYERS.length)
+  console.log("end orderPlayers");
 }
 
 async function playerBets() {
   /*
     On va tourner sur chaque joueur actif pour avoir son message soit de se coucher soit de suivre soit de relancer 
-    et ce jusqu'a avoir tout le monde de couche sauf un ou que tout le monde aie suivi
+    et ce jusqu"a avoir tout le monde de couche sauf un ou que tout le monde aie suivi
   */
-  console.log('inside playerBets');
+  console.log("inside playerBets");
   while (!hasHandWinner() && !hasAllChecked()) {
     //on boucle sur chaque joueur actif qui a encore des chips pour avoir son message
     let currPlayer = CroupierHelper.getNextPlayer();
-    console.log(' joueur actif = ' + currPlayer.details.id);
-    console.log('etat des joueurs du tour : ');
+    console.log(" joueur actif = " + currPlayer.details.id);
+    console.log("etat des joueurs du tour : ");
     config.PLAYERS.forEach(function (player) {
       console.log(player.details);
     });
@@ -201,7 +201,7 @@ async function playerBets() {
         //le joueur est FOLDED pour cette main
         config.PLAYERS.every(function (player) {
           if (player.details.id === currPlayer.details.id) {
-            player.details.state = 'FOLDED';
+            player.details.state = "FOLDED";
             return true;
           }
         })
@@ -222,16 +222,16 @@ async function playerBets() {
     }, 1000 * config.MAX_SEC_TO_ANSWER);
 
     while (!config.CURR_PLAYER_VALID_ANSWER && !timeOut) {
-      console.log('on attend un peu');
+      console.log("on attend un peu");
       await sleep(2000);
     }
 
   }
   if(hasAllChecked()){
-    console.log('tout le monde à check');
+    console.log("tout le monde à check");
   }
   else{
-    console.log('On a un gagnant pour la main');
+    console.log("On a un gagnant pour la main");
   }
 
 }
@@ -242,13 +242,13 @@ async function startGame() {
     //message de debut de game à chaque joueur
     sendStartGameMessage();
     /*on va ensuite boucler les sequences suivantes
-    tant que une condition suivante n'est pas remplie:
+    tant que une condition suivante n"est pas remplie:
     - nbr de tours max joues
-    - il reste un seul player qui n'est pas FORFAIT => un winner
+    - il reste un seul player qui n"est pas FORFAIT => un winner
     */
     config.CURRENT_HAND = 1;
     while (config.CURRENT_HAND <= config.MAX_HANDS && !hasWinner()) {
-      console.log('\nMain en cours = ' + config.CURRENT_HAND);
+      console.log("\nMain en cours = " + config.CURRENT_HAND);
       //message de debut de main
       sendNewHandMessage();
 
@@ -256,16 +256,16 @@ async function startGame() {
       sendCardsMessage();
       //on dort une seconde pour eviter les accrocs de transmission trop rapide
       await sleep(1000);
-      //On appelle les joueurs dans l'ordre pour donner leur action jusqu à la resolution de la main
+      //On appelle les joueurs dans l"ordre pour donner leur action jusqu à la resolution de la main
       await launchPlayCurrHand();
 
       config.CURRENT_HAND++;
     }
     if (hasWinner()) {
-      console.log('\non a un gagnant !!');
+      console.log("\non a un gagnant !!");
     }
     else {
-      console.log('\nTous les tours sont épuisés');
+      console.log("\nTous les tours sont épuisés");
       //todo => calcul du vainqueur
     }
 
@@ -277,13 +277,13 @@ async function startGame() {
  */
 function sendCardsMessage() {
   config.PLAYERS.forEach(function (player) {
-    if (player.details.state === 'ACTIVE') {
+    if (player.details.state === "ACTIVE") {
       let twoRandomCards = CroupierHelper.getRandomCards(currentDeck, 2);
       //on stock ces 2 cartes dnas notre map joueur - cartes du tour
       playerCardsMap.set(player.details.id, twoRandomCards);
-      console.log('\nles cartes donnees au joueur ' + player.details.id + ' sont : ' + JSON.stringify(twoRandomCards[0]) + ' et ' + JSON.stringify(twoRandomCards[1]));
-      console.log('\ncartes restantes dans le deck en cours ' + currentDeck.length);
-      console.log('\ncartes restantes dans le deck modele ' + DECK.length);
+      console.log("\nles cartes donnees au joueur " + player.details.id + " sont : " + JSON.stringify(twoRandomCards[0]) + " et " + JSON.stringify(twoRandomCards[1]));
+      console.log("\ncartes restantes dans le deck en cours " + currentDeck.length);
+      console.log("\ncartes restantes dans le deck modele " + DECK.length);
       let giveCardsMessage = {
         "id": "server.game.cards",
         "data": {
@@ -312,7 +312,7 @@ function sendStartGameMessage() {
 }
 
 /**
- * Message pour annoncer à tous les joueurs le debut d'une nouvelle main
+ * Message pour annoncer à tous les joueurs le debut d"une nouvelle main
  */
 function sendNewHandMessage() {
   //nouvelle main => on genere un nouveau deck pour cette main à partir du deck modele (DEEP COPY)
@@ -320,8 +320,8 @@ function sendNewHandMessage() {
   //on nettoie la table des cartes precedentes:
   config.CARDS_ON_TABLE = [];
   //pot a 0
-  config.CURRENT_BETS.set('POT', 0);
-  //on etablit l'ordre de jeu de cette main
+  config.CURRENT_BETS.set("POT", 0);
+  //on etablit l"ordre de jeu de cette main
   orderPlayers();
   //on prend les blindes pour ce tour
   takeBlinds();
@@ -342,48 +342,48 @@ function sendNewHandMessage() {
 
 //prise des blindes aupres des joueurs 1 et 2
 function takeBlinds() {
-  console.log('inside takeBlinds');
+  console.log("inside takeBlinds");
   //modifie les blindes au besoin selon le tour en cours
   BlindHelper.actualizeBlinds(config.CURRENT_HAND);
   let bigBlindPayed = false;
   let smallBlindPlayed = false;
   let playersIter = config.PLAYERS.length - 1;
   //on regarde les jouers en partant de la fin et on cherche les ACTIVE 
-  //le premier qu'on trouve => grosse blinde
+  //le premier qu"on trouve => grosse blinde
   //le deuxieme => petite blinde
   while (playersIter >= 0 && !smallBlindPlayed) {
-    if (config.PLAYERS[playersIter].details.state === 'ACTIVE' && bigBlindPayed && !smallBlindPlayed) {
+    if (config.PLAYERS[playersIter].details.state === "ACTIVE" && bigBlindPayed && !smallBlindPlayed) {
       //paye small blind
       smallBlindPlayed = true;
       if (config.PLAYERS[playersIter].details.chips >= config.CURR_SMALL_BLIND) {
         config.PLAYERS[playersIter].details.chips = config.PLAYERS[playersIter].details.chips - config.CURR_SMALL_BLIND;
         config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id, config.CURR_SMALL_BLIND);
-        config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + config.CURR_SMALL_BLIND);
+        config.CURRENT_BETS.set("POT", config.CURRENT_BETS.get("POT") + config.CURR_SMALL_BLIND);
       } else {
         config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id, config.PLAYERS[playersIter].details.chips);
-        config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + config.PLAYERS[playersIter].details.chips);
+        config.CURRENT_BETS.set("POT", config.CURRENT_BETS.get("POT") + config.PLAYERS[playersIter].details.chips);
         config.PLAYERS[playersIter].details.chips = 0;
       }
     }
 
 
-    if (config.PLAYERS[playersIter].details.state === 'ACTIVE' && !bigBlindPayed) {
+    if (config.PLAYERS[playersIter].details.state === "ACTIVE" && !bigBlindPayed) {
       //paye big blind
       bigBlindPayed = true;
       if (config.PLAYERS[playersIter].details.chips >= config.CURR_BIG_BLIND) {
         config.PLAYERS[playersIter].details.chips = config.PLAYERS[playersIter].details.chips - config.CURR_BIG_BLIND;
         config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id, config.CURR_BIG_BLIND);
-        config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + config.CURR_BIG_BLIND);
+        config.CURRENT_BETS.set("POT", config.CURRENT_BETS.get("POT") + config.CURR_BIG_BLIND);
       } else {
         config.CURRENT_BETS.set(config.PLAYERS[playersIter].details.id, config.PLAYERS[playersIter].details.chips);
-        config.CURRENT_BETS.set('POT', config.CURRENT_BETS.get('POT') + config.PLAYERS[playersIter].details.chips);
+        config.CURRENT_BETS.set("POT", config.CURRENT_BETS.get("POT") + config.PLAYERS[playersIter].details.chips);
         config.PLAYERS[playersIter].details.chips = 0;
       }
       config.CURRENT_MAX_BET = config.CURR_BIG_BLIND;
     }
     playersIter--;
   }
-  console.log('le pot contient ' + config.CURRENT_BETS.get('POT'));
+  console.log("le pot contient " + config.CURRENT_BETS.get("POT"));
 }
 
 function sleep(ms) {

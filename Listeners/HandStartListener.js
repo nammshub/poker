@@ -1,9 +1,9 @@
-const EventEmitter = require( 'events' );
-const BlindHelper = require('../Helpers/BlindHelper');
+const EventEmitter = require( "events" );
+const BlindHelper = require("../Helpers/BlindHelper");
 
-require('../config');
+require("../config");
 /**
- * Ce listener gere l'event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
+ * Ce listener gere l"event start. Il doit stocker nos infos joueur pour la partie en cours et stocker le nbr de joueur de la partie
  */
 class HandStartListener extends EventEmitter {
     handleMessage(startMessage,playerMemo) {
@@ -15,21 +15,21 @@ class HandStartListener extends EventEmitter {
                 playerMemo.player = player;
             }
         }
-        //ajout d'un nouveau tour (vide pour le moment)
+        //ajout d"un nouveau tour (vide pour le moment)
         playerMemo.totalHands++; 
         //actualise les blindes
         const currBlinds = BlindHelper.actualizeBlinds(playerMemo.totalHands);
         playerMemo.bigBlind = currBlinds[1];
         playerMemo.turnsDetails.push({
-            'tourNumber' :playerMemo.totalHands,
-            'actionNbrIter' :0,
-            'tapis' : [
+            "tourNumber" :playerMemo.totalHands,
+            "actionNbrIter" :0,
+            "tapis" : [
                 //carte1, carte2...
             ],
-            'neuronalResponses' : [],
-            'randomResponse' : 0
+            "neuronalResponses" : [],
+            "randomResponse" : 0
         });
-        console.log('\n Hand Start event. playerMemo = ' + JSON.stringify(playerMemo));
+        console.log("\n Hand Start event. playerMemo = " + JSON.stringify(playerMemo));
     }
 
     updateActiveAndPosition(playerMemo){
@@ -45,7 +45,7 @@ class HandStartListener extends EventEmitter {
                     playerMemo.player.chips
                 }
             }
-            if (player.state && (player.state === 'ACTIVE')){
+            if (player.state && (player.state === "ACTIVE")){
                 activeNbr++;
             }
           });

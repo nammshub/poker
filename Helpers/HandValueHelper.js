@@ -1,5 +1,5 @@
-const fs = require('fs');
-require('../config');
+const fs = require("fs");
+require("../config");
 
 class HandValueHelper{
 
@@ -20,10 +20,10 @@ class HandValueHelper{
     /**
      * injecte chaque carte dans une map de arrays de type
      * {
-     *  'SPADES' : ['1','3','5','6'],
-     *  'HEART' : ['5'],
-     *  '1' : ['SPADES],
-     *  '5' : ['SPADES','HEART'],
+     *  "SPADES" : ["1","3","5","6"],
+     *  "HEART" : ["5"],
+     *  "1" : ["SPADES],
+     *  "5" : ["SPADES","HEART"],
      *  ...
      * }
      * @param {*} cards 
@@ -31,14 +31,14 @@ class HandValueHelper{
     static getCardsAsMap(cards){
         let cardsMap = new Map();
         cards.forEach( function(card){
-            let kindArray = typeof cardsMap.get(card.kind) === 'undefined' ? [] : cardsMap.get(card.kind);
-            let colorArray = typeof cardsMap.get(card.color) === 'undefined' ? [] : cardsMap.get(card.color);
+            let kindArray = typeof cardsMap.get(card.kind) === "undefined" ? [] : cardsMap.get(card.kind);
+            let colorArray = typeof cardsMap.get(card.color) === "undefined" ? [] : cardsMap.get(card.color);
             cardsMap.set(card.kind, kindArray.push[card.color]);
             cardsMap.set(card.color, colorArray.push[card.kind]);
-            //gestion de l'As qui vaut 1 et AS
-            if(card.kind === '1'){
-                kindArray = typeof cardsMap.get('AS') === 'undefined' ? [] : cardsMap.get('AS');
-                cardsMap.set('AS', kindArray.push[card.color]);
+            //gestion de l"As qui vaut 1 et AS
+            if(card.kind === "1"){
+                kindArray = typeof cardsMap.get("AS") === "undefined" ? [] : cardsMap.get("AS");
+                cardsMap.set("AS", kindArray.push[card.color]);
             }
         })
         return cardsMap
@@ -82,15 +82,15 @@ class HandValueHelper{
     static testQuinteFlush(cardsAsMAp){
         //test 5 memes couleurs
         if (          
-            (cardsAsMap.get('SPADE') === 5 || cardsAsMap.get('HEART') === 5 || cardsAsMap.get('DIAMOND') === 5 ||cardsAsMap.get('CLUB') === 5)){
+            (cardsAsMap.get("SPADE") === 5 || cardsAsMap.get("HEART") === 5 || cardsAsMap.get("DIAMOND") === 5 ||cardsAsMap.get("CLUB") === 5)){
             //test suites possibles
-            if (cardsAsMap.get('KING') === 1 && cardsAsMap.get('QUEEN') === 1 && cardsAsMap.get('JACK') === 1 && cardsAsMap.get('10') === 1 && cardsAsMap.get('9') === 1)
+            if (cardsAsMap.get("KING") === 1 && cardsAsMap.get("QUEEN") === 1 && cardsAsMap.get("JACK") === 1 && cardsAsMap.get("10") === 1 && cardsAsMap.get("9") === 1)
                 return [9,13];
-            if (cardsAsMap.get('QUEEN') === 1 && cardsAsMap.get('JACK') === 1 && cardsAsMap.get('10') === 1 && cardsAsMap.get('9') === 1 && cardsAsMap.get('8') === 1)
+            if (cardsAsMap.get("QUEEN") === 1 && cardsAsMap.get("JACK") === 1 && cardsAsMap.get("10") === 1 && cardsAsMap.get("9") === 1 && cardsAsMap.get("8") === 1)
                 return [9,12];
-            if (cardsAsMap.get('JACK') === 1 && cardsAsMap.get('10') === 1 && cardsAsMap.get('9') === 1 && cardsAsMap.get('8') === 1 && cardsAsMap.get('7') === 1)
+            if (cardsAsMap.get("JACK") === 1 && cardsAsMap.get("10") === 1 && cardsAsMap.get("9") === 1 && cardsAsMap.get("8") === 1 && cardsAsMap.get("7") === 1)
                 return [9,11];
-            if (cardsAsMap.get('10') === 1 && cardsAsMap.get('9') === 1 && cardsAsMap.get('8') === 1 && cardsAsMap.get('7') === 1 && cardsAsMap.get('6') === 1)
+            if (cardsAsMap.get("10") === 1 && cardsAsMap.get("9") === 1 && cardsAsMap.get("8") === 1 && cardsAsMap.get("7") === 1 && cardsAsMap.get("6") === 1)
                 return [9,10];
             //TODO
         }

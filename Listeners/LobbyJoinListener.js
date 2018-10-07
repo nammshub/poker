@@ -1,7 +1,7 @@
-const EventEmitter = require( 'events' );
-const NeuronalNetworkListener = require('./NeuronalNetworkListener');
+const EventEmitter = require( "events" );
+const NeuronalNetworkListener = require("./NeuronalNetworkListener");
 /**
- * Ce listener gere la venue dans le lobby. Il verifie que le nom d'equipe ne soit pas deja pris
+ * Ce listener gere la venue dans le lobby. Il verifie que le nom d"equipe ne soit pas deja pris
  */
 class LobbyJoinListener extends EventEmitter {
   
@@ -22,9 +22,9 @@ class LobbyJoinListener extends EventEmitter {
         };
         //sinon on ecrit un lobyyJoinsucces et on assigne ce nom au joueur
         for (let player of config.PLAYERS){
-            console.log('begin lobbyjoinlistener : emmittingPlayer id = '+emmittingPlayer.details.id)
-            console.log('begin lobbyjoinlistener : player id = '+player.details.id)
-            console.log('begin lobbyjoinlistener : config.PLAYERS.length = '+config.PLAYERS.length)
+            console.log("begin lobbyjoinlistener : emmittingPlayer id = "+emmittingPlayer.details.id)
+            console.log("begin lobbyjoinlistener : player id = "+player.details.id)
+            console.log("begin lobbyjoinlistener : config.PLAYERS.length = "+config.PLAYERS.length)
 
             if(player.details.id === emmittingPlayer.details.id){
                 player.details.name = message.data.name;
