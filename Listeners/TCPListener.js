@@ -14,7 +14,7 @@ const handEndListener = new HandEndListener();
 const playListener = new PlayListener();
 const boardListener = new BoardListener();
 class TCPListener extends EventEmitter {
-    handleTCPData(data, playerMemo, callback) {
+    handleTCPData(data, playerMemo, net, callback) {
         const message = JSON.parse(data);
         switch (message.id){
             case "server.game.start":
@@ -31,7 +31,7 @@ class TCPListener extends EventEmitter {
                 break;
             case "server.game.play":
                 console.log("A vous de jouer");
-                playListener.handleMessage(playerMemo,callback);
+                playListener.handleMessage(playerMemo, net, callback);
                 break;
             case "server.game.board.cards":
                 console.log("Nouvelles cartes sur le board");

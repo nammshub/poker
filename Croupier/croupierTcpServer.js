@@ -80,7 +80,7 @@ console.log("Poker server running at port " + PORT + "\n");
 function hasAllChecked() {
   //return true SSI tous les joueurs actifs ont suivi la mise la plus haute
   for (let player of config.PLAYERS) {
-    if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
+    if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0  && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
       return false;
     }
   }
@@ -104,7 +104,7 @@ function hasHandWinner() {
 function hasWinner() {
   let nbForfait = 0;
   config.PLAYERS.forEach(function (player) {
-    if (player.details.chips === 0) {
+    if (player.details.state === "ELIMINATED") {
       nbForfait++;
     }
   })

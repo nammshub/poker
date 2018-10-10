@@ -6,7 +6,7 @@ const NeuronalNetworkListener = require("./NeuronalNetworkListener");
 class PlayListener extends EventEmitter {
 
 
-    async handleMessage(playerMemo, callback) {
+    async handleMessage(playerMemo, net, callback) {
         /*
         lance le machine learning => quand fini emit event pour repondre
 		- lance le hardcoded
@@ -40,7 +40,7 @@ class PlayListener extends EventEmitter {
         messageJson.data.action.value = randomValue;
 
         //lancement de la partie neuronale
-        const rawNeuronal = await this.getNeuronalAnswer();
+        const rawNeuronal = await this.getNeuronalAnswer(net);
         console.log("on a la reponse neuronale");
         const pureNeuronal = this.getPureAnswer(rawNeuronal);
         messageJson.data.action.value = pureNeuronal;
@@ -53,12 +53,12 @@ class PlayListener extends EventEmitter {
     /**
      * retourne la reponse du reseau de neurone sous la forme d"un nombre de chips à jouer
      */
-    async getNeuronalAnswer() {
-        //const neuronalAnswer = net.run({ r: 1, g: 0.4, b: 0 });  // { white: 0.99, black: 0.002 }
-        //return neuronalAnswer.chips;
+    async getNeuronalAnswer(net) {
+        const neuronalAnswer = net.run({ r: 1, g: 0.4, b: 0 });  // { white: 0.99, black: 0.002 }
+        return neuronalAnswer.chips;
         //return 3;
-        await this.sleep((1000 * config.MAX_SEC_TO_ANSWER) + 1000);
-        return 3;
+        //await this.sleep((1000 * config.MAX_SEC_TO_ANSWER) + 1000);
+        //return 3;
     }
 
     sleep(ms) {
