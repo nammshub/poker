@@ -8,7 +8,7 @@ class CroupierMessageHandler extends EventEmitter {
         const message = JSON.parse(data);
         const emmittingPlayer = this.getPlayerBySocket(socket);
         switch (message.id) {
-            case "player.action":
+            case "client.game.action":
                 console.log("Le joueur "+ emmittingPlayer.details.id +" a joue !");
                 PlayerPlayedListener.handleMessage(message,emmittingPlayer,this);
                 break;

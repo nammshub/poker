@@ -16,7 +16,7 @@ class PlayListener extends EventEmitter {
         //let randomValue = this.getRandomInt(0,playerMemo.player.chips);
         //test check
         let messageJson = {
-            "id": "player.action",
+            "id": "client.game.action",
             "data": {
                 "action": {
                     "value": 0
