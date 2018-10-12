@@ -40,9 +40,8 @@ class PlayListener extends EventEmitter {
         messageJson.data.action.value = randomValue;
 
         //lancement de la partie neuronale
-        const rawNeuronal = await this.getNeuronalAnswer(net);
+        const pureNeuronal = await this.getNeuronalAnswer(net,playerMemo);
         console.log("on a la reponse neuronale");
-        const pureNeuronal = this.getPureAnswer(rawNeuronal);
         messageJson.data.action.value = pureNeuronal;
         clearTimeout(timerControl);
         if (!timeout) {
@@ -53,9 +52,10 @@ class PlayListener extends EventEmitter {
     /**
      * retourne la reponse du reseau de neurone sous la forme d"un nombre de chips à jouer
      */
-    async getNeuronalAnswer(net) {
+    async getNeuronalAnswer(net,playerMemo) {
         const neuronalAnswer = net.run({ r: 1, g: 0.4, b: 0 });  // { white: 0.99, black: 0.002 }
-        return neuronalAnswer.chips;
+        const pureAnswer = this.getPureAnswer(neuronalAnswer,playerMemo);
+        return pureAnswer;
         //return 3;
         //await this.sleep((1000 * config.MAX_SEC_TO_ANSWER) + 1000);
         //return 3;
@@ -70,9 +70,32 @@ class PlayListener extends EventEmitter {
      * on va jouer 40 plutot que de se coucher puisque la reponse brute est plus proche de ce resultat
      * @param {*} rawNeuronal 
      */
-    getPureAnswer(rawNeuronal) {
-        return rawNeuronal * 3;
-        return 0;
+    getPureAnswer(rawNeuronal,playerMemo) {
+        //FOLD
+        if(rawNeuronal < 0.333){
+            return 0;
+        }
+        //CHECK
+        if(rawNeuronal < 0.666){
+            return this.getCheck(playerMemo);
+        }
+        return this.getRaise(playerMemo);
+    }
+
+    getCheck(playerMemo){
+        const toCheck = playerMemo.currMaxBet - playerMemo.currBet;
+        if(toCheck <  playerMemo.player.chips){
+            playerMemo.player.chips = playerMemo.player.chips - toCheck;
+            return toCheck;
+        }
+        //sinon random entre fold et all in
+        const random = this.getRandomInt(0,1);
+        if(random === 0){
+            return 0;
+        }
+        toCheck = playerMemo.player.chips;
+        playerMemo.player.chips = 0;
+        return toCheck;
     }
 
 
