@@ -21,8 +21,6 @@ const playMessage = {
 
 //deck du tour
 let currentDeck = [];
-//map des joueurs et de leurs 2 cartes du tour
-let playerCardsMap = new Map();
 
 //generate new deck file
 //DeckHelper.generateNewDeckFile();
@@ -80,7 +78,7 @@ console.log("Poker server running at port " + PORT + "\n");
 function hasAllChecked() {
   //return true SSI tous les joueurs actifs ont suivi la mise la plus haute
   for (let player of config.PLAYERS) {
-    if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0  && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
+    if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0 && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
       return false;
     }
   }
@@ -203,28 +201,31 @@ async function playerBets() {
     config.CURR_PLAYER_CHRONO = setTimeout(function () {
       currPlayer.socket.write(JSON.stringify(timeoutMessage));
       timeOut = true;
+
       if (config.CURRENT_MAX_BET > 0) {
-        //le joueur est FOLDED pour cette main
         config.PLAYERS.every(function (player) {
           if (player.details.id === currPlayer.details.id) {
             player.details.state = "FOLDED";
             return true;
           }
-        })
-        //on broadcast la mise de 0 aux autres joueurs
-        let playerAction = {
-          "id": "server.player.action",
-          "data": {
-            "id": currPlayer.details.id,
-            "action": {
-              "value": 0
-            }
+        });
+      }
+
+      //on broadcast la mise de 0 aux autres joueurs
+      let playerAction = {
+        "id": "server.player.action",
+        "data": {
+          "id": currPlayer.details.id,
+          "action": {
+            "value": 0
           }
         }
+      };
 
-        CroupierMessageHandler.broadcast(JSON.stringify(playerAction), currPlayer);
 
-      }
+      CroupierMessageHandler.broadcast(JSON.stringify(playerAction), currPlayer);
+
+
     }, 1000 * config.MAX_SEC_TO_ANSWER);
 
     while (!config.CURR_PLAYER_VALID_ANSWER && !timeOut) {

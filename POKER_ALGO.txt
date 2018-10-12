@@ -3,10 +3,24 @@ Algo Poker IA:
 
 TODO :
 
+Player:
+	lors du message start => enregistrer dans playerMemo le pot total (chips * nb joueurs)
+	
+	nouvelle main => enregistrer dans le tableau des toursDetails l'ordre des joueurs pour associer un id joueur à une position du tour + creer une methode qui retourne pour un id joueur donne et un numero de tour donne la position du joueur dans ce tour
+					 creation d'une nouvelle map de playerBets (cfr gestion mises joueurs)
+	gestion des mises des joueurs => a inject dans playerMemo
+	
+	coup d'un joueur => enregistrer dans le tour en cours dans la map des joueurs id le coup joue. Objete de type map{
+		[idJoueur : [mise1,mise2,mise3...]],...
+	}
+	
+	fin de main: 
+	ecriture dans fichier log les coups joues à chaque tour (write asynch)
+
+Croupier:
 
 
-
-
+	gestion du gagnant et don des chips
 
 
 
