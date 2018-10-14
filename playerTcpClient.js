@@ -22,6 +22,7 @@ const playerSocket = new net.Socket();
 let playerMemo = {
     "player": "",
     "nbJoueursActifs": 0,
+    "potTotal": 0,
     "turnPosition": 0,
     "hand": [],
     "totalHands": 0,

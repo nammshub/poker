@@ -7,6 +7,7 @@ class StartListener extends EventEmitter {
     handleMessage(startMessage,playerMemo) {
         playerMemo.player = startMessage.data.info;
         playerMemo.nbJoueursActifs = startMessage.data.count;
+        playerMemo.potTotal = playerMemo.nbJoueursActifs * playerMemo.player.chips;
         console.log("\nStart event. playerMemo = " + JSON.stringify(playerMemo));
     }
 }
