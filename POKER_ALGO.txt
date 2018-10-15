@@ -4,9 +4,7 @@ Algo Poker IA:
 TODO :
 
 Player:
-	lors du message start => enregistrer dans playerMemo le pot total (chips * nb joueurs)
 	
-	nouvelle main => enregistrer dans le tableau des toursDetails l'ordre des joueurs pour associer un id joueur à une position du tour + creer une methode qui retourne pour un id joueur donne et un numero de tour donne la position du joueur dans ce tour
 					 creation d'une nouvelle map de playerBets (cfr gestion mises joueurs)
 	gestion des mises des joueurs => a inject dans playerMemo
 	
@@ -31,7 +29,9 @@ Croupier:
 
 DONE:
 
+	lors du message start => enregistrer dans playerMemo le pot total (chips * nb joueurs)
 
+	nouvelle main => enregistrer dans le tableau des toursDetails l'ordre des joueurs pour associer un id joueur à une position du tour + creer une methode qui retourne pour un id joueur donne et un numero de tour donne la position du joueur dans ce tour
 
 
 

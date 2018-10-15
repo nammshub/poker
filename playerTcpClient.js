@@ -13,17 +13,15 @@ const neurone = new brain.NeuralNetwork();
 //on recupere une copie du tableau des datas neuronales
 const neuronalArray = NEURONAL.slice(0);
 const before = new Date();
-console.log('before train = '+before.toLocaleTimeString);
+console.log('before train = ' + before.toLocaleTimeString);
 neurone.train(neuronalArray);
 const after = new Date();
-console.log('after train = '+after.toLocaleTimeString);
+console.log('after train = ' + after.toLocaleTimeString);
 
 const playerSocket = new net.Socket();
 let playerMemo = {
     "player": "",
-    "nbJoueursActifs": 0,
     "potTotal": 0,
-    "turnPosition": 0,
     "hand": [],
     "totalHands": 0,
     "listPlayers": [],
@@ -31,14 +29,23 @@ let playerMemo = {
         //infos detaillées sur chaque tour
         {
             "tourNumber": 0,
-            //cet iterateur garde en memoire le numero de l"action en cours. Chaque fois qu"un joueur joue cela augmente de 1 (CALL ou FOLD)
-            "actionNbrIter": 0,
             //tapis: liste des cartes sur le tapis
             "tapis": [
                 //carte1, carte2...
             ],
-            "neuronalResponses": [],
-            "randomResponse": 0
+            "neuronalResponses": 0,
+            "randomResponse": 0,
+            "neuronalInput": { 
+                "input" : { 
+                    "h1": 0.2692307692307692, 
+                    "h2": 0.5384615384615384, 
+                    "p1_a1": 0.006, 
+                    "p2_a1": 0.006, 
+                    "g": 0.5 }, 
+                "output" : { 
+                    "chips": 0 
+                } 
+            }
         }
     ]
 }
