@@ -17,6 +17,8 @@ class BoardListener extends EventEmitter {
         //on trie le tapis selon le cardInput
         currTapis.sort(DeckHelper.compare);
         playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].tapis = currTapis;
+        //on increment le turnStep
+        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep++;
         console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
     }
 }

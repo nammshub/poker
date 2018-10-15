@@ -21,8 +21,13 @@ class HandStartListener extends EventEmitter {
         const currBlinds = BlindHelper.actualizeBlinds(playerMemo.totalHands);
         playerMemo.bigBlind = currBlinds[1];
         console.log("la position du joueur pour ce tour est " + positionMap.get(playerMemo.player.id))
+        //gestion de la prise des petites et grandes blindes chez les joueurs prevus et considere comme mise de preflop
+        let betsMap = this.betSmallBigBlinds(currBlinds, playerMemo);
         playerMemo.turnsDetails.push({
             "positionMap": positionMap,
+            "betsMap": betsMap,
+            //turn step: 0=> preflop, 1=> flop, 2 => turn , 3=> river
+            "turnStep":0,
             "tourNumber": playerMemo.totalHands,
             "tapis": [
                 //carte1, carte2...
@@ -51,6 +56,48 @@ class HandStartListener extends EventEmitter {
             positionMap.set(player.id, position);
         });
         return positionMap;
+    }
+
+    betSmallBigBlinds(currBlinds, playerMemo) {
+        //recuperation de la map des bets. On va injecter pour ce joueur 
+        /*
+        {
+            joueur 1: { [
+                //mises du preflop
+                [],
+                //mises du flop
+                [],
+                //mises du turn
+                [],
+                //mises du river
+                []
+
+            ]},
+            joueur 2 ...
+        }
+        */
+
+        let betsMap = new Map();
+        let iterReverse = playerMemo.listPlayers.length - 1;
+        let blindTaken = 0;
+        while (iterReverse >= 0 && blindTaken < 2) {
+            if (playerMemo.listPlayers[iterReverse].state === "ACTIVE") {
+                if (blindTaken === 1) {
+                    //prise de la petite blinde
+                    blindTaken++;
+                    betsMap.set(playerMemo.listPlayers[iterReverse].id, [[currBlinds[0]], [], [], []]);
+                }
+                if (blindTaken === 0) {
+                    //prise de la grosse blinde
+                    blindTaken++;
+                    betsMap.set(playerMemo.listPlayers[iterReverse].id, [[currBlinds[1]], [], [], []]);
+                }
+            }
+            iterReverse--;
+        }
+
+        return betsMap;
+
     }
 
 }

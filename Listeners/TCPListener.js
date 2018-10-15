@@ -1,4 +1,4 @@
-const EventEmitter = require( "events" );
+const EventEmitter = require("events");
 const StartListener = require("./StartListener");
 const CardsListener = require("./CardsListener");
 const HandStartListener = require("./HandStartListener");
@@ -16,18 +16,18 @@ const boardListener = new BoardListener();
 class TCPListener extends EventEmitter {
     handleTCPData(data, playerMemo, net, callback) {
         const message = JSON.parse(data);
-        switch (message.id){
+        switch (message.id) {
             case "server.game.start":
-                console.log("Le jeu commence !! nbr joueurs = "+message.data.count);
-                startListener.handleMessage(message,playerMemo);
+                console.log("Le jeu commence !! nbr joueurs = " + message.data.count);
+                startListener.handleMessage(message, playerMemo);
                 break;
             case "server.game.cards":
                 console.log("Un joueur recoit ses cartes");
-                cardsListener.handleMessage(message,playerMemo);
+                cardsListener.handleMessage(message, playerMemo);
                 break;
             case "server.game.hand.start":
                 console.log("Une nouvelle main commence");
-                handStartListener.handleMessage(message,playerMemo);
+                handStartListener.handleMessage(message, playerMemo);
                 break;
             case "server.game.play":
                 console.log("A vous de jouer");
@@ -35,7 +35,7 @@ class TCPListener extends EventEmitter {
                 break;
             case "server.game.board.cards":
                 console.log("Nouvelles cartes sur le board");
-                boardListener.handleMessage(message,playerMemo);
+                boardListener.handleMessage(message, playerMemo);
                 break;
             case "server.game.play.timeout":
                 console.log("Vous etes en time out !!");
@@ -47,11 +47,15 @@ class TCPListener extends EventEmitter {
             case "server.lobby.join.success":
                 console.log("Rejoindre le lobby = succes");
                 break;
-            case "server.lobby.join.success":
-                console.log("Rejoindre le lobby = echec "+message.data.reason);
+            case "server.lobby.join.failure":
+                console.log("Rejoindre le lobby = echec " + message.data.reason);
+                break;
+            case "server.player.action":
+                console.log("Un joueur à joué");
+                playListener.handleMessage(message, playerMemo);
                 break;
             default:
-            console.log("message imprevu data "+data);
+                console.log("message imprevu data " + data);
         }
     }
 }
