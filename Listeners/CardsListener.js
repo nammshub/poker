@@ -23,8 +23,8 @@ class CardsListener extends EventEmitter {
     }
 
     cardsToNeuronalInput(playerMemo){
-        playerMemo.turnsDetails[playerMemo.totalHands].h1 = playerMemo.hand[0].cardInput;
-        playerMemo.turnsDetails[playerMemo.totalHands].h2 = playerMemo.hand[1].cardInput;
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.h1 = playerMemo.hand[0].cardInput;
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.h2 = playerMemo.hand[1].cardInput;
     }
 }
 

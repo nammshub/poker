@@ -17,9 +17,10 @@ console.log('before train = ' + before.toLocaleTimeString);
 neurone.train(neuronalArray);
 const after = new Date();
 console.log('after train = ' + after.toLocaleTimeString);
-
+const logFile = "/Logs/"+after.getTime()+".log";
 const playerSocket = new net.Socket();
 let playerMemo = {
+    "logFile":logFile,
     "player": "",
     "potTotal": 0,
     "hand": [],

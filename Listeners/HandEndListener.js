@@ -1,5 +1,4 @@
-require("../config");
-var fs = require("fs");
+const LogHelper = require("../Helpers/LogHelper");
 
 //var game = [r: 0.03, g: 0.7, b: 0.5];
 
@@ -7,14 +6,12 @@ var fs = require("fs");
  * Ce listener gere l"event end. Il doit stocker nos résultats de partie
  */
 class HandEndListener {
-    handleMessage(endMessage) {
+    handleMessage(endMessage,playerMemo) {
+        //calcul si les coups joues ce tour ci etaient bon ou nuls
 
-        var input = game.join(", ");
-        saveTxt = "{input: " + input + ", output: "+ outputResult + "}";
-
-
-
-        fs.writeFileSync("pokerIA.txt", saveTxt, "UTF-8");
+        //enregistrement des coups dans le fichier de log
+        LogHelper.logNeuronalInput(JSON.stringify(playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].neuronalInput), playerMemo.logFile);
+       
     }
 
 }

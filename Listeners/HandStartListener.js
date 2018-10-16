@@ -36,6 +36,7 @@ class HandStartListener extends EventEmitter {
             "randomResponse": 0,
             "neuronalInput": {
                 "input": {
+                    "winLose" : 1
                 },
                 "output": {
                 }

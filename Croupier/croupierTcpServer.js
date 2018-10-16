@@ -258,7 +258,8 @@ async function startGame() {
       console.log("\nMain en cours = " + config.CURRENT_HAND);
       //message de debut de main
       sendNewHandMessage();
-
+      //on dort une seconde pour eviter les accrocs de transmission trop rapide
+      await sleep(1000);
       //distribution des cartes à chaque joueur
       sendCardsMessage();
       //on dort une seconde pour eviter les accrocs de transmission trop rapide

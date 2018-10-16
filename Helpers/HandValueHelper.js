@@ -26,7 +26,22 @@ class HandValueHelper {
             }
         }
         //classement des joueurs sous forme d'un tableau de tableau de id
-
+        winnerArray = [];
+        let bestHand;
+        playersHandValues.forEach(function (score, playerId) {
+            if (winnerArray.length === 0) {
+                winnerArray.push(playerId);
+                bestHand = score;
+            }
+            if (score[0] > bestHand[0] || (score[0] === bestHand[0] && score[1] > bestHand[1])) {
+                bestHand = score;
+                winnerArray = [];
+                winnerArray.push(playerId);
+            }
+            if (score[0] === bestHand[0] && score[1] === bestHand[1]) {
+                winnerArray.push(playerId);
+            }
+        })
         /*
         let classement = [];
         for (let position = 0; position < this.players.length; position++) {
@@ -87,7 +102,7 @@ class HandValueHelper {
             currArray[config.CARDS_VALUE_MAP.get(card.color)][config.CARDS_VALUE_MAP.get(card.kind)]++;
             currArray[config.CARDS_VALUE_MAP.get(card.color)][0]++;
             currArray[0][config.CARDS_VALUE_MAP.get(card.kind)]++;
-            console.log("on ajoute la carte "+card.kind+" "+card.color);
+            console.log("on ajoute la carte " + card.kind + " " + card.color);
         });
         return currArray;
     }

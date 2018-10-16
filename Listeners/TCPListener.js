@@ -5,6 +5,7 @@ const HandStartListener = require("./HandStartListener");
 const HandEndListener = require("./HandEndListener");
 const PlayListener = require("./PlayListener");
 const BoardListener = require("./BoardListener");
+const ServerPlayerActionListener = require("./ServerPlayerActionListener");
 
 
 const startListener = new StartListener();
@@ -13,6 +14,7 @@ const handStartListener = new HandStartListener();
 const handEndListener = new HandEndListener();
 const playListener = new PlayListener();
 const boardListener = new BoardListener();
+const serverPlayerActionListener = new ServerPlayerActionListener();
 class TCPListener extends EventEmitter {
     handleTCPData(data, playerMemo, net, callback) {
         const message = JSON.parse(data);
@@ -41,8 +43,11 @@ class TCPListener extends EventEmitter {
                 console.log("Vous etes en time out !!");
                 break;
             case "server.game.hand.end":
-                console.log("Le gagnant est :");
-                handEndListner.handleMessage(message);
+                console.log("gagnant pour la main");
+                handEndListner.handleMessage(message, playerMemo);
+                break;
+            case "server.game.end":
+                console.log("fin de la partie");
                 break;
             case "server.lobby.join.success":
                 console.log("Rejoindre le lobby = succes");
@@ -52,7 +57,7 @@ class TCPListener extends EventEmitter {
                 break;
             case "server.player.action":
                 console.log("Un joueur à joué");
-                playListener.handleMessage(message, playerMemo);
+                serverPlayerActionListener.handleMessage(message, playerMemo);
                 break;
             default:
                 console.log("message imprevu data " + data);
