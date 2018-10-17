@@ -7,7 +7,7 @@ class HandValueHelper {
      * retourne une map de joueur : chips gagnés pour ce tour
      */
     static getWinners() {
-        let winnerChips = new Map();
+        let winnersMap = new Map();
         let playersHandValues = new Map();
         //pour chaque joueur actif, on va calculer la valeur de sa main
         //on recupere les cartes du tapis
@@ -42,32 +42,11 @@ class HandValueHelper {
                 winnerArray.push(playerId);
             }
         })
-        /*
-        let classement = [];
-        for (let position = 0; position < this.players.length; position++) {
-            let joueurMeilleur = 0;
-            for (let position2 = position + 1; position2 < this.players.length; position2++) {
-                if (this.compareHand(this.players[position], this.players[position2]) <= 0) {
-                    joueurMeilleur++;
-                }
-            }
-            while (classement[joueurMeilleur] != null) {
-                joueurMeilleur++
-            }
-            classement[joueurMeilleur] = this.players[position];
-        }
-        for (let player of classement) {
-            console.log(player.id);
-            const mainJoueur = this._mainJoueurs.get(player);
-            if (mainJoueur != null) {
-                console.log(mainJoueur.hand.hand);
-                console.log(mainJoueur.hauteur);
-                console.log(mainJoueur.complement);
-            }
-        }
-        return winnerChips;
-        */
-        return;
+        const chipsByWinner = Math.floor(config.CURRENT_BETS.get("POT") / winnerArray.length);
+        winnerArray.forEach(function(id){
+            winnersMap.set(id,chipsByWinner);
+        })
+        return winnersMap;
     }
 
 

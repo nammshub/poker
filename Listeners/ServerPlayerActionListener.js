@@ -5,7 +5,7 @@ class ServerPlayerActionListener {
 
     handleMessage(message, playerMemo) {
         const chipsPlayed = message.data.action.value;
-        const playerId = message.id;
+        const playerId = message.data.id;
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
         //ajout du coup dans notre neuronalInput
         this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
@@ -52,7 +52,7 @@ class ServerPlayerActionListener {
                     posString = "river";
                     break;
             }
-            console.log(" mises pour la phase " + posString);
+            console.log(" mises pour la phase " + posString + " pour le joueur " + playerId) ;
             currArray.forEach(function (chips) {
                 console.log(" " + chips + " ");
             })

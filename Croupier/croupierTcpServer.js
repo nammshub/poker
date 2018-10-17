@@ -138,7 +138,7 @@ async function launchPlayCurrHand() {
   if (step === 4) {
     console.log("step 4 =>who is the winner of the hand ?");
     //on est arrive en fin de main, il faut determiner le vainqueur parmi les joueurs encore ACTIFS
-    HandValueHelper.getWinners();
+    const winnerMap = HandValueHelper.getWinners();
   }
 
 }

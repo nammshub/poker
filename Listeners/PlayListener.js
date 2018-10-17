@@ -26,25 +26,30 @@ class PlayListener extends EventEmitter {
         //on cree la reponse neuronale
         let timeout = false;
         const timerControl = setTimeout(function () {
-            console.log("le timeout est passe");
-            callback(messageJson);
             //on annule la reponse neuronale
             timeout = true;
+            console.log("le timeout est passe");
+            messageJson.data.action.value = randomValue;
+            playerMemo.player.chips = playerMemo.player.chips - randomValue;
+            playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = randomValue;
+            callback(messageJson);
         }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
 
         //calcul random
         console.log("before random player chips = " + playerMemo.player.chips);
-        let randomValue = Math.max(0, playerMemo.player.chips); //this.getRandomInt(0, playerMemo.player.chips);
-        playerMemo.player.chips = playerMemo.player.chips - randomValue;
-        playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = randomValue;
-        messageJson.data.action.value = randomValue;
+        const randomValue = this.getRandomInt(0, playerMemo.player.chips);
 
         //lancement de la partie neuronale
         const pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
-        console.log("on a la reponse neuronale");
-        messageJson.data.action.value = pureNeuronal;
-        clearTimeout(timerControl);
+        console.log("on a la reponse neuronale timeout = " + timeout);
         if (!timeout) {
+            messageJson.data.action.value = pureNeuronal;
+            clearTimeout(timerControl);
+            console.log("aftre clearTimeout");
+            playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep].push(pureNeuronal);
+            console.log("aftre turnsDetails");
+            playerMemo.player.chips = playerMemo.player.chips - pureNeuronal;
+            console.log("neuronale avant callback");
             callback(messageJson);
         }
     }
@@ -54,7 +59,7 @@ class PlayListener extends EventEmitter {
      */
     async getNeuronalAnswer(net, playerMemo) {
         const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].neuronalInput.input);
-        console.log("neuronal answer = "+JSON.stringify(neuronalAnswer));
+        console.log("neuronal answer = " + JSON.stringify(neuronalAnswer));
         const pureAnswer = this.getPureAnswer(neuronalAnswer, playerMemo);
         return pureAnswer;
         //return 3;
@@ -78,7 +83,7 @@ class PlayListener extends EventEmitter {
             return 0;
         }
         //CHECK
-        if (rawNeuronal.chips < 1.666) {
+        if (rawNeuronal.chips < 0.666) {
             console.log("should check");
             return this.getCheck(playerMemo);
         }
@@ -89,19 +94,16 @@ class PlayListener extends EventEmitter {
     getCheck(playerMemo) {
         const toCheck = this.getStepMaxBet(playerMemo) - this.getStepMyBet(playerMemo);
         if (toCheck < playerMemo.player.chips) {
-            playerMemo.player.chips = playerMemo.player.chips - toCheck;
-            playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep].push(toCheck);
             return toCheck;
         }
-        //sinon random entre fold et all in
-        const random = this.getRandomInt(0, 1);
-        if (random === 0) {
-            return 0;
-        }
-        toCheck = playerMemo.player.chips;
-        playerMemo.player.chips = 0;
-        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep].push(toCheck);
-        return toCheck;
+        //sinon all in
+        return playerMemo.player.chips;;
+    }
+
+    getRaise(playerMemo) {
+        const toCheck = this.getCheck(playerMemo);
+        //random entre check et all in
+        return this.getRandomInt(toCheck, playerMemo.player.chips);
     }
 
 
