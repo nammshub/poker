@@ -260,6 +260,9 @@ async function startGame() {
       sendNewHandMessage();
       //on dort une seconde pour eviter les accrocs de transmission trop rapide
       await sleep(1000);
+      ////on prend les blindes pour ce tour
+      takeBlinds();
+      await sleep(1000);
       //distribution des cartes à chaque joueur
       sendCardsMessage();
       //on dort une seconde pour eviter les accrocs de transmission trop rapide
@@ -331,8 +334,6 @@ function sendNewHandMessage() {
   config.CURRENT_BETS.set("POT", 0);
   //on etablit l"ordre de jeu de cette main
   orderPlayers();
-  //on prend les blindes pour ce tour
-  takeBlinds();
   let playersDetails = [];
   config.PLAYERS.forEach(function (player) {
     console.log(JSON.stringify(player.details));
@@ -356,6 +357,15 @@ function takeBlinds() {
   let bigBlindPayed = false;
   let smallBlindPlayed = false;
   let playersIter = config.PLAYERS.length - 1;
+  let jsonMessage = {
+    "id": "server.player.action",
+    "data": {
+      "id": 0,
+      "action": {
+        "value": 0
+      }
+    }
+  }
   //on regarde les jouers en partant de la fin et on cherche les ACTIVE 
   //le premier qu"on trouve => grosse blinde
   //le deuxieme => petite blinde
@@ -372,6 +382,10 @@ function takeBlinds() {
         config.CURRENT_BETS.set("POT", config.CURRENT_BETS.get("POT") + config.PLAYERS[playersIter].details.chips);
         config.PLAYERS[playersIter].details.chips = 0;
       }
+      jsonMessage.data.id = config.PLAYERS[playersIter].details.id;
+      jsonMessage.data.action.value = config.CURRENT_BETS.get(config.PLAYERS[playersIter].details.id);
+      CroupierMessageHandler.broadcast(JSON.stringify(jsonMessage));
+
     }
 
 
@@ -388,6 +402,9 @@ function takeBlinds() {
         config.PLAYERS[playersIter].details.chips = 0;
       }
       config.CURRENT_MAX_BET = config.CURR_BIG_BLIND;
+      jsonMessage.data.id = config.PLAYERS[playersIter].details.id;
+      jsonMessage.data.action.value = config.CURRENT_BETS.get(config.PLAYERS[playersIter].details.id);
+      CroupierMessageHandler.broadcast(JSON.stringify(jsonMessage));
     }
     playersIter--;
   }
