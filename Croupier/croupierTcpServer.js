@@ -83,7 +83,7 @@ function hasAllChecked() {
     console.log(" player.details.state === ACTIVE " + player.details.state === "ACTIVE");
     console.log("config.CURRENT_BETS.get(player.details.id " + config.CURRENT_BETS.get(player.details.id));
 
-    if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0 && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
+    if (player.details.state === "ACTIVE" &&  !config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0 && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
       return false;
     }
   }

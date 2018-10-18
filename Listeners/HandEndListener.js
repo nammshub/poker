@@ -35,7 +35,7 @@ class HandEndListener {
         }
         if (lastTurnChips < currTurnChips) {
             //on a fait un gain => on se situe entre 0.5 et 1 (qui represente total chips)
-            winLose = 0.5 + ((currTurnChips - lastTurnChips) / ((totalChips - lastTurnChips) * 2))
+            winLose = 0.5 + ((currTurnChips - lastTurnChips) / ((playerMemo.potTotal - lastTurnChips) * 2))
         }
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.winLose = winLose;
     }
