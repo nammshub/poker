@@ -44,7 +44,7 @@ class TCPListener extends EventEmitter {
                 break;
             case "server.game.hand.end":
                 console.log("gagnant pour la main");
-                handEndListner.handleMessage(message, playerMemo);
+                handEndListener.handleMessage(message, playerMemo);
                 break;
             case "server.game.end":
                 console.log("fin de la partie");

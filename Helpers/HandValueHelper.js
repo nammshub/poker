@@ -26,7 +26,7 @@ class HandValueHelper {
             }
         }
         //classement des joueurs sous forme d'un tableau de tableau de id
-        winnerArray = [];
+        let winnerArray = [];
         let bestHand;
         playersHandValues.forEach(function (score, playerId) {
             if (winnerArray.length === 0) {

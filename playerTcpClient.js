@@ -17,7 +17,7 @@ console.log('before train = ' + before.toLocaleTimeString);
 neurone.train(neuronalArray);
 const after = new Date();
 console.log('after train = ' + after.toLocaleTimeString);
-const logFile = "/Logs/"+after.getTime()+".log";
+const logFile = "./Logs/"+after.getTime()+".log";
 const playerSocket = new net.Socket();
 let playerMemo = {
     "logFile":logFile,
@@ -29,6 +29,7 @@ let playerMemo = {
     "turnsDetails": [
         //infos detaillées sur chaque tour
         {
+            "chipsEndTurn" : 0,
             "tourNumber": 0,
             //tapis: liste des cartes sur le tapis
             "tapis": [

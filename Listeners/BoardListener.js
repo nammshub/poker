@@ -12,13 +12,13 @@ class BoardListener extends EventEmitter {
         newCardsMessage.data.cards.forEach(function (card) {
             card.cardInput = DeckHelper.getCardInput(card);
         });
-        let currTapis = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].tapis;
+        let currTapis = playerMemo.turnsDetails[playerMemo.totalHands].tapis;
         currTapis = currTapis.concat(newCardsMessage.data.cards);
         //on trie le tapis selon le cardInput
         currTapis.sort(DeckHelper.compare);
-        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].tapis = currTapis;
+        playerMemo.turnsDetails[playerMemo.totalHands].tapis = currTapis;
         //on increment le turnStep
-        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep++;
+        playerMemo.turnsDetails[playerMemo.totalHands].turnStep++;
         console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
     }
 }

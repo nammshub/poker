@@ -29,13 +29,13 @@ class ServerPlayerActionListener {
             joueur 2 ...
         }
         */
-        const turnStep = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep;
-        let betsArray = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.get(playerId);
+        const turnStep = playerMemo.turnsDetails[playerMemo.totalHands].turnStep;
+        let betsArray = playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerId);
         if (!betsArray) {
             betsArray = [[], [], [], []];
         }
         betsArray[turnStep].push(chipsPlayed);
-        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.set(playerId, betsArray);
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.set(playerId, betsArray);
         betsArray.forEach(function (currArray, position) {
             let posString;
             switch (position) {
@@ -61,9 +61,9 @@ class ServerPlayerActionListener {
 
     pushNeuronalInput(playerId, chipsPlayed, playerMemo) {
         //on recupere la position du joueur pour ce tour
-        const playerPos = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].positionMap.get(playerId);
+        const playerPos = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerId);
         //on recupere le code step turn a injecter
-        const stepNbr = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep;
+        const stepNbr = playerMemo.turnsDetails[playerMemo.totalHands].turnStep;
         let step;
         switch (stepNbr) {
             case 0:
@@ -80,10 +80,10 @@ class ServerPlayerActionListener {
                 break;
         }
         //nbr d'action pour ce joueur pour ce step
-        let actionNbr = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.get(playerId)[stepNbr].length;
+        let actionNbr = playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerId)[stepNbr].length;
         let neuronalChips = chipsPlayed / playerMemo.potTotal;
         //on injecte dans playerMemo cette action
-        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].neuronalInput.input["p" + playerPos + "_" + step + "_" + actionNbr] = neuronalChips;
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["p" + playerPos + "_" + step + "_" + actionNbr] = neuronalChips;
     }
 }
 

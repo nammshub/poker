@@ -78,6 +78,11 @@ console.log("Poker server running at port " + PORT + "\n");
 function hasAllChecked() {
   //return true SSI tous les joueurs actifs ont suivi la mise la plus haute
   for (let player of config.PLAYERS) {
+    console.log("player.details.id = " + player.details.id);
+    console.log(" !config.CURRENT_BETS.get(player.details.id) " + !config.CURRENT_BETS.get(player.details.id));
+    console.log(" player.details.state === ACTIVE " + player.details.state === "ACTIVE");
+    console.log("config.CURRENT_BETS.get(player.details.id " + config.CURRENT_BETS.get(player.details.id));
+
     if (!config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0 && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
       return false;
     }
@@ -114,6 +119,7 @@ async function launchPlayCurrHand() {
   une main se decompose en 4 phases de mises entrecoupées de pose de cartes sur le tapis par le croupier
   Une main peut se terminer prematurement si tous les joueurs sauf un se couchent
   */
+  let winnerMap = new Map();
   let step = 1;
   await playerBets();
   console.log("after first player bets");
@@ -138,8 +144,16 @@ async function launchPlayCurrHand() {
   if (step === 4) {
     console.log("step 4 =>who is the winner of the hand ?");
     //on est arrive en fin de main, il faut determiner le vainqueur parmi les joueurs encore ACTIFS
-    const winnerMap = HandValueHelper.getWinners();
+    winnerMap = HandValueHelper.getWinners();
   }
+  else {
+    config.PLAYERS.forEach(function (player) {
+      if (player.details.state === "ACTIVE") {
+        winnerMap.set(player.details.id, config.CURRENT_BETS.get("POT"));
+      }
+    })
+  }
+  CroupierMessageHandler.handleWinnerMap(winnerMap);
 
 }
 
@@ -331,6 +345,7 @@ function sendNewHandMessage() {
   //on nettoie la table des cartes precedentes:
   config.CARDS_ON_TABLE = [];
   //pot a 0
+  config.CURRENT_BETS = new Map();
   config.CURRENT_BETS.set("POT", 0);
   //on etablit l"ordre de jeu de cette main
   orderPlayers();

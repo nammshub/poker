@@ -29,27 +29,24 @@ class PlayListener extends EventEmitter {
             //on annule la reponse neuronale
             timeout = true;
             console.log("le timeout est passe");
-            messageJson.data.action.value = randomValue;
-            playerMemo.player.chips = playerMemo.player.chips - randomValue;
-            playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = randomValue;
+            const pureRandom = this.getPureAnswer(neuronalAnswer, playerMemo);
+            messageJson.data.action.value = pureRandom[0];
+            playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
+            this.updatePlayerMemo(playerMemo, pureRandom[0], pureRandom[1]);
             callback(messageJson);
         }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
 
         //calcul random
         console.log("before random player chips = " + playerMemo.player.chips);
-        const randomValue = this.getRandomInt(0, playerMemo.player.chips);
+        const randomValue = this.getRandomInt(0, 1);
 
         //lancement de la partie neuronale
         const pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
         console.log("on a la reponse neuronale timeout = " + timeout);
         if (!timeout) {
-            messageJson.data.action.value = pureNeuronal;
+            messageJson.data.action.value = pureNeuronal[0];
             clearTimeout(timerControl);
-            console.log("aftre clearTimeout");
-            playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep].push(pureNeuronal);
-            console.log("aftre turnsDetails");
-            playerMemo.player.chips = playerMemo.player.chips - pureNeuronal;
-            console.log("neuronale avant callback");
+            this.updatePlayerMemo(playerMemo, pureNeuronal[0], pureNeuronal[1]);
             callback(messageJson);
         }
     }
@@ -58,13 +55,9 @@ class PlayListener extends EventEmitter {
      * retourne la reponse du reseau de neurone sous la forme d"un nombre de chips à jouer
      */
     async getNeuronalAnswer(net, playerMemo) {
-        const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].neuronalInput.input);
+        const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input);
         console.log("neuronal answer = " + JSON.stringify(neuronalAnswer));
-        const pureAnswer = this.getPureAnswer(neuronalAnswer, playerMemo);
-        return pureAnswer;
-        //return 3;
-        //await this.sleep((1000 * config.MAX_SEC_TO_ANSWER) + 1000);
-        //return 3;
+        return this.getPureAnswer(neuronalAnswer, playerMemo);
     }
 
     sleep(ms) {
@@ -80,15 +73,15 @@ class PlayListener extends EventEmitter {
         //FOLD
         if (rawNeuronal.chips < 0.333) {
             console.log("should fold");
-            return 0;
+            return [0, 0];
         }
         //CHECK
         if (rawNeuronal.chips < 0.666) {
             console.log("should check");
-            return this.getCheck(playerMemo);
+            return [this.getCheck(playerMemo), 0.5];
         }
         console.log("should raise");
-        return this.getRaise(playerMemo);
+        return [this.getRaise(playerMemo), 1];
     }
 
     getCheck(playerMemo) {
@@ -113,9 +106,9 @@ class PlayListener extends EventEmitter {
 
     getStepMaxBet(playerMemo) {
         let maxBet = 0;
-        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.forEach(function (currArray) {
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray) {
             let sum = 0;
-            currArray[playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep].forEach(function (bet) {
+            currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
                 sum += bet;
             });
             if (sum > maxBet) {
@@ -127,14 +120,20 @@ class PlayListener extends EventEmitter {
 
     getStepMyBet(playerMemo) {
         let sum = 0;
-        playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].betsMap.forEach(function (currArray, playerId) {
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
             if (playerId === playerMemo.player.id) {
-                currArray[playerMemo.turnsDetails[playerMemo.turnsDetails.length - 1].turnStep].forEach(function (bet) {
+                currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
                     sum += bet;
                 });
             }
         });
         return sum;
+    }
+
+    updatePlayerMemo(playerMemo, chipsPlayed, foldCheckRaise) {
+        playerMemo.player.chips = playerMemo.player.chips - chipsPlayed;
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(chipsPlayed);
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = foldCheckRaise;
     }
 }
 

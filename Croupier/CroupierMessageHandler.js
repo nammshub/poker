@@ -4,22 +4,43 @@ const LobbyJoinListener = require("../Listeners/LobbyJoinListener");
 require("../config");
 
 class CroupierMessageHandler extends EventEmitter {
-    static handleData(data,socket) {
+    static handleData(data, socket) {
         const message = JSON.parse(data);
         const emmittingPlayer = this.getPlayerBySocket(socket);
         switch (message.id) {
             case "client.game.action":
-                console.log("Le joueur "+ emmittingPlayer.details.id +" a joue !");
-                PlayerPlayedListener.handleMessage(message,emmittingPlayer,this);
+                console.log("Le joueur " + emmittingPlayer.details.id + " a joue !");
+                PlayerPlayedListener.handleMessage(message, emmittingPlayer, this);
                 break;
             case "client.lobby.join":
-                console.log("Le joueur "+ emmittingPlayer.details.id +" rejoint le lobby !");
-                LobbyJoinListener.handleMessage(message,emmittingPlayer);
+                console.log("Le joueur " + emmittingPlayer.details.id + " rejoint le lobby !");
+                LobbyJoinListener.handleMessage(message, emmittingPlayer);
                 break;
             default:
-                console.log("message envoye de nature inconnue "+data)
+                console.log("message envoye de nature inconnue " + data)
                 break;
         }
+    }
+
+    static handleWinnerMap(winnerMap) {
+        //pour chaque winner, on augmente ses chips et ensuite on l'ajoute dans le tableau des winners qu'on va broadcast
+        let winnerArray = [];
+        winnerMap.forEach(function (chips, playerId) {
+            config.PLAYERS.forEach(function (player) {
+                if (player.details.id === playerId) {
+                    player.details.chips += chips;
+                    winnerArray.push(player.details);
+                }
+            })
+        })
+        //on broadcast les winners
+        let handEndMessage = {
+            "id": "server.game.hand.end",
+            "data": {
+                "winners": winnerArray
+            }
+        }
+        this.broadcast(JSON.stringify(handEndMessage));
     }
 
     // Send a message to all clients
@@ -37,10 +58,10 @@ class CroupierMessageHandler extends EventEmitter {
      * retourne le joueur lié au socket en param
      * @param {*} socket 
      */
-    static getPlayerBySocket(socket){
+    static getPlayerBySocket(socket) {
         let iter;
-        for (iter in config.PLAYERS){
-            if(config.PLAYERS[iter].socket === socket){
+        for (iter in config.PLAYERS) {
+            if (config.PLAYERS[iter].socket === socket) {
                 return config.PLAYERS[iter];
             }
         }
