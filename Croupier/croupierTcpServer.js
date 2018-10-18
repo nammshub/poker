@@ -6,7 +6,7 @@
 var net = require("net");
 require("../config");
 require("../deck");
-const DeckHelper = require("../Helpers/DeckHelper");
+//const DeckHelper = require("../Helpers/DeckHelper");
 const CroupierHelper = require("../Helpers/CroupierHelper");
 const BlindHelper = require("../Helpers/BlindHelper");
 const CroupierMessageHandler = require("./CroupierMessageHandler");
@@ -23,7 +23,7 @@ const playMessage = {
 let currentDeck = [];
 
 //generate new deck file
-DeckHelper.generateNewDeckFile();
+//DeckHelper.generateNewDeckFile();
 
 // Start a TCP Server
 net.createServer(function (socket) {
