@@ -10,11 +10,12 @@ class DeckHelper{
     static generateNewDeckFile(){
         const deckPath = "../deck.js";
 
-
+        let iter = -1;
         let deckContent = "global.DECK = [";
         config.ALL_COLORS.forEach( function(color){
             config.ALL_KINDS.forEach( function(kind){
-                deckContent = deckContent.concat("{ \"kind\" : \""+kind+"\", \"color\" : \"" + color +"\"},");
+                iter++;
+                deckContent = deckContent.concat("{ \"kind\" : \""+kind+"\", \"color\" : \"" + color +"\", \"cardInput\" : " + (iter/52) +"},");
             })
         })
         deckContent = deckContent.substring(0,deckContent.length-1);

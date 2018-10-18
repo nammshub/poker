@@ -6,7 +6,7 @@ const fs = require('fs');
 class LogHelper{
 
         static logNeuronalInput(neuronalInput, file){
-            fs.appendFile(file, neuronalInput + ",", function (err) {
+            fs.appendFile(file, neuronalInput + ",\n", function (err) {
                 if (err) throw err;
                 console.log('Saved!');
               });
