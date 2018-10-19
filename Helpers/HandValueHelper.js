@@ -21,30 +21,26 @@ class HandValueHelper {
                 allCards.forEach(function (card) {
                     console.log(card.kind + " " + card.color);
                 })
-                playersHandValues.set(player.id, this.getHandValue(allCards));
-                console.log("meilleur combinaison de la main " + playersHandValues.get(player.id)[0] + " et la valeur vaut " + playersHandValues.get(player.id)[1]);
+                playersHandValues.set(player.details.id, this.getHandValue(allCards));
+                console.log("meilleur combinaison de la main " + playersHandValues.get(player.details.id)[0] + " et la valeur vaut " + playersHandValues.get(player.details.id)[1]);
             }
         }
         //classement des joueurs sous forme d'un tableau de tableau de id
         let winnerArray = [];
-        let bestHand;
+        let bestHand = [0, 0];
         playersHandValues.forEach(function (score, playerId) {
-            if (winnerArray.length === 0) {
+            if (score[0] === bestHand[0] && score[1] === bestHand[1]) {
                 winnerArray.push(playerId);
-                bestHand = score;
             }
             if (score[0] > bestHand[0] || (score[0] === bestHand[0] && score[1] > bestHand[1])) {
                 bestHand = score;
                 winnerArray = [];
                 winnerArray.push(playerId);
             }
-            if (score[0] === bestHand[0] && score[1] === bestHand[1]) {
-                winnerArray.push(playerId);
-            }
         })
         const chipsByWinner = Math.floor(config.CURRENT_BETS.get("POT") / winnerArray.length);
-        winnerArray.forEach(function(id){
-            winnersMap.set(id,chipsByWinner);
+        winnerArray.forEach(function (id) {
+            winnersMap.set(id, chipsByWinner);
         })
         return winnersMap;
     }

@@ -9,6 +9,7 @@ global.config = {
 
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
+    MAX_RAISE_MULTIPLIER:10,
 
 
 

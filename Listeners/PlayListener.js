@@ -1,5 +1,5 @@
 const EventEmitter = require("events");
-const NeuronalNetworkListener = require("./NeuronalNetworkListener");
+require("../config");
 /**
  * Ce listener gere l"event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
  */
@@ -95,8 +95,8 @@ class PlayListener extends EventEmitter {
 
     getRaise(playerMemo) {
         const toCheck = this.getCheck(playerMemo);
-        //random entre check et all in
-        return this.getRandomInt(toCheck, playerMemo.player.chips);
+        const toRaise = toCheck + this.getRandomInt(1,config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
+        return Math.min(toRaise, playerMemo.player.chips);
     }
 
 

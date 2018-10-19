@@ -84,6 +84,10 @@ class ServerPlayerActionListener {
         let neuronalChips = chipsPlayed / playerMemo.potTotal;
         //on injecte dans playerMemo cette action
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["p" + playerPos + "_" + step + "_" + actionNbr] = neuronalChips;
+        //si le playerId est soi meme => prise de blinde par le croupier => on note cette action en neuronal comme un check
+        if(playerId === playerMemo.player.id){
+            playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 0.5;
+        }
     }
 }
 

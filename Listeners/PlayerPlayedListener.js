@@ -107,7 +107,7 @@ class PlayerPlayedListener extends EventEmitter {
 
         //joueur check
         if (message.data.action.value + config.CURRENT_BETS.get(emmittingPlayer.details.id) === config.CURRENT_MAX_BET) {
-            console.log("\n Le joueur avec (id = " + emmittingPlayer.details.id + ") a misé la max bet (" + config.CURRENT_MAX_BET + ") => CHECK");
+            console.log("\n Le joueur avec (id = " + emmittingPlayer.details.id + ") => CHECK");
             for( let player of config.PLAYERS){
                 if (player.details.id === emmittingPlayer.details.id) {
                     player.details.chips = player.details.chips - message.data.action.value;
