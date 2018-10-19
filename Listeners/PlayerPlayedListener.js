@@ -62,6 +62,7 @@ class PlayerPlayedListener extends EventEmitter {
         //joueur joue plus que ses chips restants => KO
         if (message.data.action.value > emmittingPlayer.details.chips) {
             console.log("\n Le joueur avec (id = " + emmittingPlayer.details.id + ") a misé plus que ses chips restants !!");
+            throw Error(" Le joueur avec l'id " + emmittingPlayer.details.id +" a mise " + message.data.action.value +" mais ne possede que " + emmittingPlayer.details.chips);
             for( let player of config.PLAYERS){
                                 if (player.details.id === emmittingPlayer.details.id) {
                     player.details.state = "FOLDED";
