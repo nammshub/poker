@@ -55,7 +55,13 @@ class PlayListener extends EventEmitter {
         }
 
         //lancement de la partie neuronale
-        const pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
+        let pureNeuronal;
+        if (config.DISABLE_NEURONAL) {
+            pureNeuronal = this.getPureAnswer(randomValue, playerMemo);
+        }
+        else {
+            pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
+        }
         console.log("on a la reponse neuronale timeout = " + timeout);
         if (!timeout) {
             messageJson.data.action.value = pureNeuronal[0];
