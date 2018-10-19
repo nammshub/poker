@@ -13,10 +13,10 @@ const neurone = new brain.NeuralNetwork();
 //on recupere une copie du tableau des datas neuronales
 const neuronalArray = NEURONAL.slice(0);
 const before = new Date();
-console.log('before train = ' + before.toLocaleTimeString);
+console.log('before train = ' + before);
 neurone.train(neuronalArray);
 const after = new Date();
-console.log('after train = ' + after.toLocaleTimeString);
+console.log('after train = ' + after);
 const logFile = "./Logs/"+after.getTime()+".log";
 const playerSocket = new net.Socket();
 let playerMemo = {
