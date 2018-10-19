@@ -344,6 +344,7 @@ function sendNewHandMessage() {
   currentDeck = DECK.slice(0);
   //on nettoie la table des cartes precedentes:
   config.CARDS_ON_TABLE = [];
+  config.CURR_PLAYER = null;
   //pot a 0
   config.CURRENT_BETS = new Map();
   config.CURRENT_BETS.set("POT", 0);
