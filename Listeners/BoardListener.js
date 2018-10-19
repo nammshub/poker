@@ -19,6 +19,13 @@ class BoardListener extends EventEmitter {
         playerMemo.turnsDetails[playerMemo.totalHands].tapis = currTapis;
         //on increment le turnStep
         playerMemo.turnsDetails[playerMemo.totalHands].turnStep++;
+        //on maj le input neuronal avec les cartes:
+        let iterCard = 0;
+        playerMemo.turnsDetails[playerMemo.totalHands].tapis.forEach(function(card){
+            iterCard++;
+            playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["t_"+iterCard] = card.cardInput;
+
+        })
         console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
     }
 }
