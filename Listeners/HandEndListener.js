@@ -17,10 +17,6 @@ class HandEndListener {
         this.establishWinLoseInput(playerMemo);
         //enregistrement des coups dans le fichier de log
         LogHelper.logNeuronalInput(JSON.stringify(playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput), playerMemo.logFile);
-        //si on repere un gain alors qu'on a fold => il y a un soucis à analyser
-        if (playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.winLose > 0.5 && playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips === 0) {
-            throw new Error("gain alors que fold...");
-        }
     }
 
     establishWinLoseInput(playerMemo) {

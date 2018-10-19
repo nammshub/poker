@@ -29,7 +29,7 @@ class PlayListener extends EventEmitter {
             //on annule la reponse neuronale
             timeout = true;
             console.log("le timeout est passe");
-            const pureRandom = this.getPureAnswer(neuronalAnswer, playerMemo);
+            const pureRandom = this.getPureAnswer(randomValue, playerMemo);
             messageJson.data.action.value = pureRandom[0];
             playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
             this.updatePlayerMemo(playerMemo, pureRandom[0], pureRandom[1]);
@@ -38,7 +38,21 @@ class PlayListener extends EventEmitter {
 
         //calcul random
         console.log("before random player chips = " + playerMemo.player.chips);
-        const randomValue = this.getRandomInt(0, 1);
+        let randomValue = 0.5;
+        switch (this.getRandomInt(1, 3)) {
+            //fold
+            case 1:
+                randomValue = 0;
+                break;
+            //check
+            case 2:
+                randomValue = 0.5;
+                break;
+            //raise
+            case 1:
+                randomValue = 1;
+                break;
+        }
 
         //lancement de la partie neuronale
         const pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
@@ -95,7 +109,7 @@ class PlayListener extends EventEmitter {
 
     getRaise(playerMemo) {
         const toCheck = this.getCheck(playerMemo);
-        const toRaise = toCheck + this.getRandomInt(1,config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
+        const toRaise = toCheck + this.getRandomInt(1, config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
         return Math.min(toRaise, playerMemo.player.chips);
     }
 
