@@ -6,9 +6,6 @@ global.NEURONAL = [
     { "input": { "winLose": 0.500011110864203, "step": 0, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 1.6, "p1_pf_1": 0, "p2_pf_1": 0, "p3_pf_2": 0 }, "output": { "chips": 0.5 } },
     { "input": { "winLose": 0.5000222222222223, "step": 0.75, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.300000131312, "p1_pf_1": 0, "p2_pf_1": 0, "p4_f_1": 0.5, "p4_r_1": 0.5 }, "output": { "chips": 0 } },
     { "input": { "winLose": 0.5000666696297613, "step": 0.75, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.300000121213, "p1_pf_1": 1, "p3_pf_2": 1, "p4_f_1": 0.5, "p1_t_1": 0.5 }, "output": { "chips": 0 } },
-  
-    /*
-  
     { "input": { "winLose": 0.5, "step": 0.75, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.300000121213, "p2_pf_1": 1, "p3_pf_2": 1, "p4_f_1": 0.5, "p2_t_1": 0.5, "p3_r_1": 0.5 }, "output": { "chips": 0 } },
     { "input": { "winLose": 0.5000111130867709, "step": 0, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.1009, "p1_pf_1": 0, "p2_pf_1": 0, "p3_pf_2": 0 }, "output": { "chips": 0.5 } },
     { "input": { "winLose": 0.49996668665467386, "step": 0.75, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.700000001309, "p1_pf_1": 1, "p2_pf_1": 0, "p4_f_1": 0.5, "p1_t_1": 0.5, "p4_r_1": 0.5 }, "output": { "chips": 0 } },
@@ -3617,6 +3614,6 @@ global.NEURONAL = [
     { "input": { "winLose": 0.5004400507818603, "step": 0.75, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.300000111112, "p2_pf_1": 0, "p3_pf_2": 1, "p4_f_1": 0.5, "p3_r_1": 0.5 }, "output": { "chips": 0.5 } },
     { "input": { "winLose": 0.4993146319230743, "step": 0.75, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.1051, "p1_pf_1": 0, "p2_pf_1": 1, "p3_pf_2": 1, "p2_t_1": 0.5, "p3_r_1": 0.5 }, "output": { "chips": 0.5 } },
     { "input": { "winLose": 0.4996568455873774, "step": 0.75, "p4_pf_1": 1, "p3_pf_1": 0.5, "handValue": 0.300000121213, "p1_pf_1": 0, "p2_pf_1": 1, "p4_f_1": 0.5, "p2_t_1": 0.5, "p4_r_1": 0.5 }, "output": { "chips": 0 } },
-*/
+
 
 ];

@@ -1,11 +1,15 @@
 var fs = require('fs');
+require("../config");
 
-class NetworkTrainingHelper{
+class NetworkTrainingHelper {
     //entraine le reseau sauvegarde ensuite le reseau sous forme de file json
-    static trainNetwork(network, dataArray,jsonTrainedPath){
+    static trainNetwork(network, dataArray, jsonTrainedPath) {
         const before = new Date();
         console.log('before train = ' + before);
-        network.train(dataArray, { log: true });
+        network.train(dataArray, {
+            iterations: config.TRAINING_ITERATION,
+            log: true,
+        });
         const after = new Date();
         console.log('after train = ' + after);
         //svg en JSON
@@ -15,4 +19,4 @@ class NetworkTrainingHelper{
     }
 }
 
-module.exports =  NetworkTrainingHelper;
+module.exports = NetworkTrainingHelper;
