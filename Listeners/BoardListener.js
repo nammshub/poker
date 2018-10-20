@@ -1,6 +1,7 @@
 const EventEmitter = require("events");
 require("../config");
 const DeckHelper = require("../Helpers/DeckHelper");
+const HandValueHelper = require("../Helpers/HandValueHelper");
 
 
 /**
@@ -8,25 +9,21 @@ const DeckHelper = require("../Helpers/DeckHelper");
  */
 class BoardListener extends EventEmitter {
     handleMessage(newCardsMessage, playerMemo) {
-        //on injecte le cardInput dans chaque carte recue
-        newCardsMessage.data.cards.forEach(function (card) {
-            card.cardInput = DeckHelper.getCardInput(card);
-        });
         let currTapis = playerMemo.turnsDetails[playerMemo.totalHands].tapis;
         currTapis = currTapis.concat(newCardsMessage.data.cards);
-        //on trie le tapis selon le cardInput
-        currTapis.sort(DeckHelper.compare);
         playerMemo.turnsDetails[playerMemo.totalHands].tapis = currTapis;
         //on increment le turnStep
         playerMemo.turnsDetails[playerMemo.totalHands].turnStep++;
         //on maj le input neuronal avec les cartes:
-        let iterCard = 0;
-        playerMemo.turnsDetails[playerMemo.totalHands].tapis.forEach(function(card){
-            iterCard++;
-            playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["t_"+iterCard] = card.cardInput;
-
-        })
+        HandValueHelper.handValueToNeuronalInput(playerMemo);
+        //on ajoute dans le input l'evolution du step
+        this.stepToNeuronalInput(playerMemo);
         console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
+    }
+
+    stepToNeuronalInput(playerMemo) {
+        const currStep = playerMemo.turnsDetails[playerMemo.totalHands].turnStep;
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.step = currStep / 4;
     }
 }
 

@@ -29,6 +29,7 @@ class HandStartListener extends EventEmitter {
             //turn step: 0=> preflop, 1=> flop, 2 => turn , 3=> river
             "turnStep": 0,
             "tourNumber": playerMemo.totalHands,
+            "hand": [],
             "tapis": [
                 //carte1, carte2...
             ],
@@ -36,7 +37,8 @@ class HandStartListener extends EventEmitter {
             "randomResponse": 0,
             "neuronalInput": {
                 "input": {
-                    "winLose": 1
+                    "winLose": 1,
+                    "step": 0,
                 },
                 "output": {
                 }
