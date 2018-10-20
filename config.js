@@ -10,16 +10,16 @@ global.config = {
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
     MAX_RAISE_MULTIPLIER:10,
-    DISABLE_NEURONAL:false,
+    DISABLE_NEURONAL:true,
 
 
 
     //croupier
     NB_PLAYERS: 0,
-    START_MONEY: 1500,
+    START_MONEY: 150000,
     WAIT_BEFORE_START: 100,
     CURRENT_HAND: 0,
-    MAX_HANDS: 150,
+    MAX_HANDS: 15000,
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
     ALL_KINDS: ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "1"],
     CARDS_VALUE_MAP: new Map([
