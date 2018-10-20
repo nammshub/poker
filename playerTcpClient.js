@@ -2,42 +2,29 @@ const net = require("net");
 require("./config");
 require("./neuronalMemory")
 const TCPListener = require("./Listeners/TCPListener");
-const NeuronalNetworkListener = require("./Listeners/NeuronalNetworkListener");
+const NetworkTrainingHelper = require("./Helpers/NetworkTrainingHelper");
+const fs = require('fs');
 const brain = require("brain.js");
 
 const tcpListener = new TCPListener();
 const HOST = config.HOST;
 const PORT = config.PORT;
-/*
-net.train(data, {
-                            // Defaults values --> expected validation
-      iterations: 20000,    // the maximum times to iterate the training data --> number greater than 0
-      errorThresh: 0.005,   // the acceptable error percentage from training data --> number between 0 and 1
-      log: false,           // true to use console.log, when a function is supplied it is used --> Either true or a function
-      logPeriod: 10,        // iterations between logging out --> number greater than 0
-      learningRate: 0.3,    // scales with delta to effect training rate --> number between 0 and 1
-      momentum: 0.1,        // scales with next layer's change value --> number between 0 and 1
-      callback: null,       // a periodic call back that can be triggered while training --> null or function
-      callbackPeriod: 10,   // the number of iterations through the training data between callback calls --> number greater than 0
-      timeout: Infinity     // the max number of milliseconds to train for --> number greater than 0
-});
-*/
-const neurone = new brain.NeuralNetwork();
-//on recupere une copie du tableau des datas neuronales
-const neuronalArray = NEURONAL.slice(0);
-const before = new Date();
-console.log('before train = ' + before);
-neurone.train(neuronalArray, { log: true });
-const after = new Date();
-console.log('after train = ' + after);
-const logFile = "./Logs/" + after.getTime() + ".log";
+
+let neurone = new brain.NeuralNetwork();
+if (config.TRAINING_NEEDED) {
+    //on recupere une copie du tableau des datas neuronales
+    const neuronalArray = NEURONAL.slice(0);
+    NetworkTrainingHelper.trainNetwork(neurone, neuronalArray, "trained-network.json");
+}
+const logName = new Date();
+const logFile = "./Logs/" + logName.getTime() + ".log";
+//creation du reseau à partir du trained-network.json
+jsonTrainedNetwork = JSON.parse(fs.readFileSync("trained-network.json", "utf8"));
+neurone.fromJSON(jsonTrainedNetwork);
+console.log("network ready to work !!");
 
 //PAUSE jusqu'a ce que user clic une touche
-
-var stdin = process.openStdin();
-
-
-
+let stdin = process.openStdin();
 stdin.addListener("data", function () {
     const playerSocket = new net.Socket();
     let playerMemo = {

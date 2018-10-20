@@ -3,6 +3,8 @@ var Promise  = require('promise');
 var promises = [];
 var readline = require('readline');
 
+//cette classe convertit les logs de sorties des joueurs en fichiers input.json
+
 function readFile(file) {
     return new Promise(function (resolve, reject) {
         var lines = [];
