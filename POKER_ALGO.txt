@@ -3,6 +3,11 @@ Algo Poker IA:
 
 TODO :
 
+- parametres à prendre en compte:
+	- valeur de la main ( avec tapis) entre 0 et 1 => utiliser handvalue helper pour cela
+	- etape en cours (0: pre flop, 0.25: flop  0.5: turn 0.75:river)
+	- winLose on garde
+	- coups des joueurs en fold check et raise on garde
 
 
 

@@ -10,7 +10,7 @@ class ServerPlayerActionListener {
         //ajout du coup dans notre neuronalInput
         this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
         //si le playerId est soi meme => prise de blinde par le croupier => on note cette action en neuronal comme un check et on diminue ses chips
-        if(playerId === playerMemo.player.id){
+        if (playerId === playerMemo.player.id) {
             playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 0.5;
             playerMemo.player.chips -= chipsPlayed;
         }
@@ -57,7 +57,7 @@ class ServerPlayerActionListener {
                     posString = "river";
                     break;
             }
-            console.log(" mises pour la phase " + posString + " pour le joueur " + playerId) ;
+            console.log(" mises pour la phase " + posString + " pour le joueur " + playerId);
             currArray.forEach(function (chips) {
                 console.log(" " + chips + " ");
             })
@@ -86,9 +86,62 @@ class ServerPlayerActionListener {
         }
         //nbr d'action pour ce joueur pour ce step
         let actionNbr = playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerId)[stepNbr].length;
-        let neuronalChips = chipsPlayed / playerMemo.potTotal;
+        //let neuronalChips = chipsPlayed / playerMemo.potTotal;
+        //On va logger une action (FOLD,CHECK,RAISE) plutot que un montant d'argent
+
+        let stepMaxBet = 0;
+
+        let playerSumBet = 0;
+
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, betsPlayerId) {
+
+            let stepSumBet = 0;
+
+            currArray[stepNbr].forEach(function (bet) {
+
+                stepSumBet += bet;
+
+            });
+
+            if (stepSumBet > stepMaxBet) {
+
+                stepMaxBet = stepSumBet;
+
+            }
+
+            if (playerId === betsPlayerId) {
+
+                playerSumBet = stepSumBet;
+
+            }
+
+        });
+
+        //on fold par defaut
+
+        let playerAction = 0;
+
+        if (stepMaxBet === playerSumBet + chipsPlayed) {
+
+            //le joueur check
+
+            playerAction = 0.5;
+
+        }
+
+        if (stepMaxBet < playerSumBet + chipsPlayed) {
+
+            //le joueur raise
+
+            playerAction = 1;
+
+        }
+
+
+
         //on injecte dans playerMemo cette action
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["p" + playerPos + "_" + step + "_" + actionNbr] = neuronalChips;
+
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["p" + playerPos + "_" + step + "_" + actionNbr] = playerAction;
     }
 }
 
