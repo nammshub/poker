@@ -325,8 +325,8 @@ class HandValueHelper {
         console.log("hand value array = " + handValueArray[0] + " et " + handValueArray[1]);
         const neuronalInput = (handValueArray[0] / 10) + (handValueArray[1] / 1000000000000);
         //la valeur max d'une main au preflop est la paire => cela fausse l'echelle de valeur, on compense en divisant par la meilleure paire possible (As)
-        if(tapis.length === 0){
-            neuronalInput /= 2.000013;
+        if (tapis.length === 0) {
+            neuronalInput = neuronalInput / 2.000013;
         }
         console.log("neuronalInput = " + neuronalInput);
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["handValue"] = neuronalInput;
