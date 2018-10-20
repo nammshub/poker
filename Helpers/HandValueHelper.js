@@ -318,8 +318,8 @@ class HandValueHelper {
 
     ////////////////// FOR PLAYER //////////////////////
     static handValueToNeuronalInput(playerMemo) {
-        const hand = turnsDetails[playerMemo.totalHands].hand;
-        const tapis = turnsDetails[playerMemo.totalHands].tapis;
+        const hand = playerMemo.turnsDetails[playerMemo.totalHands].hand;
+        const tapis = playerMemo.turnsDetails[playerMemo.totalHands].tapis;
         const cards = hand.concat(tapis);
         const handValueArray = this.getHandValue(cards);
         const neuronalInput = handValueArray[0] / 10 + handValueArray[1] / 1000000000;

@@ -77,7 +77,7 @@ class PlayListener extends EventEmitter {
     async getNeuronalAnswer(net, playerMemo) {
         const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input);
         console.log("neuronal answer = " + JSON.stringify(neuronalAnswer));
-        return this.getPureAnswer(neuronalAnswer, playerMemo);
+        return this.getPureAnswer(neuronalAnswer.chips, playerMemo);
     }
 
     sleep(ms) {
@@ -91,12 +91,12 @@ class PlayListener extends EventEmitter {
      */
     getPureAnswer(rawNeuronal, playerMemo) {
         //FOLD
-        if (rawNeuronal.chips < 0.333) {
+        if (rawNeuronal < 0.333) {
             console.log("should fold");
             return [0, 0];
         }
         //CHECK
-        if (rawNeuronal.chips < 0.666) {
+        if (rawNeuronal < 0.666) {
             console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
