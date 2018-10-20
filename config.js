@@ -10,7 +10,7 @@ global.config = {
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
     MAX_RAISE_MULTIPLIER:10,
-    DISABLE_NEURONAL:false,
+    DISABLE_NEURONAL:true,
     TRAINING_NEEDED:false,
     TRAINING_ITERATION: 20000,
 
