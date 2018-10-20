@@ -322,7 +322,9 @@ class HandValueHelper {
         const tapis = playerMemo.turnsDetails[playerMemo.totalHands].tapis;
         const cards = hand.concat(tapis);
         const handValueArray = this.getHandValue(cards);
-        const neuronalInput = handValueArray[0] / 10 + handValueArray[1] / 1000000000;
+        console.log("hand value array = " + handValueArray[0] + " et " + handValueArray[1]);
+        const neuronalInput = (handValueArray[0] / 10) + (handValueArray[1] / 1000000000000);
+        console.log("neuronalInput = " + neuronalInput);
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["handValue"] = neuronalInput;
     }
 }

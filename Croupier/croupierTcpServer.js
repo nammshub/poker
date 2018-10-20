@@ -124,6 +124,7 @@ async function launchPlayCurrHand() {
   await playerBets();
   console.log("after first player bets");
   while (!hasHandWinner() && step < 4) {
+    await sleep(1000);
     console.log("step = " + step);
     switch (step) {
       //flop
