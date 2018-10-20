@@ -19,7 +19,7 @@ global.config = {
     //croupier
     NB_PLAYERS: 0,
     START_MONEY: 1500,
-    WAIT_BEFORE_START: 60,
+    WAIT_BEFORE_START: 30,
     CURRENT_HAND: 0,
     MAX_HANDS: 150,
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
