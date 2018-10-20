@@ -14,10 +14,13 @@ class BoardListener extends EventEmitter {
         playerMemo.turnsDetails[playerMemo.totalHands].tapis = currTapis;
         //on increment le turnStep
         playerMemo.turnsDetails[playerMemo.totalHands].turnStep++;
-        //on maj le input neuronal avec les cartes:
-        HandValueHelper.handValueToNeuronalInput(playerMemo);
-        //on ajoute dans le input l'evolution du step
-        this.stepToNeuronalInput(playerMemo);
+        //on injecte dans le neuronal SSI le joueur est toujours actif sinon les calculs de valeur de main sont fausses
+        if (playerMemo.turnsDetails[playerMemo.totalHands].state === "ACTIVE") {
+            //on maj le input neuronal avec les cartes:
+            HandValueHelper.handValueToNeuronalInput(playerMemo);
+            //on ajoute dans le input l'evolution du step
+            this.stepToNeuronalInput(playerMemo);
+        }
         console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
     }
 

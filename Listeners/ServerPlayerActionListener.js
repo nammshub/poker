@@ -11,7 +11,8 @@ class ServerPlayerActionListener {
         //this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
         //si le playerId est soi meme => prise de blinde par le croupier => on note cette action en neuronal comme un check et on diminue ses chips
         if (playerId === playerMemo.player.id) {
-            playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 0.5;
+            playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 1;
+            playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(1);
             playerMemo.player.chips -= chipsPlayed;
         }
     }

@@ -93,8 +93,10 @@ class PlayListener extends EventEmitter {
         //FOLD
         if (rawNeuronal < 0.333) {
             console.log("should fold");
+            playerMemo.turnsDetails[playerMemo.totalHands].state = "FOLDED";
             return [0, 0];
         }
+        playerMemo.turnsDetails[playerMemo.totalHands].state = "ACTIVE";
         //CHECK
         if (rawNeuronal < 0.666) {
             console.log("should check");
@@ -153,7 +155,13 @@ class PlayListener extends EventEmitter {
     updatePlayerMemo(playerMemo, chipsPlayed, foldCheckRaise) {
         playerMemo.player.chips = playerMemo.player.chips - chipsPlayed;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(chipsPlayed);
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = foldCheckRaise;
+        playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(foldCheckRaise);
+        let outputSum = 0;
+        playerMemo.turnsDetails[playerMemo.totalHands].outputArray.forEach(function (output) {
+            outputSum += output;
+        })
+
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = (outputSum / playerMemo.turnsDetails[playerMemo.totalHands].outputArray.length);
     }
 }
 

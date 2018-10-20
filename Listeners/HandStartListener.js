@@ -28,7 +28,9 @@ class HandStartListener extends EventEmitter {
             "betsMap": betsMap,
             //turn step: 0=> preflop, 1=> flop, 2 => turn , 3=> river
             "turnStep": 0,
+            "state":"ACTIVE",
             "tourNumber": playerMemo.totalHands,
+            "outputArray":[],
             "hand": [],
             "tapis": [
                 //carte1, carte2...
