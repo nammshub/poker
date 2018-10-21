@@ -159,9 +159,10 @@ class PlayListener extends EventEmitter {
         return sum;
     }
 
-    getSomeBluff(playerMemo){
+    getSomeBluff(playerMemo) {
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.bluff = 1;
         const checkOrRaise = this.getRandomInt(0, 1);
-        if(checkOrRaise === 0){
+        if (checkOrRaise === 0) {
             return this.getPureAnswer(0.5, playerMemo);
         }
         return this.getPureAnswer(1, playerMemo);
