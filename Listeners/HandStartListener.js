@@ -41,6 +41,7 @@ class HandStartListener extends EventEmitter {
                 "input": {
                     "winLose": 1,
                     "step": 0,
+                    "bluff":0,
                 },
                 "output": {
                 }

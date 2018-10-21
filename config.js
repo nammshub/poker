@@ -9,20 +9,21 @@ global.config = {
 
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
-    MAX_RAISE_MULTIPLIER:10,
+    MAX_RAISE_MULTIPLIER:5,
+    BLUFF_RATIO:3, //bluff 1/BLUFF_RATIO time
     DISABLE_NEURONAL:false,
-    TRAINING_NEEDED:true,
+    TRAINING_NEEDED:false,
     //200000 => environ 30 minutes de training
-    TRAINING_ITERATION: 600000,
+    TRAINING_ITERATION: 400000,
 
 
 
     //croupier
     NB_PLAYERS: 0,
-    START_MONEY: 150000,
+    START_MONEY: 1500,
     WAIT_BEFORE_START: 30,
     CURRENT_HAND: 0,
-    MAX_HANDS: 15000,
+    MAX_HANDS: 150,
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
     ALL_KINDS: ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "1"],
     CARDS_VALUE_MAP: new Map([

@@ -8,7 +8,7 @@ class LogHelper{
         static logNeuronalInput(neuronalInput, file){
             fs.appendFile(file, neuronalInput + ",\n", function (err) {
                 if (err) throw err;
-                console.log('Saved!');
+                console.log('log saved!');
               });
         }
 }

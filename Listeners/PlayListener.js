@@ -49,7 +49,7 @@ class PlayListener extends EventEmitter {
                 randomValue = 0.5;
                 break;
             //raise
-            case 1:
+            case 3:
                 randomValue = 1;
                 break;
         }
@@ -60,7 +60,14 @@ class PlayListener extends EventEmitter {
             pureNeuronal = this.getPureAnswer(randomValue, playerMemo);
         }
         else {
-            pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
+            const bluffValue = this.getRandomInt(1, config.BLUFF_RATIO)
+            if (bluffValue === 1) {
+                //on va bluff
+                pureNeuronal = this.getSomeBluff(playerMemo);
+            }
+            else {
+                pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
+            }
         }
         console.log("on a la reponse neuronale timeout = " + timeout);
         if (!timeout) {
@@ -150,6 +157,14 @@ class PlayListener extends EventEmitter {
             }
         });
         return sum;
+    }
+
+    getSomeBluff(playerMemo){
+        const checkOrRaise = this.getRandomInt(0, 1);
+        if(checkOrRaise === 0){
+            return this.getPureAnswer(0.5, playerMemo);
+        }
+        return this.getPureAnswer(1, playerMemo);
     }
 
     updatePlayerMemo(playerMemo, chipsPlayed, foldCheckRaise) {
