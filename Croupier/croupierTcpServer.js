@@ -200,6 +200,7 @@ async function playerBets() {
   */
   console.log("inside playerBets");
   while (!hasHandWinner() && !hasAllChecked()) {
+    await sleep(1000);
     //on boucle sur chaque joueur actif qui a encore des chips pour avoir son message
     let currPlayer = CroupierHelper.getNextPlayer();
     console.log(" joueur actif = " + currPlayer.details.id);
