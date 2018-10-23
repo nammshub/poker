@@ -275,7 +275,7 @@ async function startGame() {
       //on dort une seconde pour eviter les accrocs de transmission trop rapide
       await sleep(1000);
       ////on prend les blindes pour ce tour
-      takeBlinds();
+      await takeBlinds();
       await sleep(1000);
       //distribution des cartes à chaque joueur
       sendCardsMessage();
@@ -366,10 +366,11 @@ function sendNewHandMessage() {
 }
 
 //prise des blindes aupres des joueurs 1 et 2
-function takeBlinds() {
+async function takeBlinds() {
   console.log("inside takeBlinds");
   //modifie les blindes au besoin selon le tour en cours
   BlindHelper.actualizeBlinds(config.CURRENT_HAND);
+  await sleep(1000);
   let bigBlindPayed = false;
   let smallBlindPlayed = false;
   let playersIter = config.PLAYERS.length - 1;

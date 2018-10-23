@@ -6,7 +6,7 @@ const HandEndListener = require("./HandEndListener");
 const PlayListener = require("./PlayListener");
 const BoardListener = require("./BoardListener");
 const ServerPlayerActionListener = require("./ServerPlayerActionListener");
-
+const BlindChangeListener = require("./BlindChangeListener");
 
 const startListener = new StartListener();
 const cardsListener = new CardsListener();
@@ -15,6 +15,7 @@ const handEndListener = new HandEndListener();
 const playListener = new PlayListener();
 const boardListener = new BoardListener();
 const serverPlayerActionListener = new ServerPlayerActionListener();
+const blindChangeListener = new BlindChangeListener();
 class TCPListener extends EventEmitter {
     handleTCPData(data, playerMemo, net, callback) {
         const message = JSON.parse(data);
@@ -60,7 +61,9 @@ class TCPListener extends EventEmitter {
                 serverPlayerActionListener.handleMessage(message, playerMemo);
                 break;
             case "server.game.blind.change":
-            console.log("blind change");
+                console.log("blind change");
+                blindChangeListener.handleMessage(message, playerMemo);
+                break;
             default:
                 console.log("message imprevu data " + data);
         }

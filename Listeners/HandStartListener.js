@@ -19,7 +19,7 @@ class HandStartListener extends EventEmitter {
         playerMemo.totalHands++;
         //actualise les blindes
         const currBlinds = BlindHelper.actualizeBlinds(playerMemo.totalHands);
-        playerMemo.bigBlind = currBlinds[1];
+        //playerMemo.bigBlind = currBlinds[1];
         console.log("la position du joueur pour ce tour est " + positionMap.get(playerMemo.player.id))
         //gestion de la prise des petites et grandes blindes chez les joueurs prevus et considere comme mise de preflop
         let betsMap = this.getNewBetsMap(playerMemo);
