@@ -200,7 +200,7 @@ class PlayListener extends EventEmitter {
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
             "input": {
-                "Win": 1,
+                "Win": config.WIN_RATIO,
                 "Lose": 0,
                 "myCurrBet": myCurrBetsSum / playerMemo.potTotal,
                 "step": currStep,

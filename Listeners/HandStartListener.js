@@ -39,7 +39,7 @@ class HandStartListener extends EventEmitter {
             "randomResponse": 0,
             "currInput":{
                 "input": {
-                    "Win": 1,
+                    "Win": config.WIN_RATIO,
                     "Lose": 0,
                     "myCurrBet":0,
                     "step": 0,

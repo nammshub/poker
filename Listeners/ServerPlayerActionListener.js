@@ -8,7 +8,7 @@ class ServerPlayerActionListener {
         const playerId = message.data.id;
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
         //ajout du coup dans notre neuronalInput
-        this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
+        //this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
         //si le playerId est soi meme => prise de blinde par le croupier => on note cette action en neuronal comme un check et on diminue ses chips
         if (playerId === playerMemo.player.id) {
             //playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 1;

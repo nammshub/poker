@@ -321,11 +321,135 @@ class HandValueHelper {
         const hand = playerMemo.turnsDetails[playerMemo.totalHands].hand;
         const tapis = playerMemo.turnsDetails[playerMemo.totalHands].tapis;
         const cards = hand.concat(tapis);
-        const handValueArray = this.getHandValue(cards);
+        let handValueArray;
+        if (tapis.length === 0) {
+            handValueArray = this.getHandValuePreflop(hand);
+        }
+        else {
+            handValueArray = this.getHandValue(cards);
+        }
         console.log("hand value array = " + handValueArray[0] + " et " + handValueArray[1]);
         let neuronalInput = (handValueArray[0] / 10) + (handValueArray[1] / 1000000000000);
         console.log("neuronalInput = " + neuronalInput);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["handValue"] = neuronalInput;
+    }
+
+    static getHandValuePreflop(hand){
+        let valueCardsArray = this.fillCardsArray(hand);
+        let mainFinal = null;
+        for (let main = 4; main >= 0; main--) {
+            console.log(" main = " + main);
+            switch (main) {
+                case 4:
+                    //confirme
+                    mainFinal = this.havePairWithHand(valueCardsArray);
+                    break;
+                case 3:
+                    //confirme
+                    mainFinal = this.haveSameColor(valueCardsArray);
+                    break;
+                case 2:
+                    //confirme
+                    mainFinal = this.haveFollow(valueCardsArray);
+                    break;
+                case 1:
+                    //confirme
+                    mainFinal = this.haveBigFigures(valueCardsArray);
+                    break;
+                case 0:
+                    //confirme
+                    mainFinal = this.getHandValue(hand);
+                    break;
+            }
+            if (mainFinal) {
+                return mainFinal;
+            }
+        }
+    }
+
+    static havePairWithHand(valueCardsArray) {
+        let ponderation = [100 * 100, 100, 1];
+        let iterPonderation = 0;
+        let hauteur = 0;
+        let complement = 0;
+        for (let valeur = 13; valeur >= 1; valeur--) {
+            if (valueCardsArray[valeur] === 2 && hauteur === 0) {
+                hauteur = valeur;
+            }
+            if (valueCardsArray[valeur] === 1 && iterPonderation < 3) {
+                complement = complement + valeur * ponderation[iterPonderation];
+                iterPonderation++;
+            }
+        }
+        if (hauteur > 0) {
+            return [8, hauteur * (100 * 100 * 100) + complement];
+        }
+        return;
+    }
+
+    static haveFollow(valueCardsArray){
+        let compteurAffile = 0;
+        let hauteur = 0;
+        for (let valeur = 14; valeur >= 1; valeur--) {
+            valeur = valeur - 1;
+            //permet de consider 1 comme As et 1
+            if (valeur === 0) {
+                valeur = 13;
+            }
+            if (valueCardsArray[0][valeur] >= 1) {
+                if (hauteur === 0) {
+                    hauteur = valeur;
+                }
+                compteurAffile++;
+                if (compteurAffile === 2) {
+                    return [5, hauteur];
+                }
+            } else {
+                compteurAffile = 0;
+                hauteur = 0;
+            }
+        }
+        return;
+    }
+
+    static haveBigFigures(valueCardsArray){
+        let iterHigh = 0;
+        let hauteur = 0;
+        for (let valeur = 14; valeur >= 10; valeur--) {
+            valeur = valeur - 1;
+            //permet de consider 1 comme As et 1
+            if (valeur === 0) {
+                valeur = 13;
+            }
+            if (valueCardsArray[0][valeur] >= 1) {
+                if (hauteur === 0) {
+                    hauteur = valeur;
+                }
+                iterHigh++;
+                if (iterHigh === 2) {
+                    return [4, hauteur];
+                }
+            } 
+        }
+        return;
+    }
+
+    static haveSameColor(valueCardsArray){
+        let ponderation = [100 * 100 * 100 * 100, 100 * 100 * 100, 100 * 100, 100, 1];
+        let iterPonderation = 0;
+        let hauteur = 0;
+        for (let couleur = 1; couleur <= 4; couleur++) {
+            if (valueCardsArray[couleur][0] >= 2) {
+                for (let valeur = 13; valeur >= 1; valeur--) {
+                    if (valueCardsArray[couleur][valeur] === 1 && iterPonderation < 2) {
+                        hauteur = hauteur + valeur * ponderation[iterPonderation];
+                        iterPonderation++;
+                    }
+                }
+                return [6, hauteur];
+            }
+        }
+        return;
     }
 }
 
