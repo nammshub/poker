@@ -28,24 +28,27 @@ class HandStartListener extends EventEmitter {
             "betsMap": betsMap,
             //turn step: 0=> preflop, 1=> flop, 2 => turn , 3=> river
             "turnStep": 0,
-            "state":"ACTIVE",
+            "state": "ACTIVE",
             "tourNumber": playerMemo.totalHands,
-            "outputArray":[],
+            //"outputArray": [],
             "hand": [],
             "tapis": [
                 //carte1, carte2...
             ],
             "neuronalResponses": null,
             "randomResponse": 0,
-            "neuronalInput": {
+            "currInput":{
                 "input": {
-                    "winLose": 1,
+                    "Win": 1,
+                    "Lose": 0,
+                    "myCurrBet":0,
                     "step": 0,
-                    "bluff":0,
+                    "bluff": 0,
                 },
                 "output": {
                 }
-            }
+            },
+            "neuronalInputs": [],
         });
         console.log("\n Hand Start event. playerMemo = " + JSON.stringify(playerMemo));
     }

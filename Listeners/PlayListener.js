@@ -1,5 +1,6 @@
 const EventEmitter = require("events");
 require("../config");
+const HandValueHelper = require("../Helpers/HandValueHelper");
 /**
  * Ce listener gere l"event play. Il doit activer les calculs et repondre au croupier dans les temps impartis
  */
@@ -80,7 +81,7 @@ class PlayListener extends EventEmitter {
      * retourne la reponse du reseau de neurone sous la forme d"un nombre de chips à jouer
      */
     async getNeuronalAnswer(net, playerMemo) {
-        const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input);
+        const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.totalHands].currInput.input);
         console.log("neuronal answer = " + JSON.stringify(neuronalAnswer));
         return this.getPureAnswer(neuronalAnswer.chips, playerMemo);
     }
@@ -157,8 +158,24 @@ class PlayListener extends EventEmitter {
         return sum;
     }
 
+    getHandMyBet(playerMemo) {
+        let sum = 0;
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
+            if (playerId === playerMemo.player.id) {
+                let iterStep = -1;
+                while (iterStep < playerMemo.turnsDetails[playerMemo.totalHands].turnStep) {
+                    iterStep++;
+                    currArray[iterStep].forEach(function (bet) {
+                        sum += bet;
+                    });
+                }
+            }
+        });
+        return sum;
+    }
+
     getSomeBluff(playerMemo) {
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.bluff = 1;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.bluff = 1;
         const checkOrRaise = this.getRandomInt(0, 1);
         if (checkOrRaise === 0) {
             return this.getPureAnswer(0.5, playerMemo);
@@ -167,15 +184,32 @@ class PlayListener extends EventEmitter {
     }
 
     updatePlayerMemo(playerMemo, chipsPlayed, foldCheckRaise) {
+        let myCurrBetsSum = this.getHandMyBet(playerMemo);
         playerMemo.player.chips = playerMemo.player.chips - chipsPlayed;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(chipsPlayed);
-        playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(foldCheckRaise);
+        /*playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(foldCheckRaise);
         let outputSum = 0;
         playerMemo.turnsDetails[playerMemo.totalHands].outputArray.forEach(function (output) {
             outputSum += output;
         })
-
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = (outputSum / playerMemo.turnsDetails[playerMemo.totalHands].outputArray.length);
+        */
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.chips = foldCheckRaise;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.myCurrBet = myCurrBetsSum / playerMemo.potTotal;
+        const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
+        //on injecte ce currInput dans le tableau et ensuite on reset le currInput
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
+            "input": {
+                "Win": 1,
+                "Lose": 0,
+                "myCurrBet": myCurrBetsSum / playerMemo.potTotal,
+                "step": currStep,
+                "bluff": 0,
+            },
+            "output": {
+            }
+        }
+        HandValueHelper.handValueToNeuronalInput(playerMemo)
     }
 }
 

@@ -16,28 +16,28 @@ class HandEndListener {
         playerMemo.turnsDetails[playerMemo.totalHands].chipsEndTurn = playerMemo.player.chips;
         this.establishWinLoseInput(playerMemo);
         //enregistrement des coups dans le fichier de log
-        LogHelper.logNeuronalInput(JSON.stringify(playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput), playerMemo.logFile);
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.forEach(function (currInput) {
+            LogHelper.logNeuronalInput(JSON.stringify(currInput), playerMemo.logFile);
+        });
     }
 
     establishWinLoseInput(playerMemo) {
         const lastTurnChips = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 2].chipsEndTurn;
         const currTurnChips = playerMemo.turnsDetails[playerMemo.totalHands].chipsEndTurn;
-        let winLose;
-        if (lastTurnChips === currTurnChips) {
-            winLose = 0.5;
-        }
+        let win = 0;
+        let lose = 0;
         if (lastTurnChips > currTurnChips) {
-            //perte => on va se situer entre 0 et 0.5
-            /*
-             calcul (currTurnChips/lastTurnChips) / 2
-            */
-            winLose = (currTurnChips / lastTurnChips) / 2;
+            //perte => on va se situer entre 0 et 1 (tous nos chips)
+            lose = (lastTurnChips - currTurnChips) / playerMemo.potTotal;
         }
         if (lastTurnChips < currTurnChips) {
-            //on a fait un gain => on se situe entre 0.5 et 1 (qui represente total chips)
-            winLose = 0.5 + ((currTurnChips - lastTurnChips) / ((playerMemo.potTotal - lastTurnChips) * 2))
+            //on a fait un gain => on se situe entre 0 et 1 (qui represente total chips)
+            win = ((currTurnChips - lastTurnChips) / ((playerMemo.potTotal - lastTurnChips)))
         }
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.winLose = winLose;
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.forEach(function (currInput) {
+            currInput.input.Win = win;
+            currInput.input.Lose = lose;
+        });
     }
 }
 

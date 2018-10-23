@@ -8,11 +8,11 @@ class ServerPlayerActionListener {
         const playerId = message.data.id;
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
         //ajout du coup dans notre neuronalInput
-        //this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
+        this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
         //si le playerId est soi meme => prise de blinde par le croupier => on note cette action en neuronal comme un check et on diminue ses chips
         if (playerId === playerMemo.player.id) {
-            playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 1;
-            playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(1);
+            //playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 1;
+            //playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(1);
             playerMemo.player.chips -= chipsPlayed;
         }
     }
@@ -66,10 +66,14 @@ class ServerPlayerActionListener {
     }
 
     pushNeuronalInput(playerId, chipsPlayed, playerMemo) {
+        if(playerId === playerMemo.player.id){
+            return;
+        }
         //on recupere la position du joueur pour ce tour
         const playerPos = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerId);
-        //on recupere le code step turn a injecter
         const stepNbr = playerMemo.turnsDetails[playerMemo.totalHands].turnStep;
+
+        /*on recupere le code step turn a injecter
         let step;
         switch (stepNbr) {
             case 0:
@@ -85,6 +89,7 @@ class ServerPlayerActionListener {
                 step = "r"
                 break;
         }
+        */
         //nbr d'action pour ce joueur pour ce step
         let actionNbr = playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerId)[stepNbr].length;
         //let neuronalChips = chipsPlayed / playerMemo.potTotal;
@@ -142,7 +147,7 @@ class ServerPlayerActionListener {
 
         //on injecte dans playerMemo cette action
 
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input["p" + playerPos + "_" + step + "_" + actionNbr] = playerAction;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["p" + playerPos + "_" + actionNbr] = playerAction;
     }
 }
 

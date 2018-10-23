@@ -26,7 +26,7 @@ class BoardListener extends EventEmitter {
 
     stepToNeuronalInput(playerMemo) {
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].turnStep;
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.input.step = currStep / 4;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step = currStep / 4;
     }
 }
 
