@@ -13,10 +13,10 @@ const CroupierMessageHandler = require("./CroupierMessageHandler");
 const HandValueHelper = require("../Helpers/HandValueHelper");
 const PORT = config.PORT;
 const timeoutMessage = {
-  "id": "server.game.play.timeout"
+  "id": "server.game.player.play.timeout"
 };
 const playMessage = {
-  "id": "server.game.play"
+  "id": "server.game.player.play"
 };
 
 //deck du tour
@@ -83,7 +83,7 @@ function hasAllChecked() {
     console.log(" player.details.state === ACTIVE " + player.details.state === "ACTIVE");
     console.log("config.CURRENT_BETS.get(player.details.id " + config.CURRENT_BETS.get(player.details.id));
 
-    if (player.details.state === "ACTIVE" &&  !config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0 && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
+    if (player.details.state === "ACTIVE" && !config.CURRENT_BETS.get(player.details.id) || (player.details.state === "ACTIVE" && player.details.chips > 0 && config.CURRENT_BETS.get(player.details.id) !== config.CURRENT_MAX_BET)) {
       return false;
     }
   }
@@ -229,12 +229,10 @@ async function playerBets() {
 
       //on broadcast la mise de 0 aux autres joueurs
       let playerAction = {
-        "id": "server.player.action",
+        "id": "server.game.player.action",
         "data": {
           "id": currPlayer.details.id,
-          "action": {
-            "value": 0
-          }
+          "value": 0
         }
       };
 
@@ -376,12 +374,10 @@ function takeBlinds() {
   let smallBlindPlayed = false;
   let playersIter = config.PLAYERS.length - 1;
   let jsonMessage = {
-    "id": "server.player.action",
+    "id": "server.game.player.action",
     "data": {
       "id": 0,
-      "action": {
-        "value": 0
-      }
+      "value": 0
     }
   }
   //on regarde les jouers en partant de la fin et on cherche les ACTIVE 
@@ -401,7 +397,7 @@ function takeBlinds() {
         config.PLAYERS[playersIter].details.chips = 0;
       }
       jsonMessage.data.id = config.PLAYERS[playersIter].details.id;
-      jsonMessage.data.action.value = config.CURRENT_BETS.get(config.PLAYERS[playersIter].details.id);
+      jsonMessage.data.value = config.CURRENT_BETS.get(config.PLAYERS[playersIter].details.id);
       CroupierMessageHandler.broadcast(JSON.stringify(jsonMessage));
 
     }
@@ -421,7 +417,7 @@ function takeBlinds() {
       }
       config.CURRENT_MAX_BET = config.CURR_BIG_BLIND;
       jsonMessage.data.id = config.PLAYERS[playersIter].details.id;
-      jsonMessage.data.action.value = config.CURRENT_BETS.get(config.PLAYERS[playersIter].details.id);
+      jsonMessage.data.value = config.CURRENT_BETS.get(config.PLAYERS[playersIter].details.id);
       CroupierMessageHandler.broadcast(JSON.stringify(jsonMessage));
     }
     playersIter--;

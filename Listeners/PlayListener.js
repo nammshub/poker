@@ -16,11 +16,9 @@ class PlayListener extends EventEmitter {
         //let randomValue = this.getRandomInt(0,playerMemo.player.chips);
         //test check
         let messageJson = {
-            "id": "client.game.action",
+            "id": "client.game.player.play",
             "data": {
-                "action": {
-                    "value": 0
-                }
+                "value": 0
             }
         };
         //on cree la reponse neuronale
@@ -30,7 +28,7 @@ class PlayListener extends EventEmitter {
             timeout = true;
             console.log("le timeout est passe");
             const pureRandom = this.getPureAnswer(randomValue, playerMemo);
-            messageJson.data.action.value = pureRandom[0];
+            messageJson.data.value = pureRandom[0];
             playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
             this.updatePlayerMemo(playerMemo, pureRandom[0], pureRandom[1]);
             callback(messageJson);
@@ -71,7 +69,7 @@ class PlayListener extends EventEmitter {
         }
         console.log("on a la reponse neuronale timeout = " + timeout);
         if (!timeout) {
-            messageJson.data.action.value = pureNeuronal[0];
+            messageJson.data.value = pureNeuronal[0];
             clearTimeout(timerControl);
             this.updatePlayerMemo(playerMemo, pureNeuronal[0], pureNeuronal[1]);
             callback(messageJson);

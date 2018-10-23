@@ -31,7 +31,7 @@ class TCPListener extends EventEmitter {
                 console.log("Une nouvelle main commence");
                 handStartListener.handleMessage(message, playerMemo);
                 break;
-            case "server.game.play":
+            case "server.game.player.play":
                 console.log("A vous de jouer");
                 playListener.handleMessage(playerMemo, net, callback);
                 break;
@@ -39,7 +39,7 @@ class TCPListener extends EventEmitter {
                 console.log("Nouvelles cartes sur le board");
                 boardListener.handleMessage(message, playerMemo);
                 break;
-            case "server.game.play.timeout":
+            case "server.game.player.play.timeout":
                 console.log("Vous etes en time out !!");
                 break;
             case "server.game.hand.end":
@@ -55,10 +55,12 @@ class TCPListener extends EventEmitter {
             case "server.lobby.join.failure":
                 console.log("Rejoindre le lobby = echec " + message.data.reason);
                 break;
-            case "server.player.action":
+            case "server.game.player.action":
                 console.log("Un joueur à joué");
                 serverPlayerActionListener.handleMessage(message, playerMemo);
                 break;
+            case "server.game.blind.change":
+            console.log("blind change");
             default:
                 console.log("message imprevu data " + data);
         }

@@ -4,7 +4,7 @@
 class ServerPlayerActionListener {
 
     handleMessage(message, playerMemo) {
-        const chipsPlayed = message.data.action.value;
+        const chipsPlayed = message.data.value;
         const playerId = message.data.id;
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
         //ajout du coup dans notre neuronalInput
