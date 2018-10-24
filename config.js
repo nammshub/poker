@@ -16,7 +16,8 @@ global.config = {
     //200000 => environ 30 minutes de training
     TRAINING_ITERATION: 400000,
 
-
+    //Choix de la méthode de jeu
+    HOLDEM_LIMIT: true,
 
     //croupier
     NB_PLAYERS: 0,
