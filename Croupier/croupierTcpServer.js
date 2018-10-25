@@ -310,7 +310,7 @@ function sendCardsMessage() {
       console.log("\ncartes restantes dans le deck en cours " + currentDeck.length);
       console.log("\ncartes restantes dans le deck modele " + DECK.length);
       let giveCardsMessage = {
-        "id": "server.game.cards",
+        "id": "server.game.player.cards",
         "data": {
           "cards": twoRandomCards
         }

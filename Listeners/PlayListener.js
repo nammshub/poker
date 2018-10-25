@@ -108,6 +108,10 @@ class PlayListener extends EventEmitter {
             console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
+        if (!config.NO_LIMIT && this.hasAlreadyRaised(playerMemo)) {
+            console.log("should check");
+            return [this.getCheck(playerMemo), 0.5];
+        }
         console.log("should raise");
         return [this.getRaise(playerMemo), 1];
     }
@@ -124,6 +128,10 @@ class PlayListener extends EventEmitter {
     getRaise(playerMemo) {
         const toCheck = this.getCheck(playerMemo);
         const toRaise = toCheck + this.getRandomInt(1, config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
+        //si jeu en holdem limit raise de la grosse blind
+        if (config.HOLDEM_LIMIT && !hasAlreadyRaised(playerMemo)) {
+            return playerMemo.bigBlind;
+        }
         return Math.min(toRaise, playerMemo.player.chips);
     }
 
@@ -210,6 +218,18 @@ class PlayListener extends EventEmitter {
             }
         }
         HandValueHelper.handValueToNeuronalInput(playerMemo)
+    }
+
+    hasAlreadyRaised(playerMemo) {
+        let alreadyRaise = false;
+        const currStep = playerMemo.turnsDetails[playerMemo.totalHands].turnStep / 4;
+        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.forEach(function (currInput) {
+            if (currInput.input.step === currStep && currInput.output.chips === 1) {
+                alreadyRaise = true;
+            }
+        })
+        console.log("alreadyRaise = " + alreadyRaise);
+        return alreadyRaise;
     }
 }
 

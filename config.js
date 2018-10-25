@@ -18,7 +18,8 @@ global.config = {
     //le ratio de ce qu'on espere gagner à chaque main soit une progression de x% vers le pot total
     WIN_RATIO:0.01,
 
-
+    //Choix de la méthode de jeu
+    HOLDEM_LIMIT: true,
 
     //croupier
     NB_PLAYERS: 0,
