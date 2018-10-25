@@ -127,10 +127,10 @@ class PlayListener extends EventEmitter {
 
     getRaise(playerMemo) {
         const toCheck = this.getCheck(playerMemo);
-        const toRaise = toCheck + this.getRandomInt(1, config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
+        let toRaise = toCheck + this.getRandomInt(1, config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
         //si jeu en holdem limit raise de la grosse blind
         if (config.HOLDEM_LIMIT && !hasAlreadyRaised(playerMemo)) {
-            return playerMemo.bigBlind;
+            toRaise =  toCheck + playerMemo.bigBlind;
         }
         return Math.min(toRaise, playerMemo.player.chips);
     }
