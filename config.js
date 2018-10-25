@@ -9,21 +9,23 @@ global.config = {
 
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
-    MAX_RAISE_MULTIPLIER:5,
-    BLUFF_RATIO:3, //bluff 1/BLUFF_RATIO time
+    MAX_RAISE_MULTIPLIER:3,
+    BLUFF_RATIO:30, //bluff 1/BLUFF_RATIO time
     DISABLE_NEURONAL:false,
     TRAINING_NEEDED:false,
     //200000 => environ 30 minutes de training
-    TRAINING_ITERATION: 400000,
+    TRAINING_ITERATION: 200000,
+    //le ratio de ce qu'on espere gagner à chaque main soit une progression de x% vers le pot total
+    WIN_RATIO:0.01,
 
 
 
     //croupier
     NB_PLAYERS: 0,
-    START_MONEY: 1500,
-    WAIT_BEFORE_START: 30,
+    START_MONEY: 15000,
+    WAIT_BEFORE_START: 20,
     CURRENT_HAND: 0,
-    MAX_HANDS: 150,
+    MAX_HANDS: 1500,
     ALL_COLORS: ["SPADE", "HEART", "DIAMOND", "CLUB"],
     ALL_KINDS: ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "1"],
     CARDS_VALUE_MAP: new Map([
@@ -50,8 +52,8 @@ global.config = {
     //gestion des mises et du pot d'un tour
     CURRENT_BETS: new Map(),
     CURRENT_MAX_BET: 0,
-    CURR_SMALL_BLIND: 10,
-    CURR_BIG_BLIND: 20,
+    CURR_SMALL_BLIND: 0,
+    CURR_BIG_BLIND: 0,
     BLIND_EVOLUTION: new Map([
         [136, [100, 200]],
         [121, [75, 150]],
