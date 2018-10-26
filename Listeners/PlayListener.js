@@ -24,16 +24,17 @@ class PlayListener extends EventEmitter {
         };
         //on cree la reponse neuronale
         let timeout = false;
-        const timerControl = setTimeout(function () {
-            //on annule la reponse neuronale
-            timeout = true;
-            console.log("le timeout est passe");
-            const pureRandom = this.getPureAnswer(randomValue, playerMemo);
-            messageJson.data.value = pureRandom[0];
-            playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
-            this.updatePlayerMemo(playerMemo, pureRandom[0], pureRandom[1]);
-            callback(messageJson);
-        }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
+        const _this = this;
+        const timerControl = setTimeout(function () {
+        //on annule la reponse neuronale
+        timeout = true;
+        console.log("le timeout est passe");
+        const pureRandom = _this.getPureAnswer(randomValue, playerMemo);
+        messageJson.data.value = pureRandom[0];
+        playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
+        _this.updatePlayerMemo(playerMemo, pureRandom[0], pureRandom[1]);
+        callback(messageJson);
+        }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
 
         //calcul random
         console.log("before random player chips = " + playerMemo.player.chips);
@@ -129,7 +130,7 @@ class PlayListener extends EventEmitter {
         const toCheck = this.getCheck(playerMemo);
         let toRaise = toCheck + this.getRandomInt(1, config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
         //si jeu en holdem limit raise de la grosse blind
-        if (config.HOLDEM_LIMIT && !hasAlreadyRaised(playerMemo)) {
+        if (config.HOLDEM_LIMIT && !this.hasAlreadyRaised(playerMemo)) {
             toRaise =  toCheck + playerMemo.bigBlind;
         }
         return Math.min(toRaise, playerMemo.player.chips);
