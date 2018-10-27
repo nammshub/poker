@@ -119,11 +119,11 @@ class PlayListener extends EventEmitter {
 
     getCheck(playerMemo) {
         const toCheck = this.getStepMaxBet(playerMemo);
-        if (toCheck + (this.getHandMyBet(playerMemo) -  this.getStepMyBet(playerMemo)) < playerMemo.player.chips) {
+        if (toCheck < playerMemo.player.chips -  (this.getHandMyBet(playerMemo) -  this.getStepMyBet(playerMemo))) {
             return toCheck;
         }
         //sinon all in
-        return playerMemo.player.chips;;
+        return playerMemo.player.chips - (this.getHandMyBet(playerMemo) - this.getStepMyBet(playerMemo));
     }
 
     getRaise(playerMemo) {
@@ -133,7 +133,7 @@ class PlayListener extends EventEmitter {
         if (config.HOLDEM_LIMIT && !this.hasAlreadyRaised(playerMemo)) {
             toRaise =  toCheck + playerMemo.bigBlind;
         }
-        return Math.min(toRaise, playerMemo.player.chips);
+        return Math.min(toRaise, playerMemo.player.chips - (this.getHandMyBet(playerMemo) - this.getStepMyBet(playerMemo)));
     }
 
 
