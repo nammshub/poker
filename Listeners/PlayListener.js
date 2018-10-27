@@ -200,6 +200,12 @@ class PlayListener extends EventEmitter {
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.chips = foldCheckRaise;
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.myCurrBet = myCurrBetsSum / playerMemo.potTotal;
+        playerMemo.nbPlayed += 1;
+        playerMemo.pourcentRaise = playerMemo.nbRaise/playerMemo.nbPlayed;
+        //TODO Boucle d'ajout du pourcentage de Raise de chaque joueur
+        //playerMemo..forEach(function (player) {
+
+        //    }
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
         //on injecte ce currInput dans le tableau et ensuite on reset le currInput
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);

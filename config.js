@@ -10,7 +10,7 @@ global.config = {
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
     MAX_RAISE_MULTIPLIER:3,
-    BLUFF_RATIO:30, //bluff 1/BLUFF_RATIO time
+    BLUFF_RATIO:5, //bluff 1/BLUFF_RATIO time
     DISABLE_NEURONAL:false,
     TRAINING_NEEDED:false,
     //200000 => environ 30 minutes de training

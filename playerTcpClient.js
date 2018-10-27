@@ -31,6 +31,9 @@ stdin.addListener("data", function () {
         "logFile": logFile,
         "player": "",
         "potTotal": 0,
+        "nbRaise": 0,
+        "nbPlayed": 0,
+        "pourcentRaise": 0;
         "hand": [],
         "totalHands": 0,
         "listPlayers": [],
