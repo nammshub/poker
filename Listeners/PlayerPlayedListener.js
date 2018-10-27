@@ -132,7 +132,6 @@ class PlayerPlayedListener extends EventEmitter {
                     PlayerPlayedListener.sendValidSignal();
                     playerAction.data.value = message.data.value;
                     CroupierMessageHandler.broadcast(JSON.stringify(playerAction), emmittingPlayer);
-                    playerMemo.nbRaise += 1;
                     return true;
                 }
             }

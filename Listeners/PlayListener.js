@@ -129,6 +129,7 @@ class PlayListener extends EventEmitter {
     getRaise(playerMemo) {
         const toCheck = this.getCheck(playerMemo);
         let toRaise = toCheck + this.getRandomInt(1, config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
+        playerMemo.nbRaise += 1;
         //si jeu en holdem limit raise de la grosse blind
         if (config.HOLDEM_LIMIT && !this.hasAlreadyRaised(playerMemo)) {
             toRaise =  toCheck + playerMemo.bigBlind;
@@ -203,13 +204,15 @@ class PlayListener extends EventEmitter {
         playerMemo.nbPlayed += 1;
         playerMemo.pourcentRaise = playerMemo.nbRaise/playerMemo.nbPlayed;
         //TODO Boucle d'ajout du pourcentage de Raise de chaque joueur
-        //playerMemo.player.id.forEach(function (player) {
-        //    playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
-        //        "input": {
-        //            "p" + player.id + "": playerMemo.pourcentRaise,
-        //        }
-        //    }
-        //}
+        /*
+        playerMemo.player.id.forEach(function (player) {
+            playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
+                "input": {
+                    "player.id": playerMemo.pourcentRaise,
+                }
+            }
+        };
+        */
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
         //on injecte ce currInput dans le tableau et ensuite on reset le currInput
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
@@ -220,6 +223,7 @@ class PlayListener extends EventEmitter {
                 "myCurrBet": myCurrBetsSum / playerMemo.potTotal,
                 "step": currStep,
                 "bluff": 0,
+                "p1": playerMemo.pourcentRaise,
             },
             "output": {
             }

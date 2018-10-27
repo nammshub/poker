@@ -33,7 +33,7 @@ stdin.addListener("data", function () {
         "potTotal": 0,
         "nbRaise": 0,
         "nbPlayed": 0,
-        "pourcentRaise": 0;
+        "pourcentRaise": 0,
         "hand": [],
         "totalHands": 0,
         "listPlayers": [],
