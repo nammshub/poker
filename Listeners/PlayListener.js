@@ -203,9 +203,13 @@ class PlayListener extends EventEmitter {
         playerMemo.nbPlayed += 1;
         playerMemo.pourcentRaise = playerMemo.nbRaise/playerMemo.nbPlayed;
         //TODO Boucle d'ajout du pourcentage de Raise de chaque joueur
-        //playerMemo..forEach(function (player) {
-
+        //playerMemo.player.id.forEach(function (player) {
+        //    playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
+        //        "input": {
+        //            "p" + player.id + "": playerMemo.pourcentRaise,
+        //        }
         //    }
+        //}
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
         //on injecte ce currInput dans le tableau et ensuite on reset le currInput
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
