@@ -7,9 +7,6 @@ class ServerPlayerActionListener {
         const chipsPlayed = message.data.value;
         const playerId = message.data.id;
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
-        if (playerId === playerMemo.player.id) {
-            playerMemo.player.chips -= chipsPlayed;
-        }
     }
 
     pushPlayerBets(playerId, chipsPlayed, playerMemo) {
