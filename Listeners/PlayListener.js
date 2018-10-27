@@ -109,7 +109,7 @@ class PlayListener extends EventEmitter {
             console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
-        if (!config.NO_LIMIT && this.hasAlreadyRaised(playerMemo)) {
+        if (config.HOLDEM_LIMIT && this.hasAlreadyRaised(playerMemo)) {
             console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
@@ -118,8 +118,8 @@ class PlayListener extends EventEmitter {
     }
 
     getCheck(playerMemo) {
-        const toCheck = this.getStepMaxBet(playerMemo) - this.getStepMyBet(playerMemo);
-        if (toCheck < playerMemo.player.chips) {
+        const toCheck = this.getStepMaxBet(playerMemo);
+        if (toCheck + (this.getHandMyBet(playerMemo) -  this.getStepMyBet(playerMemo)) < playerMemo.player.chips) {
             return toCheck;
         }
         //sinon all in
@@ -194,14 +194,8 @@ class PlayListener extends EventEmitter {
 
     updatePlayerMemo(playerMemo, chipsPlayed, foldCheckRaise) {
         let myCurrBetsSum = this.getHandMyBet(playerMemo);
-        playerMemo.player.chips = playerMemo.player.chips - chipsPlayed;
+        //playerMemo.player.chips = playerMemo.player.chips - chipsPlayed;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(chipsPlayed);
-        /*playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(foldCheckRaise);
-        let outputSum = 0;
-        playerMemo.turnsDetails[playerMemo.totalHands].outputArray.forEach(function (output) {
-            outputSum += output;
-        })
-        */
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.chips = foldCheckRaise;
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.myCurrBet = myCurrBetsSum / playerMemo.potTotal;
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;

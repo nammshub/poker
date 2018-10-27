@@ -7,12 +7,7 @@ class ServerPlayerActionListener {
         const chipsPlayed = message.data.value;
         const playerId = message.data.id;
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
-        //ajout du coup dans notre neuronalInput
-        //this.pushNeuronalInput(playerId, chipsPlayed, playerMemo);
-        //si le playerId est soi meme => prise de blinde par le croupier => on note cette action en neuronal comme un check et on diminue ses chips
         if (playerId === playerMemo.player.id) {
-            //playerMemo.turnsDetails[playerMemo.totalHands].neuronalInput.output.chips = 1;
-            //playerMemo.turnsDetails[playerMemo.totalHands].outputArray.push(1);
             playerMemo.player.chips -= chipsPlayed;
         }
     }
@@ -58,10 +53,11 @@ class ServerPlayerActionListener {
                     posString = "river";
                     break;
             }
-            console.log(" mises pour la phase " + posString + " pour le joueur " + playerId);
+            let sumStepChips = 0;
             currArray.forEach(function (chips) {
-                console.log(" " + chips + " ");
+                sumStepChips += chips;
             })
+            console.log(" mises pour la phase " + posString + " pour le joueur " + playerId + " = " + sumStepChips);
         })
     }
 

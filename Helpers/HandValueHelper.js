@@ -159,11 +159,11 @@ class HandValueHelper {
             if (valueCardsArray[0][valeur] === 1 && complement === 0) {
                 complement = valeur;
             }
-            if (valueCardsArray[0][valeur] === 2 && hauteur1 === 0) {
-                hauteur1 = valeur;
-            }
             if (valueCardsArray[0][valeur] === 2 && hauteur1 !== 0 && hauteur2 === 0) {
                 hauteur2 = valeur;
+            }
+            if (valueCardsArray[0][valeur] === 2 && hauteur1 === 0) {
+                hauteur1 = valeur;
             }
         }
         if (hauteur1 > 0 && hauteur2 > 0) {
