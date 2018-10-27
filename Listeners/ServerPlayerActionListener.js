@@ -10,6 +10,7 @@ class ServerPlayerActionListener {
     }
 
     pushPlayerBets(playerId, chipsPlayed, playerMemo) {
+        console.log("un jouer à joue (" + playerId + ") chips = " + chipsPlayed);
         //recuperation de la map des bets. On va injecter pour ce joueur 
         /*
         {
@@ -32,7 +33,8 @@ class ServerPlayerActionListener {
         if (!betsArray) {
             betsArray = [[], [], [], []];
         }
-        betsArray[turnStep].push(chipsPlayed);
+        let stepSumBet = this.getStepPlayerBet(playerMemo, playerId);
+        betsArray[turnStep].push(chipsPlayed - stepSumBet);
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.set(playerId, betsArray);
         betsArray.forEach(function (currArray, position) {
             let posString;
@@ -59,7 +61,7 @@ class ServerPlayerActionListener {
     }
 
     pushNeuronalInput(playerId, chipsPlayed, playerMemo) {
-        if(playerId === playerMemo.player.id){
+        if (playerId === playerMemo.player.id) {
             return;
         }
         //on recupere la position du joueur pour ce tour
@@ -141,6 +143,18 @@ class ServerPlayerActionListener {
         //on injecte dans playerMemo cette action
 
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["p" + playerPos + "_" + actionNbr] = playerAction;
+    }
+
+    getStepPlayerBet(playerMemo, currPlayerId) {
+        let sum = 0;
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
+            if (playerId === currPlayerId) {
+                currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
+                    sum += bet;
+                });
+            }
+        });
+        return sum;
     }
 }
 
