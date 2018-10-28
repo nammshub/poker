@@ -14,7 +14,7 @@ global.config = {
     DISABLE_NEURONAL:false,
     TRAINING_NEEDED:false,
     //200000 => environ 30 minutes de training
-    TRAINING_ITERATION: 100000,
+    TRAINING_ITERATION: 50000,
     //le ratio de ce qu'on espere gagner à chaque main soit une progression de x% vers le pot total
     WIN_RATIO:0.01,
 
