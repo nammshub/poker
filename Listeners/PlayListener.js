@@ -196,11 +196,14 @@ class PlayListener extends EventEmitter {
         let myCurrBetsSum = this.getHandMyBet(playerMemo);
         //chips played est le total du step donc le delta est chips played - bet step
         let deltaChips = chipsPlayed - this.getStepMyBet(playerMemo);
+        //let positionPlayed = playerMemo.turnsDetails.positionMap;
         console.log("chips played = " + chipsPlayed + "getStepMyBet " + this.getStepMyBet(playerMemo) + " delta = "+deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.chips = foldCheckRaise;
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.myCurrBet = myCurrBetsSum / playerMemo.potTotal;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.position = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id)/playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size;
         //on injecte ce currInput dans le tableau et ensuite on reset le currInput
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
@@ -209,6 +212,7 @@ class PlayListener extends EventEmitter {
                 "Lose": 0,
                 "myCurrBet": myCurrBetsSum / playerMemo.potTotal,
                 "step": currStep,
+                "position": playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id)/playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size,
                 "bluff": 0,
             },
             "output": {

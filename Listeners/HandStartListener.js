@@ -43,6 +43,7 @@ class HandStartListener extends EventEmitter {
                     "Lose": 0,
                     "myCurrBet":0,
                     "step": 0,
+                    "position": positionMap.get(playerMemo.player.id)/positionMap.size,
                     "bluff": 0,
                 },
                 "output": {
