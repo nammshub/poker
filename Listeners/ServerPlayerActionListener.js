@@ -7,6 +7,7 @@ class ServerPlayerActionListener {
         const chipsPlayed = message.data.value;
         const playerId = message.data.id;
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
+        this.pushNeuronalInput(playerId,playerMemo);
     }
 
     pushPlayerBets(playerId, chipsPlayed, playerMemo) {
@@ -60,89 +61,27 @@ class ServerPlayerActionListener {
         })
     }
 
-    pushNeuronalInput(playerId, chipsPlayed, playerMemo) {
+    pushNeuronalInput(playerId, playerMemo) {
         if (playerId === playerMemo.player.id) {
             return;
         }
         //on recupere la position du joueur pour ce tour
         const playerPos = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerId);
-        const stepNbr = playerMemo.turnsDetails[playerMemo.totalHands].turnStep;
-
-        /*on recupere le code step turn a injecter
-        let step;
-        switch (stepNbr) {
-            case 0:
-                step = "pf"
-                break;
-            case 1:
-                step = "f"
-                break;
-            case 2:
-                step = "t"
-                break;
-            case 3:
-                step = "r"
-                break;
-        }
-        */
-        //nbr d'action pour ce joueur pour ce step
-        let actionNbr = playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerId)[stepNbr].length;
-        //let neuronalChips = chipsPlayed / playerMemo.potTotal;
-        //On va logger une action (FOLD,CHECK,RAISE) plutot que un montant d'argent
-
-        let stepMaxBet = 0;
-
-        let playerSumBet = 0;
-
-        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, betsPlayerId) {
-
-            let stepSumBet = 0;
-
-            currArray[stepNbr].forEach(function (bet) {
-
-                stepSumBet += bet;
-
-            });
-
-            if (stepSumBet > stepMaxBet) {
-
-                stepMaxBet = stepSumBet;
-
+        let percentBets = 0;
+        //on recupere le nombre de jetons que le joueur avait au debut de la main
+        let totalChips = 1;
+        const _this = this;
+        playerMemo.listPlayers.forEach(function (player) {
+            if (player.id === playerId) {
+                totalChips = player.chips;
+                const alreadyBet = _this.getHandPlayerBet(playerMemo, playerId);
+                percentBets = alreadyBet / totalChips;
+                //on injecte dans playerMemo cette info
+                playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentBets_" + playerPos] = percentBets;
+                console.log("percentBets pour joueur en position " + playerPos + " = " + percentBets +" soit mises main = " + alreadyBet + " sur total chips = " + totalChips);
             }
+        })
 
-            if (playerId === betsPlayerId) {
-
-                playerSumBet = stepSumBet;
-
-            }
-
-        });
-
-        //on fold par defaut
-
-        let playerAction = 0;
-
-        if (stepMaxBet === playerSumBet + chipsPlayed) {
-
-            //le joueur check
-
-            playerAction = 0.5;
-
-        }
-
-        if (stepMaxBet < playerSumBet + chipsPlayed) {
-
-            //le joueur raise
-
-            playerAction = 1;
-
-        }
-
-
-
-        //on injecte dans playerMemo cette action
-
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["p" + playerPos + "_" + actionNbr] = playerAction;
     }
 
     getStepPlayerBet(playerMemo, currPlayerId) {
@@ -152,6 +91,20 @@ class ServerPlayerActionListener {
                 currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
                     sum += bet;
                 });
+            }
+        });
+        return sum;
+    }
+
+    getHandPlayerBet(playerMemo, currPlayerId) {
+        let sum = 0;
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
+            if (playerId === currPlayerId) {
+                for (let iter = 0; iter <= playerMemo.turnsDetails[playerMemo.totalHands].turnStep; iter++) {
+                    currArray[iter].forEach(function (bet) {
+                        sum += bet;
+                    });
+                }
             }
         });
         return sum;
