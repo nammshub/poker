@@ -7,6 +7,9 @@ require("../config");
  */
 class HandStartListener extends EventEmitter {
     handleMessage(startMessage, playerMemo) {
+        startMessage.data.players.forEach(function(player){
+            console.log("inside HandStartListener player " + player.id);
+        })
         playerMemo.listPlayers = startMessage.data.players;
         let positionMap = this.getMapPosition(playerMemo);
         //Maj des chips si le corupier a pris une blinde chez le joueur
@@ -64,6 +67,7 @@ class HandStartListener extends EventEmitter {
         playerMemo.listPlayers.forEach(function (player) {
             position++;
             positionMap.set(player.id, position);
+            console.log("position player id = " + player.id + " position = " + position);
         });
         return positionMap;
     }

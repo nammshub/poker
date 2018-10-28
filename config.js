@@ -16,7 +16,7 @@ global.config = {
     //200000 => environ 30 minutes de training
     TRAINING_ITERATION: 500000,
     //le ratio de ce qu'on espere gagner à chaque main soit une progression de x% vers le pot total
-    WIN_RATIO:1,
+    WIN_RATIO:0.01,
 
     //Choix de la méthode de jeu
     HOLDEM_LIMIT: true,
