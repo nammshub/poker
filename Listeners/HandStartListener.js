@@ -7,7 +7,7 @@ require("../config");
  */
 class HandStartListener extends EventEmitter {
     handleMessage(startMessage, playerMemo) {
-        startMessage.data.players.forEach(function(player){
+        startMessage.data.players.forEach(function (player) {
             console.log("inside HandStartListener player " + player.id);
         })
         playerMemo.listPlayers = startMessage.data.players;
@@ -27,6 +27,7 @@ class HandStartListener extends EventEmitter {
         //gestion de la prise des petites et grandes blindes chez les joueurs prevus et considere comme mise de preflop
         let betsMap = this.getNewBetsMap(playerMemo);
         playerMemo.turnsDetails.push({
+            "nbrBlindPayed":0,
             "positionMap": positionMap,
             "betsMap": betsMap,
             //turn step: 0=> preflop, 1=> flop, 2 => turn , 3=> river
@@ -40,20 +41,22 @@ class HandStartListener extends EventEmitter {
             ],
             "neuronalResponses": null,
             "randomResponse": 0,
-            "currInput":{
+            "currInput": {
                 "input": {
                     "Win": config.WIN_RATIO,
                     "Lose": 0,
-                    "myCurrBet":0,
+                    "myCurrBet": 0,
                     "step": 0,
-                    "position": positionMap.get(playerMemo.player.id)/positionMap.size,
+                    "position": positionMap.get(playerMemo.player.id) / positionMap.size,
                     "bluff": 0,
+                    "maxHandsRatio": playerMemo.totalHands / config.MAX_HANDS,
                 },
                 "output": {
                 }
             },
             "neuronalInputs": [],
         });
+        this.handleActionRatioMap(playerMemo);
         console.log("\n Hand Start event. playerMemo = " + JSON.stringify(playerMemo));
     }
 
@@ -97,6 +100,19 @@ class HandStartListener extends EventEmitter {
         });
         return betsMap;
 
+    }
+
+    handleActionRatioMap(playerMemo) {
+        if (!playerMemo.actionRatioMap) {
+            playerMemo.actionRatioMap = new Map();
+            const actionMap = new Map();
+            actionMap.set("FOLD", 0);
+            actionMap.set("CHECK", 0);
+            actionMap.set("RAISE", 0);
+            playerMemo.listPlayers.forEach(function (player) {
+                playerMemo.actionRatioMap.set(player.id, new Map(actionMap));
+            })
+        }
     }
 
 }

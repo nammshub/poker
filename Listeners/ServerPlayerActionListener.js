@@ -6,8 +6,13 @@ class ServerPlayerActionListener {
     handleMessage(message, playerMemo) {
         const chipsPlayed = message.data.value;
         const playerId = message.data.id;
+        if(playerMemo.turnsDetails[playerMemo.totalHands].nbrBlindPayed < 2){
+            playerMemo.turnsDetails[playerMemo.totalHands].nbrBlindPayed++;
+        }else{
+          this.injectActionRatio(playerId, chipsPlayed, playerMemo);
+        }
         this.pushPlayerBets(playerId, chipsPlayed, playerMemo);
-        this.pushNeuronalInput(playerId,playerMemo);
+        this.pushNeuronalInput(playerId, playerMemo);
     }
 
     pushPlayerBets(playerId, chipsPlayed, playerMemo) {
@@ -78,7 +83,7 @@ class ServerPlayerActionListener {
                 percentBets = alreadyBet / totalChips;
                 //on injecte dans playerMemo cette info
                 playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentBets_" + playerPos] = percentBets;
-                console.log("percentBets pour joueur en position " + playerPos + " = " + percentBets +" soit mises main = " + alreadyBet + " sur total chips = " + totalChips);
+                console.log("percentBets pour joueur en position " + playerPos + " = " + percentBets + " soit mises main = " + alreadyBet + " sur total chips = " + totalChips);
             }
         })
 
@@ -108,6 +113,44 @@ class ServerPlayerActionListener {
             }
         });
         return sum;
+    }
+
+    injectActionRatio(playerId, chipsPlayed, playerMemo) {
+        let playerActionRatioMap = playerMemo.actionRatioMap.get(playerId);
+        const stepMaxBet = this.getStepMaxBet(playerMemo);
+        switch (true) {
+            case (chipsPlayed < stepMaxBet):
+                console.log("one more fold for player id " + playerId);
+                playerActionRatioMap.set("FOLD", playerActionRatioMap.get("FOLD") + 1);
+                break;
+            case (chipsPlayed === stepMaxBet):
+                console.log("one more check for player id " + playerId);
+                playerActionRatioMap.set("CHECK", playerActionRatioMap.get("CHECK") + 1);
+                break;
+            case (chipsPlayed > stepMaxBet):
+                console.log("one more raise for player id " + playerId);
+                playerActionRatioMap.set("RAISE", playerActionRatioMap.get("RAISE") + 1);
+                break;
+        }
+        const totalActions = playerActionRatioMap.get("FOLD") + playerActionRatioMap.get("CHECK") + playerActionRatioMap.get("RAISE");
+        const playerPos = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerId);
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentRaise_" + playerPos] = playerActionRatioMap.get("RAISE") / totalActions;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentCheck_" + playerPos] = playerActionRatioMap.get("CHECK") / totalActions;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentFold_" + playerPos] = playerActionRatioMap.get("FOLD") / totalActions;
+    }
+
+    getStepMaxBet(playerMemo) {
+        let maxBet = 0;
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray) {
+            let sum = 0;
+            currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
+                sum += bet;
+            });
+            if (sum > maxBet) {
+                maxBet = sum;
+            }
+        });
+        return maxBet;
     }
 }
 
