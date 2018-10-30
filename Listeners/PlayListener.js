@@ -240,7 +240,11 @@ class PlayListener extends EventEmitter {
         playerMemo.listPlayers.forEach(function (player) {
             const playerPosition = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(player.id);
             const turnChips = player.chips;
-            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["totalChipsRatio_" + playerPosition] = turnChips / totalChips;
+            let variableName = "myChipsRatio"
+            if (player.id !== playerMemo.player.id) {
+                variableName = "totalChipsRatio_" + playerPosition;
+            }
+            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[variableName] = turnChips / totalChips;
         });
     }
 }
