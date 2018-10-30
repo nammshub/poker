@@ -214,6 +214,7 @@ class PlayListener extends EventEmitter {
                 "step": currStep,
                 "position": playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id)/playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size,
                 "bluff": 0,
+                "maxHandsRatio": playerMemo.totalHands / config.MAX_HANDS,
             },
             "output": {
             }
