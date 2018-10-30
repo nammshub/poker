@@ -24,17 +24,17 @@ class PlayListener extends EventEmitter {
         };
         //on cree la reponse neuronale
         let timeout = false;
-        const _this = this;
-        const timerControl = setTimeout(function () {
-        //on annule la reponse neuronale
-        timeout = true;
-        console.log("le timeout est passe");
-        const pureRandom = _this.getPureAnswer(randomValue, playerMemo);
-        messageJson.data.value = pureRandom[0];
-        playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
-        _this.updatePlayerMemo(playerMemo, pureRandom[0], pureRandom[1]);
-        callback(messageJson);
-        }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
+        const _this = this;
+        const timerControl = setTimeout(function () {
+            //on annule la reponse neuronale
+            timeout = true;
+            console.log("le timeout est passe");
+            const pureRandom = _this.getPureAnswer(randomValue, playerMemo);
+            messageJson.data.value = pureRandom[0];
+            playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
+            _this.updatePlayerMemo(playerMemo, pureRandom[0], pureRandom[1]);
+            callback(messageJson);
+        }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
 
         //calcul random
         console.log("before random player chips = " + playerMemo.player.chips);
@@ -119,7 +119,7 @@ class PlayListener extends EventEmitter {
 
     getCheck(playerMemo) {
         const toCheck = this.getStepMaxBet(playerMemo);
-        if (toCheck < playerMemo.player.chips -  (this.getHandMyBet(playerMemo) -  this.getStepMyBet(playerMemo))) {
+        if (toCheck < playerMemo.player.chips - (this.getHandMyBet(playerMemo) - this.getStepMyBet(playerMemo))) {
             return toCheck;
         }
         //sinon all in
@@ -130,8 +130,8 @@ class PlayListener extends EventEmitter {
         const toCheck = this.getCheck(playerMemo);
         let toRaise = toCheck + this.getRandomInt(1, config.MAX_RAISE_MULTIPLIER) * playerMemo.bigBlind;
         //si jeu en holdem limit raise de la grosse blind
-        if (config.HOLDEM_LIMIT && !this.hasAlreadyRaised(playerMemo)) {
-            toRaise =  toCheck + playerMemo.bigBlind;
+        if (config.HOLDEM_LIMIT && !this.hasAlreadyRaised(playerMemo)) {
+            toRaise = toCheck + playerMemo.bigBlind;
         }
         return Math.min(toRaise, playerMemo.player.chips - (this.getHandMyBet(playerMemo) - this.getStepMyBet(playerMemo)));
     }
@@ -197,13 +197,14 @@ class PlayListener extends EventEmitter {
         //chips played est le total du step donc le delta est chips played - bet step
         let deltaChips = chipsPlayed - this.getStepMyBet(playerMemo);
         //let positionPlayed = playerMemo.turnsDetails.positionMap;
-        console.log("chips played = " + chipsPlayed + "getStepMyBet " + this.getStepMyBet(playerMemo) + " delta = "+deltaChips);
+        console.log("chips played = " + chipsPlayed + "getStepMyBet " + this.getStepMyBet(playerMemo) + " delta = " + deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.chips = foldCheckRaise;
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.myCurrBet = myCurrBetsSum / playerMemo.potTotal;
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.position = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id)/playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.position = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id) / playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size;
+        this.injectPlayersChipsRatio(playerMemo);
         //on injecte ce currInput dans le tableau et ensuite on reset le currInput
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
@@ -212,7 +213,7 @@ class PlayListener extends EventEmitter {
                 "Lose": 0,
                 "myCurrBet": myCurrBetsSum / playerMemo.potTotal,
                 "step": currStep,
-                "position": playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id)/playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size,
+                "position": playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id) / playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size,
                 "bluff": 0,
                 "maxHandsRatio": playerMemo.totalHands / config.MAX_HANDS,
             },
@@ -232,6 +233,15 @@ class PlayListener extends EventEmitter {
         })
         console.log("alreadyRaise = " + alreadyRaise);
         return alreadyRaise;
+    }
+
+    injectPlayersChipsRatio(playerMemo) {
+        const totalChips = playerMemo.potTotal;
+        playerMemo.listPlayers.forEach(function (player) {
+            const playerPosition = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(player.id);
+            const turnChips = player.chips;
+            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["totalChipsRatio_" + playerPosition] = turnChips / totalChips;
+        });
     }
 }
 
