@@ -1,0 +1,15 @@
+{
+  "name": "poker-master",
+  "version": "1.0.0",
+  "description": "Poker IA in NodeJS + Deeplearning",
+  "main": "config.js",
+  "scripts": {
+    "start": "node playerTcpClient.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "brain.js": "^1.4.2"
+  }
+}
