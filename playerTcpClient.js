@@ -24,8 +24,8 @@ neurone.fromJSON(jsonTrainedNetwork);
 console.log("network ready to work !!");
 
 //PAUSE jusqu'a ce que user clic une touche
-let stdin = process.openStdin();
-stdin.addListener("data", function () {
+//let stdin = process.openStdin();
+//stdin.addListener("data", function () {
     const playerSocket = new net.Socket();
     let playerMemo = {
         "logFile": logFile,
@@ -92,4 +92,4 @@ stdin.addListener("data", function () {
     playerSocket.on("close", function () {
         console.log("Connection closed");
     });
-});
+//});
