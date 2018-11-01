@@ -196,7 +196,7 @@ class PlayListener extends EventEmitter {
         let myCurrBetsSum = this.getHandMyBet(playerMemo);
         //chips played est le total du step donc le delta est chips played - bet step
         let deltaChips = chipsPlayed - this.getStepMyBet(playerMemo);
-        console.log("chips begin hand = " + playerMemo.player.chips);
+        console.log("player id = "+playerMemo.player.id+" chips begin hand = " + playerMemo.player.chips);
         console.log("chips played hand = " + this.getHandMyBet(playerMemo));
         console.log("chips played = " + chipsPlayed + "getStepMyBet " + this.getStepMyBet(playerMemo) + " delta = " + deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(deltaChips);

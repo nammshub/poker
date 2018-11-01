@@ -13,9 +13,9 @@ global.config = {
     BLUFF_RATIO: 10, //bluff 1/BLUFF_RATIO time
     DISABLE_NEURONAL: false,
     TRAINING_NEEDED: true,
-    HIDDEN_LAYERS: [14,7,3],
+    HIDDEN_LAYERS: [20,10],
     //200000 => environ 30 minutes de training
-    TRAINING_ITERATION: 2000,
+    TRAINING_ITERATION: 2500,
     //le ratio de ce qu'on espere gagner à chaque main soit une progression de x% vers le pot total
     WIN_RATIO: 0.1,
 
