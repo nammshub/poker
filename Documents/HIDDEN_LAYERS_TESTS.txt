@@ -1,0 +1,278 @@
+HIDDEN LAYERS TESTS:
+
+
+---------------------
+[15,7,3],
+---------------------
+
+iterations: 10, training error: 0.09114268254959235
+iterations: 20, training error: 0.09115353064923576
+iterations: 30, training error: 0.09115185734553598
+iterations: 40, training error: 0.0911115458153888
+iterations: 50, training error: 0.0797609285013172
+iterations: 60, training error: 0.07863153435279163
+iterations: 70, training error: 0.07050286408072044
+iterations: 80, training error: 0.05803716497705451
+iterations: 90, training error: 0.05269316685696558
+iterations: 100, training error: 0.052997442037976315
+iterations: 110, training error: 0.051607527104152506
+iterations: 120, training error: 0.05123417053264355
+iterations: 130, training error: 0.04907865856945911
+iterations: 140, training error: 0.04908593969987834
+iterations: 150, training error: 0.048150495845519385
+iterations: 160, training error: 0.0477907598848628
+iterations: 170, training error: 0.04723206536968676
+iterations: 180, training error: 0.04662296666196311
+iterations: 190, training error: 0.04610680142994027
+iterations: 200, training error: 0.04539366536837332
+iterations: 210, training error: 0.04517052333642485
+iterations: 220, training error: 0.04486702967176748
+iterations: 230, training error: 0.045596749570844586
+iterations: 240, training error: 0.0463097086629894
+iterations: 250, training error: 0.048404499512275795
+iterations: 260, training error: 0.0480604583598104
+iterations: 270, training error: 0.046988547807515255
+iterations: 280, training error: 0.04608067099848309
+iterations: 290, training error: 0.04546410746148976
+iterations: 300, training error: 0.04586585001993469
+iterations: 310, training error: 0.044551301106553615
+iterations: 320, training error: 0.04477270309265461
+iterations: 330, training error: 0.04541153087170928
+iterations: 340, training error: 0.04574384126453335
+iterations: 350, training error: 0.0453944983421528
+iterations: 360, training error: 0.04572438790738862
+iterations: 370, training error: 0.04574292815186696
+iterations: 380, training error: 0.04458547099260783
+iterations: 390, training error: 0.044503148101099725
+iterations: 400, training error: 0.04446078136657569
+iterations: 410, training error: 0.044234300971461006
+Terminer le programme de commandes (O/N) ? o
+
+
+
+
+
+
+
+---------------------
+[20,10,5],
+---------------------
+iterations: 10, training error: 0.0910632611891218
+iterations: 20, training error: 0.08027011766957552
+iterations: 30, training error: 0.07966819138724908
+iterations: 40, training error: 0.07776466652008898
+iterations: 50, training error: 0.07179960025264616
+iterations: 60, training error: 0.05535315182045463
+iterations: 70, training error: 0.05246543238999118
+iterations: 80, training error: 0.050628777642399043
+iterations: 90, training error: 0.050695313255358365
+iterations: 100, training error: 0.04828658803415948
+iterations: 110, training error: 0.0483083755830094
+iterations: 120, training error: 0.04714194714131766
+iterations: 130, training error: 0.04701562532267127
+iterations: 140, training error: 0.046313470707037244
+iterations: 150, training error: 0.05108009673813034
+iterations: 160, training error: 0.0465455558262966
+iterations: 170, training error: 0.04512672765079969
+iterations: 180, training error: 0.04433599133296445
+iterations: 190, training error: 0.044863364772848344
+iterations: 200, training error: 0.04560010832006525
+iterations: 210, training error: 0.044620334600163146
+iterations: 220, training error: 0.04434103019999192
+iterations: 230, training error: 0.04430487987026295
+iterations: 240, training error: 0.04389031317201138
+iterations: 250, training error: 0.04400124752874108
+iterations: 260, training error: 0.0432000392012552
+iterations: 270, training error: 0.043279908927317375
+iterations: 280, training error: 0.043290432662607015
+iterations: 290, training error: 0.041810155134359435
+iterations: 300, training error: 0.04174473083235665
+iterations: 310, training error: 0.04170917889006786
+iterations: 320, training error: 0.04324902386165664
+iterations: 330, training error: 0.04642459452105311
+iterations: 340, training error: 0.04415714240194248
+iterations: 350, training error: 0.04374990517068123
+iterations: 360, training error: 0.04263503835951917
+iterations: 370, training error: 0.04369507271600236
+iterations: 380, training error: 0.042084596598196224
+iterations: 390, training error: 0.042914388214537226
+iterations: 400, training error: 0.041658985002003664
+iterations: 410, training error: 0.041647276715072984
+iterations: 420, training error: 0.04216559262022497
+iterations: 430, training error: 0.0415736371786501
+iterations: 440, training error: 0.041595756461255365
+iterations: 450, training error: 0.041564432772230875
+iterations: 460, training error: 0.04153928753440097
+iterations: 470, training error: 0.04275432028667973
+iterations: 480, training error: 0.04121667929594739
+iterations: 490, training error: 0.0422527935906233
+iterations: 500, training error: 0.04253272033396901
+
+
+
+
+---------------------
+[25,12,6],
+---------------------
+iterations: 10, training error: 0.09112330207328423
+iterations: 20, training error: 0.08816212847361359
+iterations: 30, training error: 0.08005163394198461
+iterations: 40, training error: 0.07873722576156968
+iterations: 50, training error: 0.07270736842092383
+iterations: 60, training error: 0.063905655832165
+iterations: 70, training error: 0.05538903184575244
+iterations: 80, training error: 0.051243938738117986
+iterations: 90, training error: 0.04945730237361222
+iterations: 100, training error: 0.050148437080454744
+iterations: 110, training error: 0.047846696950740314
+iterations: 120, training error: 0.048182690626896355
+iterations: 130, training error: 0.04744772707674817
+iterations: 140, training error: 0.04624060505352093
+iterations: 150, training error: 0.045412956771034636
+iterations: 160, training error: 0.044894326614389024
+iterations: 170, training error: 0.04405072967096796
+iterations: 180, training error: 0.04369426074883606
+iterations: 190, training error: 0.04342574896761466
+iterations: 200, training error: 0.042697877243767904
+iterations: 210, training error: 0.042737503338820385
+iterations: 220, training error: 0.043149323776033775
+iterations: 230, training error: 0.04202724639854899
+iterations: 240, training error: 0.042314959457523164
+iterations: 250, training error: 0.04176653842542722
+iterations: 260, training error: 0.04139300429632547
+iterations: 270, training error: 0.041184472672276484
+iterations: 280, training error: 0.040778393562799456
+iterations: 290, training error: 0.04048599224863097
+iterations: 300, training error: 0.04054328821271745
+iterations: 310, training error: 0.0404616714408049
+iterations: 320, training error: 0.039828372238701414
+iterations: 330, training error: 0.039945581225785086
+iterations: 340, training error: 0.04031239627592337
+iterations: 350, training error: 0.04059296188828858
+iterations: 360, training error: 0.039803404716211105
+iterations: 370, training error: 0.03981575058254001
+iterations: 380, training error: 0.039064633772394164
+iterations: 390, training error: 0.03916851631693957
+iterations: 400, training error: 0.03930789071199161
+iterations: 410, training error: 0.0406217680269287
+iterations: 420, training error: 0.03893761521633679
+iterations: 430, training error: 0.038737867726789166
+iterations: 440, training error: 0.038924171237827855
+iterations: 450, training error: 0.03899184802375249
+iterations: 460, training error: 0.038555908864781815
+iterations: 470, training error: 0.03931684749309014
+iterations: 480, training error: 0.038162116887990996
+iterations: 490, training error: 0.03779882935288843
+iterations: 500, training error: 0.04005522786187206
+
+
+
+
+---------------------
+[20,10],
+---------------------
+iterations: 10, training error: 0.07075380470696996
+iterations: 20, training error: 0.05569186813936066
+iterations: 30, training error: 0.051913039968237984
+iterations: 40, training error: 0.052285766893563394
+iterations: 50, training error: 0.051977456021117
+iterations: 60, training error: 0.05023980741125988
+iterations: 70, training error: 0.04572418971794191
+iterations: 80, training error: 0.045030943443877286
+iterations: 90, training error: 0.0443546150442364
+iterations: 100, training error: 0.0439873553234818
+iterations: 110, training error: 0.04348416618597882
+iterations: 120, training error: 0.04281269024416936
+iterations: 130, training error: 0.04257880591210188
+iterations: 140, training error: 0.0424380981698263
+iterations: 150, training error: 0.04221113332618465
+iterations: 160, training error: 0.041827774128430875
+iterations: 170, training error: 0.0415066393880577
+iterations: 180, training error: 0.04131327970580043
+iterations: 190, training error: 0.041108173683344705
+iterations: 200, training error: 0.040980639479154424
+iterations: 210, training error: 0.04079238280673122
+iterations: 220, training error: 0.04066497071522736
+iterations: 230, training error: 0.04060344152265639
+iterations: 240, training error: 0.04058585896012133
+iterations: 250, training error: 0.04045228497525087
+iterations: 260, training error: 0.0403497631142637
+iterations: 270, training error: 0.04009721975940717
+iterations: 280, training error: 0.03990698830157029
+iterations: 290, training error: 0.03975396363539222
+iterations: 300, training error: 0.03965942773243114
+iterations: 310, training error: 0.039516819789944674
+iterations: 320, training error: 0.03936409331953828
+iterations: 330, training error: 0.03919971022877377
+iterations: 340, training error: 0.03917995378217566
+iterations: 350, training error: 0.039077461720972484
+iterations: 360, training error: 0.03903537775350648
+iterations: 370, training error: 0.03901354414615374
+iterations: 380, training error: 0.03889026815537724
+iterations: 390, training error: 0.038802243524308375
+iterations: 400, training error: 0.03862676885209317
+iterations: 410, training error: 0.03858246912439343
+iterations: 420, training error: 0.038593700844723494
+iterations: 430, training error: 0.038492349115632485
+iterations: 440, training error: 0.038314942795255484
+iterations: 450, training error: 0.0383276642956206
+iterations: 460, training error: 0.03814261854106441
+iterations: 470, training error: 0.038113184845320086
+iterations: 480, training error: 0.0379953791082485
+iterations: 490, training error: 0.03803055106710485
+iterations: 500, training error: 0.038104566447619455
+
+
+---------------------
+[15,7],
+---------------------
+iterations: 10, training error: 0.07480076144020124
+iterations: 20, training error: 0.05406722846220451
+iterations: 30, training error: 0.05094179150000694
+iterations: 40, training error: 0.05033694667957433
+iterations: 50, training error: 0.04912841373360121
+iterations: 60, training error: 0.04876846777067546
+iterations: 70, training error: 0.04626199285457078
+iterations: 80, training error: 0.045301790143448525
+iterations: 90, training error: 0.044833936862256646
+iterations: 100, training error: 0.04438874115435529
+iterations: 110, training error: 0.043871192053339024
+iterations: 120, training error: 0.04313445265403275
+iterations: 130, training error: 0.04278305050653705
+iterations: 140, training error: 0.04258311198885616
+iterations: 150, training error: 0.04250136091877146
+iterations: 160, training error: 0.04246678022195012
+iterations: 170, training error: 0.04207330112115986
+iterations: 180, training error: 0.04194493469131073
+iterations: 190, training error: 0.04599220042904728
+iterations: 200, training error: 0.045617625997194426
+iterations: 210, training error: 0.04508998525664065
+iterations: 220, training error: 0.043916927745858515
+iterations: 230, training error: 0.04392788426177883
+iterations: 240, training error: 0.04430532059373581
+iterations: 250, training error: 0.04365004665905729
+iterations: 260, training error: 0.04273714008304481
+iterations: 270, training error: 0.0432166111900003
+iterations: 280, training error: 0.044336827523643305
+iterations: 290, training error: 0.04397047500523713
+iterations: 300, training error: 0.043968017840001906
+iterations: 310, training error: 0.04362771601621491
+iterations: 320, training error: 0.043602856084065465
+iterations: 330, training error: 0.0436280114276967
+iterations: 340, training error: 0.043359046078089
+iterations: 350, training error: 0.04328066310949947
+iterations: 360, training error: 0.043508975878535076
+iterations: 370, training error: 0.04204391201514868
+iterations: 380, training error: 0.04191426793510968
+iterations: 390, training error: 0.041784492928572524
+iterations: 400, training error: 0.04165824163400255
+iterations: 410, training error: 0.04261162606583338
+iterations: 420, training error: 0.04337128875300269
+iterations: 430, training error: 0.043269401178367105
+iterations: 440, training error: 0.042933837718697895
+iterations: 450, training error: 0.04322508511655956
+iterations: 460, training error: 0.0435095518636462
+iterations: 470, training error: 0.04243715123381988
+iterations: 480, training error: 0.041893690605507725
+iterations: 490, training error: 0.04280793681710373
+iterations: 500, training error: 0.04236890167043711
