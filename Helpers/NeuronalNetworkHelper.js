@@ -8,7 +8,7 @@ class NeuronalNetworkHelper  {
         neuronalNetworkListener.launchCompute( actionNbrIter, function(output){
             
         });
-        console.log("object game contains" + JSON.stringify(game));
+        //console.log("object game contains" + JSON.stringify(game));
     }
 }
 

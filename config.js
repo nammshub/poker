@@ -9,14 +9,15 @@ global.config = {
 
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
-    MAX_RAISE_MULTIPLIER:3,
-    BLUFF_RATIO:7, //bluff 1/BLUFF_RATIO time
-    DISABLE_NEURONAL:false,
-    TRAINING_NEEDED:true,
+    MAX_RAISE_MULTIPLIER: 3,
+    BLUFF_RATIO: 10, //bluff 1/BLUFF_RATIO time
+    DISABLE_NEURONAL: false,
+    TRAINING_NEEDED: true,
+    HIDDEN_LAYERS: [14,7,3],
     //200000 => environ 30 minutes de training
-    TRAINING_ITERATION: 20000,
+    TRAINING_ITERATION: 2000,
     //le ratio de ce qu'on espere gagner à chaque main soit une progression de x% vers le pot total
-    WIN_RATIO:1,
+    WIN_RATIO: 0.1,
 
     //Choix de la méthode de jeu
     HOLDEM_LIMIT: false,

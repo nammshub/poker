@@ -8,7 +8,7 @@ require("../config");
 class HandStartListener extends EventEmitter {
     handleMessage(startMessage, playerMemo) {
         startMessage.data.players.forEach(function (player) {
-            console.log("inside HandStartListener player " + player.id);
+            //console.log("inside HandStartListener player " + player.id);
         })
         playerMemo.listPlayers = startMessage.data.players;
         let positionMap = this.getMapPosition(playerMemo);
@@ -23,7 +23,7 @@ class HandStartListener extends EventEmitter {
         //actualise les blindes
         const currBlinds = BlindHelper.actualizeBlinds(playerMemo.totalHands);
         //playerMemo.bigBlind = currBlinds[1];
-        console.log("la position du joueur pour ce tour est " + positionMap.get(playerMemo.player.id))
+        //console.log("la position du joueur pour ce tour est " + positionMap.get(playerMemo.player.id))
         //gestion de la prise des petites et grandes blindes chez les joueurs prevus et considere comme mise de preflop
         let betsMap = this.getNewBetsMap(playerMemo);
         playerMemo.turnsDetails.push({
@@ -57,7 +57,7 @@ class HandStartListener extends EventEmitter {
             "neuronalInputs": [],
         });
         this.handleActionRatioMap(playerMemo);
-        console.log("\n Hand Start event. playerMemo = " + JSON.stringify(playerMemo));
+        //console.log("\n Hand Start event. playerMemo = " + JSON.stringify(playerMemo));
     }
 
     /**
@@ -70,7 +70,7 @@ class HandStartListener extends EventEmitter {
         playerMemo.listPlayers.forEach(function (player) {
             position++;
             positionMap.set(player.id, position);
-            console.log("position player id = " + player.id + " position = " + position);
+            //console.log("position player id = " + player.id + " position = " + position);
         });
         return positionMap;
     }

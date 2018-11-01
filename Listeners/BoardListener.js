@@ -21,7 +21,7 @@ class BoardListener extends EventEmitter {
             //on ajoute dans le input l'evolution du step
             this.stepToNeuronalInput(playerMemo);
         }
-        console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
+        //console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
     }
 
     stepToNeuronalInput(playerMemo) {

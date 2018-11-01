@@ -16,7 +16,7 @@ class ServerPlayerActionListener {
     }
 
     pushPlayerBets(playerId, chipsPlayed, playerMemo) {
-        console.log("un jouer à joue (" + playerId + ") chips = " + chipsPlayed);
+        //console.log("un jouer à joue (" + playerId + ") chips = " + chipsPlayed);
         //recuperation de la map des bets. On va injecter pour ce joueur 
         /*
         {
@@ -62,7 +62,7 @@ class ServerPlayerActionListener {
             currArray.forEach(function (chips) {
                 sumStepChips += chips;
             })
-            console.log(" mises pour la phase " + posString + " pour le joueur " + playerId + " = " + sumStepChips);
+            //console.log(" mises pour la phase " + posString + " pour le joueur " + playerId + " = " + sumStepChips);
         })
     }
 
@@ -83,7 +83,7 @@ class ServerPlayerActionListener {
                 percentBets = alreadyBet / totalChips;
                 //on injecte dans playerMemo cette info
                 playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentBets_" + playerPos] = percentBets;
-                console.log("percentBets pour joueur en position " + playerPos + " = " + percentBets + " soit mises main = " + alreadyBet + " sur total chips = " + totalChips);
+                //console.log("percentBets pour joueur en position " + playerPos + " = " + percentBets + " soit mises main = " + alreadyBet + " sur total chips = " + totalChips);
             }
         })
 
@@ -120,15 +120,15 @@ class ServerPlayerActionListener {
         const stepMaxBet = this.getStepMaxBet(playerMemo);
         switch (true) {
             case (chipsPlayed < stepMaxBet):
-                console.log("one more fold for player id " + playerId);
+                //console.log("one more fold for player id " + playerId);
                 playerActionRatioMap.set("FOLD", playerActionRatioMap.get("FOLD") + 1);
                 break;
             case (chipsPlayed === stepMaxBet):
-                console.log("one more check for player id " + playerId);
+                //console.log("one more check for player id " + playerId);
                 playerActionRatioMap.set("CHECK", playerActionRatioMap.get("CHECK") + 1);
                 break;
             case (chipsPlayed > stepMaxBet):
-                console.log("one more raise for player id " + playerId);
+                //console.log("one more raise for player id " + playerId);
                 playerActionRatioMap.set("RAISE", playerActionRatioMap.get("RAISE") + 1);
                 break;
         }

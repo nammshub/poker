@@ -28,7 +28,7 @@ class PlayListener extends EventEmitter {
         const timerControl = setTimeout(function () {
             //on annule la reponse neuronale
             timeout = true;
-            console.log("le timeout est passe");
+            //console.log("le timeout est passe");
             const pureRandom = _this.getPureAnswer(randomValue, playerMemo);
             messageJson.data.value = pureRandom[0];
             playerMemo.turnsDetails[playerMemo.totalHands].randomResponse = pureRandom;
@@ -37,7 +37,7 @@ class PlayListener extends EventEmitter {
         }, (1000 * config.MAX_SEC_TO_ANSWER) - 1000);
 
         //calcul random
-        console.log("before random player chips = " + playerMemo.player.chips);
+        //console.log("before random player chips = " + playerMemo.player.chips);
         let randomValue = 0.5;
         switch (this.getRandomInt(1, 3)) {
             //fold
@@ -69,7 +69,7 @@ class PlayListener extends EventEmitter {
                 pureNeuronal = await this.getNeuronalAnswer(net, playerMemo);
             }
         }
-        console.log("on a la reponse neuronale timeout = " + timeout);
+        //console.log("on a la reponse neuronale timeout = " + timeout);
         if (!timeout) {
             messageJson.data.value = pureNeuronal[0];
             clearTimeout(timerControl);
@@ -83,7 +83,7 @@ class PlayListener extends EventEmitter {
      */
     async getNeuronalAnswer(net, playerMemo) {
         const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.totalHands].currInput.input);
-        console.log("neuronal answer = " + JSON.stringify(neuronalAnswer));
+        //console.log("neuronal answer = " + JSON.stringify(neuronalAnswer));
         return this.getPureAnswer(neuronalAnswer.chips, playerMemo);
     }
 
@@ -99,21 +99,21 @@ class PlayListener extends EventEmitter {
     getPureAnswer(rawNeuronal, playerMemo) {
         //FOLD
         if (rawNeuronal < 0.333) {
-            console.log("should fold");
+            //console.log("should fold");
             playerMemo.turnsDetails[playerMemo.totalHands].state = "FOLDED";
             return [0, 0];
         }
         playerMemo.turnsDetails[playerMemo.totalHands].state = "ACTIVE";
         //CHECK
         if (rawNeuronal < 0.666) {
-            console.log("should check");
+            //console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
         if (config.HOLDEM_LIMIT && this.hasAlreadyRaised(playerMemo)) {
-            console.log("should check");
+            //console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
-        console.log("should raise");
+        //console.log("should raise");
         return [this.getRaise(playerMemo), 1];
     }
 
@@ -196,7 +196,8 @@ class PlayListener extends EventEmitter {
         let myCurrBetsSum = this.getHandMyBet(playerMemo);
         //chips played est le total du step donc le delta est chips played - bet step
         let deltaChips = chipsPlayed - this.getStepMyBet(playerMemo);
-        //let positionPlayed = playerMemo.turnsDetails.positionMap;
+        console.log("chips begin hand = " + playerMemo.player.chips);
+        console.log("chips played hand = " + this.getHandMyBet(playerMemo));
         console.log("chips played = " + chipsPlayed + "getStepMyBet " + this.getStepMyBet(playerMemo) + " delta = " + deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.chips = foldCheckRaise;
@@ -231,7 +232,7 @@ class PlayListener extends EventEmitter {
                 alreadyRaise = true;
             }
         })
-        console.log("alreadyRaise = " + alreadyRaise);
+        //console.log("alreadyRaise = " + alreadyRaise);
         return alreadyRaise;
     }
 

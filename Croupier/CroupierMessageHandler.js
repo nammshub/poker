@@ -9,15 +9,15 @@ class CroupierMessageHandler extends EventEmitter {
         const emmittingPlayer = this.getPlayerBySocket(socket);
         switch (message.id) {
             case "client.game.player.play":
-                console.log("Le joueur " + emmittingPlayer.details.id + " a joue !");
+                //console.log("Le joueur " + emmittingPlayer.details.id + " a joue !");
                 PlayerPlayedListener.handleMessage(message, emmittingPlayer, this);
                 break;
             case "client.lobby.join":
-                console.log("Le joueur " + emmittingPlayer.details.id + " rejoint le lobby !");
+                //console.log("Le joueur " + emmittingPlayer.details.id + " rejoint le lobby !");
                 LobbyJoinListener.handleMessage(message, emmittingPlayer);
                 break;
             default:
-                console.log("message envoye de nature inconnue " + data)
+                //console.log("message envoye de nature inconnue " + data)
                 break;
         }
     }

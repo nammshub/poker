@@ -24,7 +24,7 @@ class DeckHelper{
 
         fs.writeFile(deckPath, deckContent, function (err) {
             if (err) throw err;
-            console.log("Saved!");
+            //console.log("Saved!");
           });
     }
 

@@ -8,7 +8,7 @@ class StartListener extends EventEmitter {
         playerMemo.player = startMessage.data.info;
         playerMemo.potTotal = startMessage.data.count * playerMemo.player.chips;
         playerMemo.turnsDetails[0].chipsEndTurn = playerMemo.player.chips;
-        console.log("\nStart event. playerMemo = " + JSON.stringify(playerMemo));
+        //console.log("\nStart event. playerMemo = " + JSON.stringify(playerMemo));
     }
 }
 

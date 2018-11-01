@@ -43,9 +43,9 @@ fs.readdir('../Logs', function (err, files) {
 
             results.then(writeFile)
                 .then(function (data) {
-                    console.log(data)
+                    //console.log(data)
                 }).catch(function (err) {
-                console.log(err)
+                //console.log(err)
             });
         }
 

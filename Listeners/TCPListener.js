@@ -25,63 +25,63 @@ class TCPListener extends EventEmitter {
         messageArray.forEach(function (message) {
             switch (message.id) {
                 case "server.lobby.join.success":
-                    console.log("Rejoindre le lobby = succes");
+                    //console.log("Rejoindre le lobby = succes");
                     break;
                 case "server.lobby.join.failure":
-                    console.log("Rejoindre le lobby = echec " + message.data.reason);
+                    //console.log("Rejoindre le lobby = echec " + message.data.reason);
                     break;
                 case "server.game.start":
-                    console.log("Le jeu commence !! nbr joueurs = " + message.data.count);
+                    //console.log("Le jeu commence !! nbr joueurs = " + message.data.count);
                     startListener.handleMessage(message, playerMemo);
                     break;
                 case "server.game.player.cards":
-                    console.log("Un joueur recoit ses cartes");
+                    //console.log("Un joueur recoit ses cartes");
                     cardsListener.handleMessage(message, playerMemo);
                     break;
                 case "server.game.hand.start":
-                    console.log("Une nouvelle main commence");
+                    //console.log("Une nouvelle main commence");
                     handStartListener.handleMessage(message, playerMemo);
                     break;
                 case "server.game.turn.start":
-                    console.log("Un nouveau tour commence");
+                    //console.log("Un nouveau tour commence");
                     break;
                 case "server.game.turn.end":
-                    console.log("Un nouveau tour se termine");
+                    //console.log("Un nouveau tour se termine");
                     break;
                 case "server.game.blind.change":
-                    console.log("Les Blindes changent : Small blind -> " + message.data.small + ", Big Blind -> " + message.data.big);
+                    //console.log("Les Blindes changent : Small blind -> " + message.data.small + ", Big Blind -> " + message.data.big);
                     blindChangeListener.handleMessage(message, playerMemo);
                     break;
                 case "server.game.player.play":
-                    console.log("A vous de jouer");
+                    //console.log("A vous de jouer");
                     playListener.handleMessage(playerMemo, net, callback);
                     break;
                 case "server.game.player.play.timeout":
-                    console.log("Vous etes en time out !!");
+                    //console.log("Vous etes en time out !!");
                     break;
                 case "server.game.player.play.success":
-                    console.log("Votre coup est valide et a bien été pris en compte par le serveur");
+                    //console.log("Votre coup est valide et a bien été pris en compte par le serveur");
                     break;
                 case "server.game.player.play.failure":
-                    console.log("Votre coup n'est pas valide et n'a pas été pris en compte par le serveur");
+                    //console.log("Votre coup n'est pas valide et n'a pas été pris en compte par le serveur");
                     break;
                 case "server.game.player.action":
-                    console.log("Un joueur à joué");
+                    //console.log("Un joueur à joué");
                     serverPlayerActionListener.handleMessage(message, playerMemo);
                     break;
                 case "server.game.board.cards":
-                    console.log("Nouvelles cartes sur le board");
+                    //console.log("Nouvelles cartes sur le board");
                     boardListener.handleMessage(message, playerMemo);
                     break;
                 case "server.game.hand.end":
-                    console.log("gagnant pour la main");
+                    //console.log("gagnant pour la main");
                     handEndListener.handleMessage(message, playerMemo);
                     break;
                 case "server.game.end":
-                    console.log("fin de la partie");
+                    //console.log("fin de la partie");
                     break;
                 default:
-                    console.log("message imprevu data " + data);
+                    //console.log("message imprevu data " + data);
             }
         })
     }

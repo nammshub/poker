@@ -14,15 +14,15 @@ class HandValueHelper {
         const tapis = config.CARDS_ON_TABLE;
         for (let player of config.PLAYERS) {
             if (player.details.state === "ACTIVE") {
-                console.log("analyse des cartes du joueur " + player.details.id);
+                //console.log("analyse des cartes du joueur " + player.details.id);
                 let allCards = config.PLAYERS_CARDS_MAP.get(player.details.id);
                 allCards = allCards.concat(tapis);
-                console.log("all cards for this player are ");
+                //console.log("all cards for this player are ");
                 allCards.forEach(function (card) {
-                    console.log(card.kind + " " + card.color);
+                    //console.log(card.kind + " " + card.color);
                 })
                 playersHandValues.set(player.details.id, this.getHandValue(allCards));
-                console.log("meilleur combinaison de la main " + playersHandValues.get(player.details.id)[0] + " et la valeur vaut " + playersHandValues.get(player.details.id)[1]);
+                //console.log("meilleur combinaison de la main " + playersHandValues.get(player.details.id)[0] + " et la valeur vaut " + playersHandValues.get(player.details.id)[1]);
             }
         }
         //classement des joueurs sous forme d'un tableau de tableau de id
@@ -56,7 +56,7 @@ class HandValueHelper {
             TOTAL   |       |           |           |           |
     */
     static initValueCardsArray() {
-        console.log("inside initValueCardsArray");
+        //console.log("inside initValueCardsArray");
 
         let currArray = [];
         for (let i = 0; i < 5; i++) {
@@ -65,28 +65,28 @@ class HandValueHelper {
                 currArray[i][j] = 0;
             }
         }
-        console.log("ending initValueCardsArray");
+        //console.log("ending initValueCardsArray");
         return currArray;
     }
 
     static fillCardsArray(cards) {
-        console.log("inside fillCardsArray");
+        //console.log("inside fillCardsArray");
         let currArray = this.initValueCardsArray();
         //on remplit le tableau à double entree selon le kind et color de la carte
         cards.forEach(function (card) {
             currArray[config.CARDS_VALUE_MAP.get(card.color)][config.CARDS_VALUE_MAP.get(card.kind)]++;
             currArray[config.CARDS_VALUE_MAP.get(card.color)][0]++;
             currArray[0][config.CARDS_VALUE_MAP.get(card.kind)]++;
-            console.log("on ajoute la carte " + card.kind + " " + card.color);
+            //console.log("on ajoute la carte " + card.kind + " " + card.color);
         });
         return currArray;
     }
     static getHandValue(cards) {
-        console.log("inside getHandValue")
+        //console.log("inside getHandValue")
         let valueCardsArray = this.fillCardsArray(cards);
         let mainFinal = null;
         for (let main = 8; main >= 0; main--) {
-            console.log(" main = " + main);
+            //console.log(" main = " + main);
             switch (main) {
                 case 8:
                     //confirme
@@ -280,7 +280,7 @@ class HandValueHelper {
     }
 
     static haveQuinteFlush(valueCardsArray) {
-        console.log("inside haveQuinteFlush");
+        //console.log("inside haveQuinteFlush");
         let compteurAffilé = 0;
         let valeurFirst = 0;
         for (let couleur = 1; couleur <= 4; couleur++) {
@@ -309,7 +309,7 @@ class HandValueHelper {
             compteurAffilé = 0;
             valeurFirst = 0;
         }
-        console.log("ending haveQuinteFlush");
+        //console.log("ending haveQuinteFlush");
         return;
     }
 
@@ -328,9 +328,9 @@ class HandValueHelper {
         else {
             handValueArray = this.getHandValue(cards);
         }
-        console.log("hand value array = " + handValueArray[0] + " et " + handValueArray[1]);
+        //console.log("hand value array = " + handValueArray[0] + " et " + handValueArray[1]);
         let neuronalInput = (handValueArray[0] / 10) + (handValueArray[1] / 1000000000000);
-        console.log("neuronalInput = " + neuronalInput);
+        //console.log("neuronalInput = " + neuronalInput);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["handValue"] = neuronalInput;
     }
 
@@ -338,7 +338,7 @@ class HandValueHelper {
         let valueCardsArray = this.fillCardsArray(hand);
         let mainFinal = null;
         for (let main = 4; main >= 0; main--) {
-            console.log(" main = " + main);
+            //console.log(" main = " + main);
             switch (main) {
                 case 4:
                     //confirme

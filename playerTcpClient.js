@@ -10,7 +10,9 @@ const tcpListener = new TCPListener();
 const HOST = config.HOST;
 const PORT = config.PORT;
 
-let neurone = new brain.NeuralNetwork();
+let neurone = new brain.NeuralNetwork({
+    hiddenLayers: config.HIDDEN_LAYERS,
+});
 if (config.TRAINING_NEEDED) {
     //on recupere une copie du tableau des datas neuronales
     const neuronalArray = NEURONAL.slice(0);
@@ -21,7 +23,7 @@ const logFile = "./Logs/" + logName.getTime() + ".log";
 //creation du reseau à partir du trained-network.json
 jsonTrainedNetwork = JSON.parse(fs.readFileSync("trained-network.json", "utf8"));
 neurone.fromJSON(jsonTrainedNetwork);
-console.log("network ready to work !!");
+//console.log("network ready to work !!");
 
 //PAUSE jusqu'a ce que user clic une touche
 //let stdin = process.openStdin();
@@ -69,7 +71,7 @@ console.log("network ready to work !!");
                 teamName = val;
         });
 
-        console.log("CONNECTED TO: " + HOST + ":" + PORT);
+        //console.log("CONNECTED TO: " + HOST + ":" + PORT);
         // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
         const suscribeMessage = {
             "id": "client.lobby.join",
@@ -91,5 +93,8 @@ console.log("network ready to work !!");
     // Add a "close" event handler for the client socket
     playerSocket.on("close", function () {
         console.log("Connection closed");
+    });
+    playerSocket.on("error", function (error) {
+        console.log("Error :" + error.message);
     });
 //});
