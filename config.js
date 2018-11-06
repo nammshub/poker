@@ -1,6 +1,6 @@
 global.config = {
 
-    PORT: 1300,
+    PORT: 4000,
     HOST: "127.0.0.1",
     NEURONAL_NETWORK: null,
     NEURONAL_NETWORK_LISTENER: null,
