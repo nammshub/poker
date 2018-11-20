@@ -1,7 +1,8 @@
 const EventEmitter = require("events");
 require("../config");
-const DeckHelper = require("../Helpers/DeckHelper");
 const HandValueHelper = require("../Helpers/HandValueHelper");
+const HandStrengthHelper = require("../Helpers/HandStrengthHelper");
+
 
 
 /**
@@ -12,6 +13,9 @@ class BoardListener extends EventEmitter {
         let currTapis = playerMemo.turnsDetails[playerMemo.totalHands].tapis;
         currTapis = currTapis.concat(newCardsMessage.data.cards);
         playerMemo.turnsDetails[playerMemo.totalHands].tapis = currTapis;
+        //on calcule la force de la main
+        const handStrength = HandStrengthHelper.getHandStrength(playerMemo.turnsDetails[playerMemo.totalHands].hand, currTapis, playerMemo.listPlayers.length - 1);
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input['handStrength'] = handStrength;
         //on increment le turnStep
         playerMemo.turnsDetails[playerMemo.totalHands].turnStep++;
         //on injecte dans le neuronal SSI le joueur est toujours actif sinon les calculs de valeur de main sont fausses
@@ -21,7 +25,6 @@ class BoardListener extends EventEmitter {
             //on ajoute dans le input l'evolution du step
             this.stepToNeuronalInput(playerMemo);
         }
-        //console.log("Board mis à jour coté joueur avec " + newCardsMessage.data.cards.length + " nouvelles cartes");
     }
 
     stepToNeuronalInput(playerMemo) {
