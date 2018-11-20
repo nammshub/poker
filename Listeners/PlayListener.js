@@ -222,7 +222,7 @@ class PlayListener extends EventEmitter {
             "output": {
             }
         }
-        HandValueHelper.handValueToNeuronalInput(playerMemo)
+        //HandValueHelper.handValueToNeuronalInput(playerMemo)
     }
 
     hasAlreadyRaised(playerMemo) {

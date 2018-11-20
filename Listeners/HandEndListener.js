@@ -8,12 +8,23 @@ const LogHelper = require("../Helpers/LogHelper");
 class HandEndListener {
     handleMessage(endMessage, playerMemo) {
         //calcul si les coups joues ce tour ci etaient bon ou nuls
+        let winner = false;
         endMessage.data.winners.forEach(function (player) {
+            console.log("winner id =" + player.id);
+            console.log("winner chips =" + player.chips);
+
+
             if (player.id === playerMemo.player.id) {
                 playerMemo.player.chips = player.chips;
+                winner = true;
             }
         })
-        playerMemo.turnsDetails[playerMemo.totalHands].chipsEndTurn = playerMemo.player.chips;
+        if (winner) {
+            playerMemo.turnsDetails[playerMemo.totalHands].chipsEndTurn = playerMemo.player.chips;
+        }
+        else {
+            playerMemo.turnsDetails[playerMemo.totalHands].chipsEndTurn = playerMemo.player.chips - this.getHandMyBet(playerMemo);
+        }
         this.establishWinLoseInput(playerMemo);
         //enregistrement des coups dans le fichier de log
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.forEach(function (currInput) {
@@ -22,8 +33,11 @@ class HandEndListener {
     }
 
     establishWinLoseInput(playerMemo) {
-        const lastTurnChips = playerMemo.turnsDetails[playerMemo.turnsDetails.length - 2].chipsEndTurn;
+        const lastTurnChips = playerMemo.turnsDetails[playerMemo.totalHands - 1].chipsEndTurn;
         const currTurnChips = playerMemo.turnsDetails[playerMemo.totalHands].chipsEndTurn;
+        console.log("playerMemo.totalHands =" + playerMemo.totalHands);
+        console.log("lastTurnChips =" + lastTurnChips);
+        console.log("currTurnChips =" + currTurnChips);
         let win = 0;
         let lose = 0;
         if (lastTurnChips > currTurnChips) {
@@ -38,6 +52,22 @@ class HandEndListener {
             currInput.input.Win = win;
             currInput.input.Lose = lose;
         });
+    }
+
+    getHandMyBet(playerMemo) {
+        let sum = 0;
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
+            if (playerId === playerMemo.player.id) {
+                let iterStep = -1;
+                while (iterStep < playerMemo.turnsDetails[playerMemo.totalHands].turnStep) {
+                    iterStep++;
+                    currArray[iterStep].forEach(function (bet) {
+                        sum += bet;
+                    });
+                }
+            }
+        });
+        return sum;
     }
 }
 

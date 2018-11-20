@@ -10,7 +10,7 @@ const HandStrengthHelper = require("../Helpers/HandStrengthHelper");
 class CardsListener extends EventEmitter {
     handleMessage(cardsMessage, playerMemo) {
         playerMemo.turnsDetails[playerMemo.totalHands].hand = cardsMessage.data.cards;
-        HandValueHelper.handValueToNeuronalInput(playerMemo);
+        //HandValueHelper.handValueToNeuronalInput(playerMemo);
         //on calcule la force de la main
         const handStrength = HandStrengthHelper.getHandStrength(playerMemo.turnsDetails[playerMemo.totalHands].hand, [], playerMemo.listPlayers.length - 1);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input['handStrength'] = handStrength;
