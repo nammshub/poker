@@ -12,14 +12,12 @@ global.config = {
     MAX_RAISE_MULTIPLIER: 3,
     BLUFF_RATIO: 15, //bluff 1/BLUFF_RATIO time
     DISABLE_NEURONAL: false,
-    TRAINING_NEEDED: false,
+    TRAINING_NEEDED: true,
     HIDDEN_LAYERS: [25, 12, 6], //cette config est bien aussi [20,10], [25,12,6],
     //20000 => environ 30 minutes de training
-    TRAINING_ITERATION: 2000,
-    //le ratio de ce qu'on espere gagner à chaque main soit une progression de x% vers le pot total
-    WIN_RATIO: 0.1,
+    TRAINING_ITERATION: 10000,
     //Nbr de games simulees pour determiner la force de la main
-    HAND_STRENGTH_GAMES_NBR: 1000,
+    HAND_STRENGTH_GAMES_NBR: 3000,
 
     //Choix de la méthode de jeu
     HOLDEM_LIMIT: false,

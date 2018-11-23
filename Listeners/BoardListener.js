@@ -20,6 +20,7 @@ class BoardListener extends EventEmitter {
             //on maj le input neuronal avec les cartes:
             //HandValueHelper.handValueToNeuronalInput(playerMemo);
             //on calcule la force de la main
+            console.log("player id =" + playerMemo.player.id + " step = " + playerMemo.turnsDetails[playerMemo.totalHands].turnStep);
             const handStrength = HandStrengthHelper.getHandStrength(playerMemo.turnsDetails[playerMemo.totalHands].hand, currTapis, playerMemo.listPlayers.length - 1);
             playerMemo.turnsDetails[playerMemo.totalHands].currInput.input['handStrength'] = handStrength;
             //on ajoute dans le input l'evolution du step

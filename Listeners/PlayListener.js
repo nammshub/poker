@@ -82,9 +82,30 @@ class PlayListener extends EventEmitter {
      * retourne la reponse du reseau de neurone sous la forme d"un nombre de chips à jouer
      */
     async getNeuronalAnswer(net, playerMemo) {
-        const neuronalAnswer = net.run(playerMemo.turnsDetails[playerMemo.totalHands].currInput.input);
-        //console.log("neuronal answer = " + JSON.stringify(neuronalAnswer));
-        return this.getPureAnswer(neuronalAnswer.chips, playerMemo);
+        const moveToPlay = this.getBestMove(net, playerMemo);
+        return this.getPureAnswer(moveToPlay, playerMemo);
+    }
+
+    /**
+     * Pour les params d'entrees donnés, on va tester les 3 moves (FOLD?CHECK,RAISE) 
+     * et selon le meilleur ratio win/lose retourne par le reseau on sait quel est le meilleur move
+     * @param {*} net 
+     * @param {*} playerMemo 
+     */
+    async getBestMove(net, playerMemo) {
+        const threeMoves = [0, 0.5, 1];
+        let maxWin = 0;
+        let bestMove = 0;
+        threeMoves.forEach(function(move){
+            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.move = move;
+            let winLose = net.run(playerMemo.turnsDetails[playerMemo.totalHands].currInput.input).winLose;
+            console.log("move = " + move + " winLose = " + winLose );
+            if(winLose > maxWin){
+                maxWin = winLose;
+                bestMove = move;
+            }
+        });
+        return bestMove;
     }
 
     sleep(ms) {
@@ -200,7 +221,7 @@ class PlayListener extends EventEmitter {
         console.log("chips played hand = " + this.getHandMyBet(playerMemo));
         console.log("chips played = " + chipsPlayed + "getStepMyBet " + this.getStepMyBet(playerMemo) + " delta = " + deltaChips);
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(deltaChips);
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.chips = foldCheckRaise;
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.move = foldCheckRaise;
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.myCurrBet = myCurrBetsSum / playerMemo.potTotal;
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.input
         const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
@@ -210,8 +231,6 @@ class PlayListener extends EventEmitter {
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
             "input": {
-                "Win": config.WIN_RATIO,
-                "Lose": 0,
                 "myCurrBet": myCurrBetsSum / playerMemo.potTotal,
                 "step": currStep,
                 "position": playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id) / playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size,

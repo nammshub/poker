@@ -9,6 +9,7 @@ class NetworkTrainingHelper {
         network.train(dataArray, {
             iterations: config.TRAINING_ITERATION,
             log: true,
+            learningRate: 0.6,
         });
         const after = new Date();
         //console.log('after train = ' + after);
