@@ -59,7 +59,12 @@ class HandStrengthHelper {
                 nbrVictories++;
             }
         }
-        console.log("hand strength =" + nbrVictories / config.HAND_STRENGTH_GAMES_NBR);
+        try{
+            console.log("hand strength =" + nbrVictories / config.HAND_STRENGTH_GAMES_NBR + " hand = "+myHand[0].kind+" "+myHand[0].color+" "+myHand[1].kind+" "+myHand[1].color );
+        }
+        catch(error){
+            console.error(error);
+        }
         return nbrVictories / config.HAND_STRENGTH_GAMES_NBR;
     }
 

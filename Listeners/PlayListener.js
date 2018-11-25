@@ -92,17 +92,23 @@ class PlayListener extends EventEmitter {
      * @param {*} net 
      * @param {*} playerMemo 
      */
-    async getBestMove(net, playerMemo) {
+    getBestMove(net, playerMemo) {
         const threeMoves = [0, 0.5, 1];
         let maxWin = 0;
         let bestMove = 0;
-        threeMoves.forEach(function(move){
+        console.log(playerMemo.turnsDetails[playerMemo.totalHands].hand[0].kind + " " 
+        + playerMemo.turnsDetails[playerMemo.totalHands].hand[0].color + " "
+        + playerMemo.turnsDetails[playerMemo.totalHands].hand[1].kind + " "
+        + playerMemo.turnsDetails[playerMemo.totalHands].hand[1].color);
+
+        threeMoves.forEach(function (move) {
             playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.move = move;
             let winLose = net.run(playerMemo.turnsDetails[playerMemo.totalHands].currInput.input).winLose;
-            console.log("move = " + move + " winLose = " + winLose );
-            if(winLose > maxWin){
+            console.log("move = " + move + " winLose = " + winLose);
+            if (winLose > maxWin) {
                 maxWin = winLose;
                 bestMove = move;
+                console.log("bestMove = " + bestMove);
             }
         });
         return bestMove;
@@ -120,21 +126,21 @@ class PlayListener extends EventEmitter {
     getPureAnswer(rawNeuronal, playerMemo) {
         //FOLD
         if (rawNeuronal < 0.333) {
-            //console.log("should fold");
+            console.log("should fold");
             playerMemo.turnsDetails[playerMemo.totalHands].state = "FOLDED";
             return [0, 0];
         }
         playerMemo.turnsDetails[playerMemo.totalHands].state = "ACTIVE";
         //CHECK
         if (rawNeuronal < 0.666) {
-            //console.log("should check");
+            console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
         if (config.HOLDEM_LIMIT && this.hasAlreadyRaised(playerMemo)) {
-            //console.log("should check");
+            console.log("should check");
             return [this.getCheck(playerMemo), 0.5];
         }
-        //console.log("should raise");
+        console.log("should raise");
         return [this.getRaise(playerMemo), 1];
     }
 
@@ -205,11 +211,14 @@ class PlayListener extends EventEmitter {
     }
 
     getSomeBluff(playerMemo) {
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.bluff = 1;
+        console.log("bluff !!");
+        //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.bluff = 1;
+        /*
         const checkOrRaise = this.getRandomInt(0, 1);
         if (checkOrRaise === 0) {
             return this.getPureAnswer(0.5, playerMemo);
         }
+        */
         return this.getPureAnswer(1, playerMemo);
     }
 

@@ -9,13 +9,16 @@ global.config = {
 
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
-    MAX_RAISE_MULTIPLIER: 3,
-    BLUFF_RATIO: 15, //bluff 1/BLUFF_RATIO time
+    MAX_RAISE_MULTIPLIER: 10,
+    BLUFF_RATIO: 7, //bluff 1/BLUFF_RATIO time
     DISABLE_NEURONAL: false,
-    TRAINING_NEEDED: true,
-    HIDDEN_LAYERS: [25, 12, 6], //cette config est bien aussi [20,10], [25,12,6],
+    TRAINING_NEEDED: false,
+    HIDDEN_LAYERS: [25,12,6], //cette config est bien aussi [20,10], [25,12,6],
+    LEANRING_RATE: 0.9,
+    ERROR_TRESH: 0.005,
+
     //20000 => environ 30 minutes de training
-    TRAINING_ITERATION: 10000,
+    TRAINING_ITERATION: 3000,
     //Nbr de games simulees pour determiner la force de la main
     HAND_STRENGTH_GAMES_NBR: 3000,
 
