@@ -34,13 +34,13 @@ class ServerPlayerActionListener {
             joueur 2 ...
         }
         */
-        const turnStep = playerMemo.turnsDetails[playerMemo.totalHands].turnStep;
+        const handStep = playerMemo.turnsDetails[playerMemo.totalHands].handStep;
         let betsArray = playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerId);
         if (!betsArray) {
             betsArray = [[], [], [], []];
         }
         let stepSumBet = this.getStepPlayerBet(playerMemo, playerId);
-        betsArray[turnStep].push(chipsPlayed - stepSumBet);
+        betsArray[handStep].push(chipsPlayed - stepSumBet);
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.set(playerId, betsArray);
         betsArray.forEach(function (currArray, position) {
             let posString;
@@ -82,7 +82,7 @@ class ServerPlayerActionListener {
                 const alreadyBet = _this.getHandPlayerBet(playerMemo, playerId);
                 percentBets = alreadyBet / totalChips;
                 //on injecte dans playerMemo cette info
-                playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentBets_" + playerPos] = percentBets;
+                //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentBets_" + playerPos] = percentBets;
                 //console.log("percentBets pour joueur en position " + playerPos + " = " + percentBets + " soit mises main = " + alreadyBet + " sur total chips = " + totalChips);
             }
         })
@@ -93,7 +93,7 @@ class ServerPlayerActionListener {
         let sum = 0;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
             if (playerId === currPlayerId) {
-                currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
+                currArray[playerMemo.turnsDetails[playerMemo.totalHands].handStep].forEach(function (bet) {
                     sum += bet;
                 });
             }
@@ -105,7 +105,7 @@ class ServerPlayerActionListener {
         let sum = 0;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
             if (playerId === currPlayerId) {
-                for (let iter = 0; iter <= playerMemo.turnsDetails[playerMemo.totalHands].turnStep; iter++) {
+                for (let iter = 0; iter <= playerMemo.turnsDetails[playerMemo.totalHands].handStep; iter++) {
                     currArray[iter].forEach(function (bet) {
                         sum += bet;
                     });
@@ -118,6 +118,8 @@ class ServerPlayerActionListener {
     injectActionRatio(playerId, chipsPlayed, playerMemo) {
         let playerActionRatioMap = playerMemo.actionRatioMap.get(playerId);
         const stepMaxBet = this.getStepMaxBet(playerMemo);
+        let check = false;
+        let raise = false;
         switch (true) {
             case (chipsPlayed < stepMaxBet):
                 //console.log("one more fold for player id " + playerId);
@@ -126,24 +128,30 @@ class ServerPlayerActionListener {
             case (chipsPlayed === stepMaxBet):
                 //console.log("one more check for player id " + playerId);
                 playerActionRatioMap.set("CHECK", playerActionRatioMap.get("CHECK") + 1);
+                check = true;
                 break;
             case (chipsPlayed > stepMaxBet):
                 //console.log("one more raise for player id " + playerId);
                 playerActionRatioMap.set("RAISE", playerActionRatioMap.get("RAISE") + 1);
+                raise = true;
                 break;
         }
         const totalActions = playerActionRatioMap.get("FOLD") + playerActionRatioMap.get("CHECK") + playerActionRatioMap.get("RAISE");
         const playerPos = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerId);
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentRaise_" + playerPos] = playerActionRatioMap.get("RAISE") / totalActions;
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentCheck_" + playerPos] = playerActionRatioMap.get("CHECK") / totalActions;
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["percentFold_" + playerPos] = playerActionRatioMap.get("FOLD") / totalActions;
+        //si le joueur n'est pas habituellement aggressif et qu'il fait un raise, on le signale
+        if(raise && (playerActionRatioMap.get("RAISE") / totalActions) < 0.5 ){
+            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_unusualRaise"] = 1;
+        }
+        //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_"+playerMemo.turnsDetails[playerMemo.totalHands].stepTurn+"_percentRaise_" + playerPos] = playerActionRatioMap.get("RAISE") / totalActions;
+       // playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_"+playerMemo.turnsDetails[playerMemo.totalHands].stepTurn+"_percentCheck_" + playerPos] = playerActionRatioMap.get("CHECK") / totalActions;
+       // playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_"+playerMemo.turnsDetails[playerMemo.totalHands].stepTurn+"_percentFold_" + playerPos] = playerActionRatioMap.get("FOLD") / totalActions;
     }
 
     getStepMaxBet(playerMemo) {
         let maxBet = 0;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray) {
             let sum = 0;
-            currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
+            currArray[playerMemo.turnsDetails[playerMemo.totalHands].handStep].forEach(function (bet) {
                 sum += bet;
             });
             if (sum > maxBet) {
@@ -151,6 +159,21 @@ class ServerPlayerActionListener {
             }
         });
         return maxBet;
+    }
+
+    getStepName(stepNbr){
+        switch(stepNbr){
+            case 0:
+                return 'preflop';
+            case 1:
+                return 'flop';
+            case 2:
+                return 'turn';
+            case 3:
+                return 'river';
+            default:
+                throw Error('step inconnu !!');
+        }
     }
 }
 

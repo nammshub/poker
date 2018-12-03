@@ -31,7 +31,8 @@ class HandStartListener extends EventEmitter {
             "positionMap": positionMap,
             "betsMap": betsMap,
             //turn step: 0=> preflop, 1=> flop, 2 => turn , 3=> river
-            "turnStep": 0,
+            "handStep": 0,
+            "stepTurn": 0,
             "state": "ACTIVE",
             "tourNumber": playerMemo.totalHands,
             //"outputArray": [],
@@ -43,16 +44,12 @@ class HandStartListener extends EventEmitter {
             "randomResponse": 0,
             "currInput": {
                 "input": {
-                    "myCurrBet": 0,
-                    "step": 0,
                     "position": positionMap.get(playerMemo.player.id) / positionMap.size,
-                    "bluff": 0,
                     "maxHandsRatio": playerMemo.totalHands / config.MAX_HANDS,
                 },
                 "output": {
                 }
-            },
-            "neuronalInputs": [],
+            }
         });
         this.handleActionRatioMap(playerMemo);
         //console.log("\n Hand Start event. playerMemo = " + JSON.stringify(playerMemo));

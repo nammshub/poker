@@ -331,7 +331,7 @@ class HandValueHelper {
         //console.log("hand value array = " + handValueArray[0] + " et " + handValueArray[1]);
         let neuronalInput = (handValueArray[0] / 10) + (handValueArray[1] / 1000000000000);
         //console.log("neuronalInput = " + neuronalInput);
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["handValue"] = neuronalInput;
+        //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["handValue"] = neuronalInput;
     }
 
     static getHandValuePreflop(hand){

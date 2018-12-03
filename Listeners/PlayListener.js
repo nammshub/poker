@@ -101,8 +101,9 @@ class PlayListener extends EventEmitter {
         + playerMemo.turnsDetails[playerMemo.totalHands].hand[1].kind + " "
         + playerMemo.turnsDetails[playerMemo.totalHands].hand[1].color);
 
+        const _this = this;
         threeMoves.forEach(function (move) {
-            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.move = move;
+            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[_this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_"+playerMemo.turnsDetails[playerMemo.totalHands].stepTurn+"_move"] = move;
             let winLose = net.run(playerMemo.turnsDetails[playerMemo.totalHands].currInput.input).winLose;
             console.log("move = " + move + " winLose = " + winLose);
             if (winLose > maxWin) {
@@ -172,7 +173,7 @@ class PlayListener extends EventEmitter {
         let maxBet = 0;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray) {
             let sum = 0;
-            currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
+            currArray[playerMemo.turnsDetails[playerMemo.totalHands].handStep].forEach(function (bet) {
                 sum += bet;
             });
             if (sum > maxBet) {
@@ -186,7 +187,7 @@ class PlayListener extends EventEmitter {
         let sum = 0;
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
             if (playerId === playerMemo.player.id) {
-                currArray[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].forEach(function (bet) {
+                currArray[playerMemo.turnsDetails[playerMemo.totalHands].handStep].forEach(function (bet) {
                     sum += bet;
                 });
             }
@@ -199,7 +200,7 @@ class PlayListener extends EventEmitter {
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
             if (playerId === playerMemo.player.id) {
                 let iterStep = -1;
-                while (iterStep < playerMemo.turnsDetails[playerMemo.totalHands].turnStep) {
+                while (iterStep < playerMemo.turnsDetails[playerMemo.totalHands].handStep) {
                     iterStep++;
                     currArray[iterStep].forEach(function (bet) {
                         sum += bet;
@@ -229,14 +230,15 @@ class PlayListener extends EventEmitter {
         console.log("player id = " + playerMemo.player.id + " chips begin hand = " + playerMemo.player.chips);
         console.log("chips played hand = " + this.getHandMyBet(playerMemo));
         console.log("chips played = " + chipsPlayed + "getStepMyBet " + this.getStepMyBet(playerMemo) + " delta = " + deltaChips);
-        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].turnStep].push(deltaChips);
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.move = foldCheckRaise;
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.myCurrBet = myCurrBetsSum / playerMemo.potTotal;
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input
-        const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.position = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id) / playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size;
+        playerMemo.turnsDetails[playerMemo.totalHands].betsMap.get(playerMemo.player.id)[playerMemo.turnsDetails[playerMemo.totalHands].handStep].push(deltaChips);
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_"+playerMemo.turnsDetails[playerMemo.totalHands].stepTurn+"_move"] = foldCheckRaise;
+        //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_"+playerMemo.turnsDetails[playerMemo.totalHands].stepTurn+"_myCurrBet"] = myCurrBetsSum / playerMemo.potTotal;
+        //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input
+        //const currStep = playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.step;
+        //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input.position = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(playerMemo.player.id) / playerMemo.turnsDetails[playerMemo.totalHands].positionMap.size;
         this.injectPlayersChipsRatio(playerMemo);
-        //on injecte ce currInput dans le tableau et ensuite on reset le currInput
+        playerMemo.turnsDetails[playerMemo.totalHands].stepTurn = playerMemo.turnsDetails[playerMemo.totalHands].stepTurn + 1;
+        /*on injecte ce currInput dans le tableau et ensuite on reset le currInput
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.push(playerMemo.turnsDetails[playerMemo.totalHands].currInput);
         playerMemo.turnsDetails[playerMemo.totalHands].currInput = {
             "input": {
@@ -250,12 +252,13 @@ class PlayListener extends EventEmitter {
             "output": {
             }
         }
+        */
         //HandValueHelper.handValueToNeuronalInput(playerMemo)
     }
 
     hasAlreadyRaised(playerMemo) {
         let alreadyRaise = false;
-        const currStep = playerMemo.turnsDetails[playerMemo.totalHands].turnStep / 4;
+        const currStep = playerMemo.turnsDetails[playerMemo.totalHands].handStep / 4;
         playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.forEach(function (currInput) {
             if (currInput.input.step === currStep && currInput.output.chips === 1) {
                 alreadyRaise = true;
@@ -267,6 +270,7 @@ class PlayListener extends EventEmitter {
 
     injectPlayersChipsRatio(playerMemo) {
         const totalChips = playerMemo.potTotal;
+        const _this = this;
         playerMemo.listPlayers.forEach(function (player) {
             const playerPosition = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(player.id);
             const turnChips = player.chips;
@@ -274,8 +278,23 @@ class PlayListener extends EventEmitter {
             if (player.id !== playerMemo.player.id) {
                 variableName = "totalChipsRatio_" + playerPosition;
             }
-            playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[variableName] = turnChips / totalChips;
+            //playerMemo.turnsDetails[playerMemo.totalHands].currInput.input[_this.getStepName(playerMemo.turnsDetails[playerMemo.totalHands].handStep)+"_"+playerMemo.turnsDetails[playerMemo.totalHands].stepTurn+"_"+variableName] = turnChips / totalChips;
         });
+    }
+
+    getStepName(stepNbr){
+        switch(stepNbr){
+            case 0:
+                return 'preflop';
+            case 1:
+                return 'flop';
+            case 2:
+                return 'turn';
+            case 3:
+                return 'river';
+            default:
+                throw Error('step inconnu !!');
+        }
     }
 }
 

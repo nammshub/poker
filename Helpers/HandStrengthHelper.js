@@ -37,7 +37,7 @@ class HandStrengthHelper {
          
     *****************************************************************/
 
-    static getHandStrength(myHand, cardsOnBoard, nbrOpponents) {
+    getHandStrength(myHand, cardsOnBoard, nbrOpponents) {
         const actualDeck = this.getActualDeck(myHand.concat(cardsOnBoard));
         let nbrVictories = 0;
         for (let iter = 1; iter <= config.HAND_STRENGTH_GAMES_NBR; iter++) {
@@ -68,7 +68,7 @@ class HandStrengthHelper {
         return nbrVictories / config.HAND_STRENGTH_GAMES_NBR;
     }
 
-    static getActualDeck(unavailableCards) {
+    getActualDeck(unavailableCards) {
         let actualDeck = DECK.slice(0);
         for (let unavailableCard of unavailableCards) {
             actualDeck = actualDeck.filter(card => !(card.kind === unavailableCard.kind && card.color === unavailableCard.color));
@@ -77,7 +77,7 @@ class HandStrengthHelper {
         return actualDeck;
     }
 
-    static giveOpponentsCards(nbrOpponents, originalDeck) {
+    giveOpponentsCards(nbrOpponents, originalDeck) {
         let opponentCards = [];
         for (let iterOpponent = 0; iterOpponent < nbrOpponents; iterOpponent++) {
             opponentCards.push(CroupierHelper.getRandomCards(originalDeck, 2))
@@ -85,7 +85,7 @@ class HandStrengthHelper {
         return opponentCards;
     }
 
-    static createVirtualBoard(cardsOnBoard, originalDeck) {
+    createVirtualBoard(cardsOnBoard, originalDeck) {
         const virtualBoard = cardsOnBoard.concat(CroupierHelper.getRandomCards(originalDeck, 5 - cardsOnBoard.length));
         return virtualBoard;
     }

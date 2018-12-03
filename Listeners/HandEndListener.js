@@ -27,9 +27,8 @@ class HandEndListener {
         }
         this.establishWinLoseOutput(playerMemo);
         //enregistrement des coups dans le fichier de log
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.forEach(function (currInput) {
-            LogHelper.logNeuronalInput(JSON.stringify(currInput), playerMemo.logFile);
-        });
+        LogHelper.logNeuronalInput(JSON.stringify(playerMemo.turnsDetails[playerMemo.totalHands].currInput), playerMemo.logFile);
+
     }
 
     establishWinLoseOutput(playerMemo) {
@@ -47,9 +46,7 @@ class HandEndListener {
             //on a fait un gain => on se situe entre 0.5 et 1 (0.5 = statu quo 1 => victoire partie)
             winLose = 0.5 + ((currTurnChips - lastTurnChips) / ((playerMemo.potTotal - lastTurnChips) * 2))
         }
-        playerMemo.turnsDetails[playerMemo.totalHands].neuronalInputs.forEach(function (currInput) {
-            currInput.output.winLose = winLose;
-        });
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.winLose = winLose;
     }
 
     getHandMyBet(playerMemo) {
@@ -57,7 +54,7 @@ class HandEndListener {
         playerMemo.turnsDetails[playerMemo.totalHands].betsMap.forEach(function (currArray, playerId) {
             if (playerId === playerMemo.player.id) {
                 let iterStep = -1;
-                while (iterStep < playerMemo.turnsDetails[playerMemo.totalHands].turnStep) {
+                while (iterStep < playerMemo.turnsDetails[playerMemo.totalHands].handStep) {
                     iterStep++;
                     currArray[iterStep].forEach(function (bet) {
                         sum += bet;

@@ -1,7 +1,8 @@
 const EventEmitter = require("events");
 require("../config");
-const HandValueHelper = require("../Helpers/HandValueHelper");
 const HandStrengthHelper = require("../Helpers/HandStrengthHelper");
+
+const handStrengthHelper = new HandStrengthHelper();
 
 
 /**
@@ -12,8 +13,8 @@ class CardsListener extends EventEmitter {
         playerMemo.turnsDetails[playerMemo.totalHands].hand = cardsMessage.data.cards;
         //HandValueHelper.handValueToNeuronalInput(playerMemo);
         //on calcule la force de la main
-        const handStrength = HandStrengthHelper.getHandStrength(playerMemo.turnsDetails[playerMemo.totalHands].hand, [], playerMemo.listPlayers.length - 1);
-        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input['handStrength'] = handStrength;
+        const handStrength = handStrengthHelper.getHandStrength(playerMemo.turnsDetails[playerMemo.totalHands].hand, [], playerMemo.listPlayers.length - 1);
+        playerMemo.turnsDetails[playerMemo.totalHands].currInput.input['preflop_handStrength'] = handStrength;
     }
 }
 
