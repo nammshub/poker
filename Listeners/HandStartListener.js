@@ -53,6 +53,7 @@ class HandStartListener extends EventEmitter {
         });
         this.handleActionRatioMap(playerMemo);
         //console.log("\n Hand Start event. playerMemo = " + JSON.stringify(playerMemo));
+        this.injectPlayersProfiles(playerMemo);
     }
 
     /**
@@ -108,6 +109,27 @@ class HandStartListener extends EventEmitter {
                 playerMemo.actionRatioMap.set(player.id, new Map(actionMap));
             })
         }
+    }
+
+    /**
+     * methode qui injecte dans le curr input le % de raise et de fold de chaque joueur actif afin d'etablir un profil des adversaires
+     */
+    injectPlayersProfiles(playerMemo){
+        for (let player of playerMemo.listPlayers){
+            if(player.id !== playerMemo.player.id){
+                try{
+                    let playerActionRatioMap = playerMemo.actionRatioMap.get(player.id);
+                    let playerPos = playerMemo.turnsDetails[playerMemo.totalHands].positionMap.get(player.id);
+                    let totalActions = playerActionRatioMap.get("FOLD") + playerActionRatioMap.get("CHECK") + playerActionRatioMap.get("RAISE");
+                    playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["Player"+playerPos+"_raiseRatio"] = playerActionRatioMap.get("RAISE") / totalActions;
+                    playerMemo.turnsDetails[playerMemo.totalHands].currInput.input["Player"+playerPos+"_foldRatio"] = playerActionRatioMap.get("FOLD") / totalActions;
+                }
+                catch(error){
+                    console.log(error);
+                }
+            }
+        }
+
     }
 
 }
