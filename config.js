@@ -10,15 +10,16 @@ global.config = {
     //constantes partagées
     MAX_SEC_TO_ANSWER: 15,
     MAX_RAISE_MULTIPLIER: 10,
-    BLUFF_RATIO: 7, //bluff 1/BLUFF_RATIO time
+    BLUFF_RATIO: 5, //bluff 1/BLUFF_RATIO time
     DISABLE_NEURONAL: false,
     TRAINING_NEEDED: false,
-    HIDDEN_LAYERS: [25,12,6], //cette config est bien aussi [20,10], [25,12,6],
+    HIDDEN_LAYERS: [25, 12, 6], //cette config est bien aussi [20,10], [25,12,6],
+    ACTIVATION_FUNCTION: "sigmoid", //choices: sigmoid, relu, leaky-relu, tanh
     LEANRING_RATE: 0.9,
     ERROR_TRESH: 0.005,
 
     //20000 => environ 30 minutes de training
-    TRAINING_ITERATION: 3000,
+    TRAINING_ITERATION: 500,
     //Nbr de games simulees pour determiner la force de la main
     HAND_STRENGTH_GAMES_NBR: 3000,
 

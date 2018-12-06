@@ -32,7 +32,7 @@ class CroupierHelper {
             iter++;
         }
         if(iter != cardsNb){
-            throw config.DECK_EMPTY_EXCEPTION;
+            console.log(config.DECK_EMPTY_EXCEPTION);
         }
         return cardsToReturn;
     }

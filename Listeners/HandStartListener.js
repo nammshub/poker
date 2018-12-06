@@ -45,7 +45,7 @@ class HandStartListener extends EventEmitter {
             "currInput": {
                 "input": {
                     "position": positionMap.get(playerMemo.player.id) / positionMap.size,
-                    "maxHandsRatio": playerMemo.totalHands / config.MAX_HANDS,
+                   // "maxHandsRatio": playerMemo.totalHands / config.MAX_HANDS,
                 },
                 "output": {
                 }
