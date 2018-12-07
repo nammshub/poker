@@ -11,6 +11,7 @@ const HOST = config.HOST;
 const PORT = config.PORT;
 
 let neurone = new brain.NeuralNetwork({
+    activation: config.ACTIVATION_FUNCTION, 
     hiddenLayers: config.HIDDEN_LAYERS,
 });
 if (config.TRAINING_NEEDED) {
