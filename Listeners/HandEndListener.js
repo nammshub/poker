@@ -40,11 +40,11 @@ class HandEndListener {
         let winLose = 0.5;
         if (lastTurnChips > currTurnChips) {
             //perte => on va se situer entre 0 et 0.5 (0 = perte totale, 0.5 = statu quo)
-            winLose = currTurnChips / (2 * lastTurnChips);
+            winLose = Math.max(0,currTurnChips / (2 * lastTurnChips));
         }
         if (lastTurnChips < currTurnChips) {
             //on a fait un gain => on se situe entre 0.5 et 1 (0.5 = statu quo 1 => victoire partie)
-            winLose = 0.5 + ((currTurnChips - lastTurnChips) / ((playerMemo.potTotal - lastTurnChips) * 2))
+            winLose = Math.min(0.5 + ((currTurnChips - lastTurnChips) / ((playerMemo.potTotal - lastTurnChips) * 2)),1);
         }
         playerMemo.turnsDetails[playerMemo.totalHands].currInput.output.winLose = winLose;
     }

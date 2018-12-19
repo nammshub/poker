@@ -47,7 +47,8 @@ class BoardListener extends EventEmitter {
             case 3:
                 return 'river';
             default:
-                throw Error('step inconnu !!');
+                console.log('step inconnu !!' + stepNbr);
+                return 'unknown';
         }
     }
 }
